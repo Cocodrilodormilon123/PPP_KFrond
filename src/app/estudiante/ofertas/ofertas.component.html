@@ -1,0 +1,41 @@
+<div class="container-fluid">
+  <h2 class="mb-4 text-primary">
+    <i class="fas fa-briefcase"></i> Ofertas Disponibles
+  </h2>
+
+  <div *ngIf="ofertasFiltradas.length > 0" class="row g-4">
+    <div class="col-md-6 col-lg-4" *ngFor="let oferta of ofertasFiltradas">
+      <div class="card shadow-sm h-100">
+        <div class="card-body">
+          <h5 class="card-title text-primary">
+            <i class="fas fa-book"></i> {{ oferta.titulo }}
+          </h5>
+          <p class="card-text mb-1">
+            <i class="fas fa-building"></i> <strong>Empresa:</strong> {{ oferta.empresa?.nombre || 'Sin asignar' }}
+          </p>
+          <p class="card-text mb-1">
+            <i class="fas fa-laptop-house"></i> <strong>Modalidad:</strong> {{ oferta.modalidad }}
+          </p>
+          <p class="card-text mb-1">
+            <i class="fas fa-calendar-day"></i> <strong>Inicio:</strong> {{ oferta.fechaInicio }}
+          </p>
+          <p class="card-text mb-1" *ngIf="oferta.fechaFin">
+            <i class="fas fa-calendar-check"></i> <strong>Fin:</strong> {{ oferta.fechaFin }}
+          </p>
+          <p class="card-text" *ngIf="oferta.vacantes">
+            <i class="fas fa-user-friends"></i> <strong>Vacantes:</strong> {{ oferta.vacantes.disponibles }}
+          </p>
+        </div>
+        <div class="card-footer text-end">
+          <button class="btn btn-sm btn-outline-primary" (click)="verDetalle(oferta)">
+            <i class="fas fa-eye"></i> Ver Detalles
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <p *ngIf="ofertasFiltradas.length === 0" class="text-center text-muted mt-4">
+    <i class="fas fa-info-circle"></i> No hay ofertas disponibles actualmente.
+  </p>
+</div>

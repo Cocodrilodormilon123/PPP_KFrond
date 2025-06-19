@@ -1,0 +1,59 @@
+<mat-card class="form-card">
+  <mat-card-title>📝 Registrar Estudiante</mat-card-title>
+
+  <form (ngSubmit)="registrarEstudiante()" enctype="multipart/form-data" #formEst="ngForm" class="form-estudiante">
+    <div class="form-grid">
+
+      <mat-form-field appearance="fill">
+        <mat-label>Nombres</mat-label>
+        <input matInput name="nombre" [(ngModel)]="estudiante.nombre" required />
+      </mat-form-field>
+
+      <mat-form-field appearance="fill">
+        <mat-label>Apellidos</mat-label>
+        <input matInput name="apellido" [(ngModel)]="estudiante.apellido" required />
+      </mat-form-field>
+
+      <mat-form-field appearance="fill">
+        <mat-label>DNI</mat-label>
+        <input matInput name="dni" [(ngModel)]="estudiante.dni" required maxlength="8" />
+      </mat-form-field>
+
+      <mat-form-field appearance="fill">
+        <mat-label>Teléfono</mat-label>
+        <input matInput name="telefono" [(ngModel)]="estudiante.telefono" />
+      </mat-form-field>
+
+      <mat-form-field appearance="fill">
+        <mat-label>Código Universitario</mat-label>
+        <input matInput name="codigo" [(ngModel)]="estudiante.codigo" required />
+      </mat-form-field>
+
+      <mat-form-field appearance="fill">
+        <mat-label>Escuela Profesional</mat-label>
+        <mat-select [(ngModel)]="estudiante.ep" name="ep" required>
+          <mat-option value="Ingeniería de Sistemas">Ingeniería de Sistemas</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <!-- Campo de Foto con estilo -->
+      <div class="file-upload-container">
+        <label class="file-label">
+          📁 Foto:
+          <button mat-stroked-button color="accent" type="button" (click)="inputFile.click()">
+            Seleccionar archivo
+          </button>
+          <span *ngIf="foto?.name" class="file-name">{{ foto.name }}</span>
+          <input type="file" #inputFile (change)="handleFoto($event)" accept="image/*" hidden />
+        </label>
+      </div>
+
+    </div>
+
+    <div class="form-actions">
+      <button mat-raised-button color="primary" type="submit">
+        Registrar Estudiante
+      </button>
+    </div>
+  </form>
+</mat-card>

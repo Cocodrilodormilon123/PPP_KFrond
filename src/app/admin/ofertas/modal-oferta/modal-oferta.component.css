@@ -1,0 +1,11 @@
+.oferta-dialog-content {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-height: 70vh;
+  overflow-y: auto;
+}
+
+mat-form-field.full-width {
+  width: 100%;
+}

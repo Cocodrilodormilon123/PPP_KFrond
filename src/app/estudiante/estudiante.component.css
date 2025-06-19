@@ -1,0 +1,144 @@
+.estudiante-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  font-family: Arial, sans-serif;
+}
+
+/* Topbar */
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #00224d;
+  padding: 10px 20px;
+  color: white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.topbar a {
+  color: #bbdefb;
+  margin-right: 15px;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.topbar a:hover {
+  color: #ffffff;
+  text-decoration: underline;
+}
+
+/* Usuario */
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.user-img {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+/* Layout principal */
+.body-content {
+  display: flex;
+  flex: 1;
+  height: 100%;          /* ✅ Asegura altura completa */
+  position: relative;    /* ✅ Requerido para .sidebar absolute */
+}
+
+/* Sidebar */
+.sidebar {
+  width: 220px;
+  background-color: rgb(0, 29, 73);
+  padding: 20px;
+  border-right: 1px solid #ccc;
+  transition: transform 0.3s ease;
+  height: 100%;          /* ✅ Altura completa */
+  min-height: 100%;
+  box-sizing: border-box;
+}
+
+.sidebar.hidden {
+  transform: translateX(-100%);
+  position: absolute;
+  z-index: 2;
+}
+
+/* Botón hamburguesa */
+.toggle-button {
+  font-size: 24px;
+  cursor: pointer;
+  margin-right: 15px;
+  display: inline-block;
+}
+
+/* Sidebar navegación */
+.sidebar ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.sidebar li {
+  margin-bottom: 15px;
+}
+
+.sidebar a {
+  text-decoration: none;
+  color: white;
+  font-weight: 500;
+  display: block;
+  transition: color 0.2s ease;
+}
+
+.sidebar a:hover {
+  color: #00c0ff;
+}
+
+.sidebar a.active {
+  color: #1976d2;
+  font-weight: bold;
+}
+
+/* Contenido principal */
+.content {
+  flex: 1;
+  padding: 30px;
+  background-color: #fff;
+  overflow-y: auto;
+}
+
+/* Acciones y sección derecha */
+.right-section {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.header-actions {
+  display: flex;
+  gap: 15px;
+}
+
+.header-actions a {
+  color: #bbdefb;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.header-actions a:hover {
+  color: #ffffff;
+  text-decoration: underline;
+}
+
+/* Estilo global para íconos blancos */
+.sidebar i,
+.header-actions i,
+.toggle-button i {
+  color: white;
+  margin-right: 8px;
+}

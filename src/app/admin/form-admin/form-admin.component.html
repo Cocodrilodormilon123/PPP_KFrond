@@ -1,0 +1,46 @@
+<h3>👤 Registrar Administrador</h3>
+
+<form (ngSubmit)="registrarAdmin()" enctype="multipart/form-data" class="form-card form-estudiante">
+
+  <div class="form-grid">
+
+    <mat-form-field appearance="fill">
+      <mat-label>Código Universitario</mat-label>
+      <input matInput [(ngModel)]="admin.codigo" name="codigo" required />
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Nombres</mat-label>
+      <input matInput [(ngModel)]="admin.nombre" name="nombre" required />
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Apellidos</mat-label>
+      <input matInput [(ngModel)]="admin.apellido" name="apellido" required />
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>DNI</mat-label>
+      <input matInput [(ngModel)]="admin.dni" name="dni" required />
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Teléfono</mat-label>
+      <input matInput [(ngModel)]="admin.telefono" name="telefono" required />
+    </mat-form-field>
+
+  </div>
+
+  <div class="file-upload-container">
+    <label class="file-label">
+      📁 Foto:
+      <input type="file" (change)="handleArchivo($event)" required />
+    </label>
+    <span class="file-name" *ngIf="archivoSeleccionado">{{ archivoSeleccionado.name }}</span>
+  </div>
+
+  <div class="form-actions">
+    <button mat-raised-button color="primary" type="submit">Registrar Administrador</button>
+  </div>
+
+</form>

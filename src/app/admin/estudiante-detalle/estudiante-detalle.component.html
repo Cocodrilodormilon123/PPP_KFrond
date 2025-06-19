@@ -1,0 +1,73 @@
+<h2>🔎 Buscar Estudiante</h2>
+
+<form (ngSubmit)="buscar()" class="form-busqueda">
+  <mat-form-field appearance="outline">
+    <mat-label>Código Universitario</mat-label>
+    <input matInput [(ngModel)]="codigo" name="codigo" required />
+  </mat-form-field>
+  <button mat-raised-button color="primary" type="submit">Buscar</button>
+</form>
+
+<div *ngIf="estudiante" class="perfil-container">
+  <div class="card-perfil">
+    <div class="perfil-izq">
+      <img class="perfil-foto"
+           [src]="'http://localhost:4040/persona-ms/personas/img/' + estudiante.foto"
+           (error)="fotoError($event)" />
+    </div>
+    <div class="perfil-der">
+      <h2>{{ estudiante.nombres }} {{ estudiante.apellidos }}</h2>
+      <p><strong>Código:</strong> {{ estudiante.codigo }}</p>
+      <p><strong>EP:</strong> {{ estudiante.ep }}</p>
+      <p><strong>DNI:</strong> {{ estudiante.dni }}</p>
+      <p><strong>Teléfono:</strong> {{ estudiante.telefono }}</p>
+    </div>
+  </div>
+
+  <div class="card-practicas">
+    <h3>🏢 Práctica Profesional</h3>
+
+    <div *ngIf="practica">
+      <p><strong>Empresa:</strong> {{ practica.empresaNombre }}</p>
+      <p><strong>Oferta:</strong> {{ practica.ofertaTitulo }}</p>
+      <p><strong>Fecha de inicio:</strong> {{ practica.fechaInicio }}</p>
+
+      <h4>📁 Evidencias Subidas</h4>
+      <ul *ngIf="evidencias.length > 0">
+        <li *ngFor="let evidencia of evidencias">
+          {{ evidencia.descripcion }} —
+          <a [href]="evidencia.url" target="_blank">Ver archivo</a>
+        </li>
+      </ul>
+      <p *ngIf="evidencias.length === 0" style="color: gray;">No hay evidencias aún.</p>
+
+      <button mat-raised-button color="accent" (click)="mostrarFormulario = true" style="margin-top: 15px;">
+        ⬆️ Subir nueva evidencia
+      </button>
+
+      <div *ngIf="mostrarFormulario" style="margin-top: 20px;">
+        <form (ngSubmit)="subirEvidencia()" enctype="multipart/form-data">
+          <mat-form-field appearance="outline">
+            <mat-label>Descripción</mat-label>
+            <input matInput [(ngModel)]="descripcion" name="descripcion" required />
+          </mat-form-field>
+
+          <input type="file" (change)="handleArchivo($event)" required />
+
+          <div style="margin-top: 10px;">
+            <button mat-raised-button color="primary" type="submit">Subir</button>
+            <button mat-stroked-button type="button" (click)="mostrarFormulario = false">Cancelar</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div *ngIf="!practica" style="margin-top: 15px; color: red;">
+      Este estudiante no tiene una práctica activa.
+    </div>
+  </div>
+</div>
+
+<div *ngIf="estudiante === null && codigo">
+  <p style="color: red;">Estudiante no encontrado.</p>
+</div>

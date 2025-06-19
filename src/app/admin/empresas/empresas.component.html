@@ -1,0 +1,62 @@
+<h2>Empresas</h2>
+
+<button (click)="mostrarFormulario = !mostrarFormulario">
+  {{ mostrarFormulario ? 'Cancelar' : 'Registrar nueva empresa' }}
+</button>
+
+<form *ngIf="mostrarFormulario" (ngSubmit)="registrarEmpresa()" #formEmpresa="ngForm">
+  <input [(ngModel)]="nuevaEmpresa.nombre" name="nombre" placeholder="Nombre" required />
+  <input [(ngModel)]="nuevaEmpresa.ruc" name="ruc" placeholder="RUC" required />
+  <input [(ngModel)]="nuevaEmpresa.direccion" name="direccion" placeholder="Dirección" required />
+  <input [(ngModel)]="nuevaEmpresa.distrito" name="distrito" placeholder="Distrito" required />
+  <input [(ngModel)]="nuevaEmpresa.provincia" name="provincia" placeholder="Provincia" required />
+  <input [(ngModel)]="nuevaEmpresa.pais" name="pais" placeholder="País" required />
+  <input [(ngModel)]="nuevaEmpresa.telefono" name="telefono" placeholder="Teléfono" required />
+  <input [(ngModel)]="nuevaEmpresa.representanteLegal" name="representanteLegal" placeholder="Representante Legal" required />
+
+  <select [(ngModel)]="nuevaEmpresa.estado" name="estado" required>
+    <option value="ACTIVA">ACTIVA</option>
+    <option value="INACTIVA">INACTIVA</option>
+    <option value="SUSPENDIDA">SUSPENDIDA</option>
+  </select>
+
+  <button type="submit">Registrar</button>
+</form>
+
+<table *ngIf="empresas.length > 0" border="1" cellpadding="8" style="margin-top: 10px;">
+  <thead>
+  <tr>
+    <th>ID</th>
+    <th>Nombre</th>
+    <th>RUC</th>
+    <th>Dirección</th>
+    <th>Distrito</th>
+    <th>Provincia</th>
+    <th>País</th>
+    <th>Teléfono</th>
+    <th>Representante Legal</th>
+    <th>Fecha</th>
+    <th>Estado</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr *ngFor="let empresa of empresas">
+    <td>{{ empresa.id }}</td>
+    <td>{{ empresa.nombre }}</td>
+    <td>{{ empresa.ruc }}</td>
+    <td>{{ empresa.direccion }}</td>
+    <td>{{ empresa.distrito }}</td>
+    <td>{{ empresa.provincia || '---' }}</td>
+    <td>{{ empresa.pais || '---' }}</td>
+    <td>{{ empresa.telefono }}</td>
+    <td>{{ empresa.representanteLegal || '---' }}</td>
+    <td>{{ empresa.fechaCreacion }}</td>
+    <td>{{ empresa.estado }}</td>
+    <td>
+      <button (click)="editarEmpresa(empresa)">✏️ Editar</button>
+    </td>
+  </tr>
+  </tbody>
+</table>
+
+<p *ngIf="empresas.length === 0">No hay empresas registradas.</p>

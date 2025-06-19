@@ -1,0 +1,22 @@
+<h2>👥 Crear Usuario</h2>
+
+<mat-card style="max-width: 600px; margin-top: 20px;">
+  <mat-card-content>
+    <mat-form-field appearance="outline" style="width: 100%;">
+      <mat-label>Selecciona tipo de usuario</mat-label>
+      <mat-select [(ngModel)]="tipoSeleccionado" name="tipoSeleccionado">
+        <mat-option value="ESTUDIANTE">🎓 Estudiante</mat-option>
+        <mat-option value="ADMIN">🗂️ Secretaría</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </mat-card-content>
+</mat-card>
+
+<div
+  style="margin-top: 25px;"
+  [@slideToggle]="tipoSeleccionado"
+  class="form-container"
+>
+  <app-form-estudiante *ngIf="tipoSeleccionado === 'ESTUDIANTE'"></app-form-estudiante>
+  <app-form-admin *ngIf="tipoSeleccionado === 'ADMIN'"></app-form-admin>
+</div>

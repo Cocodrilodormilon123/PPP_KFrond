@@ -1,0 +1,30 @@
+<h2 class="titulo-seccion">Ofertas de Prácticas</h2>
+
+<div class="btn-nueva-oferta">
+  <button mat-raised-button color="primary" (click)="abrirModalOferta()">➕ Nueva Oferta</button>
+</div>
+
+<div *ngIf="ofertas.length > 0" class="ofertas-grid">
+  <div *ngFor="let oferta of ofertas" class="oferta-card">
+    <h3 class="oferta-titulo">{{ oferta.titulo }}</h3>
+    <p><strong>Empresa:</strong> {{ oferta.empresa?.nombre || 'Sin asignar' }}</p>
+    <p><strong>Modalidad:</strong> {{ oferta.modalidad }}</p>
+    <p><strong>Fecha de inicio:</strong> {{ oferta.fechaInicio }}</p>
+
+    <p *ngIf="oferta.fechaFin"><strong>Finaliza en:</strong> {{ getTiempoRestante(oferta.fechaFin) }}</p>
+    <p *ngIf="oferta.vacantes"><strong>Disponibles:</strong> {{ oferta.vacantes.disponibles }}</p>
+    <p *ngIf="!oferta.vacantes"><strong>Disponibles:</strong> No asignados aún</p>
+
+    <div class="card-actions">
+      <button mat-stroked-button color="primary" (click)="abrirModalCupos(oferta.id)">
+        {{ oferta.vacantes ? '✏️ Editar Cupos' : '➕ Cupos' }}
+      </button>
+      <button mat-stroked-button color="primary" (click)="abrirModalPostulantes(oferta.id)">
+        👥 Postulantes
+      </button>
+      <button mat-stroked-button color="accent" (click)="abrirModalOferta(oferta)">✏️ Actualizar</button>
+    </div>
+  </div>
+</div>
+
+<p *ngIf="ofertas.length === 0" class="mensaje-vacio">No hay ofertas registradas.</p>

@@ -1,0 +1,13 @@
+<h2 mat-dialog-title>Gestionar Cupos</h2>
+
+<mat-dialog-content>
+  <mat-form-field appearance="fill" style="width: 100%;">
+    <mat-label>Cantidad de cupos</mat-label>
+    <input matInput type="number" [(ngModel)]="cupos" min="0">
+  </mat-form-field>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="dialogRef.close()">Cancelar</button>
+  <button mat-raised-button color="primary" (click)="guardar()">Guardar</button>
+</mat-dialog-actions>
