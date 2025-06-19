@@ -38,7 +38,14 @@ export class EstudianteDetalleComponent {
         // Paso 2: Obtener práctica
         this.http.get<any>(`http://localhost:4040/practica-ms/practicas/persona/${estudiante.id}`).subscribe({
           next: practica => {
-            this.practica = practica;
+            //Validamos si no existe o no esta en estado EN_PROCESO de Practica
+            if (!practica || practica.estado !== 'EN_PROCESO'){
+              this.practica = null;
+              this.evidencias = [];
+              return;
+            }
+
+            this.practicaa = practica;
             this.cargarEvidencias();
           },
           error: () => {
