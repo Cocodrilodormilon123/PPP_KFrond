@@ -28,7 +28,7 @@ export class ModalOfertaComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.http.get<any[]>('http://localhost:4040/oferta-ms/empresas')
+    this.http.get<any[]>('http://localhost:4040/oferta-ms/empresas/estado/ACTIVA')
       .subscribe({
         next: res => this.empresas = res,
         error: err => console.error('Error al cargar empresas', err)
