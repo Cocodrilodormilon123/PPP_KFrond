@@ -24,16 +24,21 @@ export class ModalPostulantesComponent implements OnInit {
   }
 
   cargarPostulantes() {
-    this.http.get<any[]>(`http://localhost:4040/oferta-ms/postulaciones/oferta/${this.ofertaId}`)
+    this.http.get<any[]>(`http://localhost:4040/oferta-ms/postulaciones/oferta/${this.ofertaId}/postulantes-unicos-detallado`)
       .subscribe(resp => this.postulaciones = resp);
   }
 
-  cambiarEstado(id: number, estado: string, comentario: string = '') {
-    const url = `http://localhost:4040/oferta-ms/postulaciones/${id}/estado?estado=${estado}&comentario=${comentario}`;
+  cambiarEstado(id: number, estado: string, comentario?: string) {
+    let url = `http://localhost:4040/oferta-ms/postulaciones/${id}/estado?estado=${estado}`;
+
+    if (comentario && comentario.trim() !== '') {
+      url += `&comentario=${encodeURIComponent(comentario)}`;
+    }
+
     this.http.put(url, {}).subscribe(() => {
       this.postulaciones = this.postulaciones.map(p => {
         if (p.id === id) {
-          return { ...p, estado, comentario };
+          return { ...p, estado, comentario: comentario || '' };
         }
         return p;
       });

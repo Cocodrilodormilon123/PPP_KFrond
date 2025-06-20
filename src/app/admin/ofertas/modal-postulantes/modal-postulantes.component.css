@@ -1,8 +1,89 @@
-table {
-  width: 100%;
-  margin-top: 15px;
+/* Título del modal */
+.titulo-modal {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 22px;
+  font-weight: bold;
+  color: #2c3e50;
+  padding-bottom: 8px;
+  border-bottom: 2px solid #b2bec3;
 }
 
-th, td {
-  text-align: center;
+/* Contenedor de tabla con sombra y bordes suaves */
+.postulantes-table-container {
+  max-height: 420px;
+  overflow-y: auto;
+  padding: 15px;
+  background-color: #f8f9fa;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.12);
+}
+
+/* Tabla estilizada */
+.tabla-postulantes {
+  width: 100%;
+  border-collapse: collapse;
+  border-radius: 8px;
+  overflow: hidden;
+  background-color: #ffffff;
+}
+
+.mat-header-cell {
+  background-color: #74b9ff;
+  color: white;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.mat-cell {
+  font-size: 14px;
+  padding: 8px 12px;
+}
+
+/* Colores por estado */
+.estado {
+  font-weight: 600;
+  text-transform: capitalize;
+  border-radius: 4px;
+  padding: 2px 8px;
+  display: inline-block;
+}
+
+.estado.pendiente {
+  background-color: #fdcb6e;
+  color: #2d3436;
+}
+
+.estado.en_revision {
+  background-color: #74b9ff;
+  color: white;
+}
+
+.estado.rechazada {
+  background-color: #d63031;
+  color: white;
+}
+
+/* Botones con animación sutil */
+button[mat-icon-button] {
+  transition: background-color 0.3s ease;
+  margin-right: 4px;
+}
+
+button[mat-icon-button]:hover {
+  background-color: #dfe6e9;
+  border-radius: 50%;
+}
+
+/* Botón de cierre */
+.mat-dialog-actions button {
+  background-color: #636e72;
+  color: white;
+  border-radius: 50%;
+  transition: background-color 0.3s ease;
+}
+
+.mat-dialog-actions button:hover {
+  background-color: #2d3436;
 }

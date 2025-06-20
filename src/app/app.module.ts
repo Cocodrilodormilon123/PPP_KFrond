@@ -17,6 +17,8 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { MatTableModule } from '@angular/material/table';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatSortModule } from '@angular/material/sort'; // opcional
 
 // Componentes principales
 import { AppComponent } from './app.component';
@@ -43,7 +45,6 @@ import { PracticasComponent } from './estudiante/practicas/practicas.component';
 import { SubirCvComponent } from './estudiante/subir-cv/subir-cv.component';
 import { DetalleOfertaComponent } from './estudiante/ofertas/detalle-oferta/detalle-oferta.component';
 
-
 const routes: Routes = [
   {
     path: 'admin', component: AdminComponent, children: [
@@ -65,14 +66,12 @@ const routes: Routes = [
       { path: '', redirectTo: 'perfil', pathMatch: 'full' }
     ]
   },
-  { path: '', redirectTo: 'admin', pathMatch: 'full' } // Redirección por defecto
+  { path: '', redirectTo: 'admin', pathMatch: 'full' }
 ];
 
 @NgModule({
   declarations: [
     AppComponent,
-
-    // Admin
     AdminComponent,
     EmpresasComponent,
     AdminOfertasComponent,
@@ -84,8 +83,6 @@ const routes: Routes = [
     ModalOfertaComponent,
     ModalCuposComponent,
     ModalPostulantesComponent,
-
-    // Estudiante
     EstudianteComponent,
     PerfilComponent,
     EstudianteOfertasComponent,
@@ -109,7 +106,9 @@ const routes: Routes = [
     MatNativeDateModule,
     MatTableModule,
     MatCardModule,
-    MatIconModule
+    MatIconModule,
+    MatTooltipModule,
+    MatSortModule // si luego quieres ordenar columnas
   ],
   providers: [],
   bootstrap: [AppComponent]
