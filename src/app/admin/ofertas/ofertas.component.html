@@ -1,5 +1,15 @@
 <h2 class="titulo-seccion">Ofertas de Prácticas</h2>
 
+<!-- FILTRO POR ESTADO -->
+<div class="filtro-ofertas" style="margin-bottom: 16px;">
+  <label for="estado">Filtrar por estado:</label>
+  <select id="estado" [(ngModel)]="filtroEstado" (change)="filtrarOfertasPorEstado()">
+    <option value="TODAS">Todas</option>
+    <option value="ACTIVA">Activas</option>
+    <option value="FINALIZADA">Finalizadas</option>
+  </select>
+</div>
+
 <div class="btn-nueva-oferta">
   <button mat-raised-button color="primary" (click)="abrirModalOferta()">➕ Nueva Oferta</button>
 </div>
