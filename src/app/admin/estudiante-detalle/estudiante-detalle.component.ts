@@ -45,7 +45,7 @@ export class EstudianteDetalleComponent {
               return;
             }
 
-            this.practicaa = practica;
+            this.practica = practica;
             this.cargarEvidencias();
           },
           error: () => {

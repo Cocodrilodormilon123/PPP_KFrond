@@ -1,0 +1,14 @@
+.panel-derecho {
+  position: fixed;
+  top: 55px;
+  right: 0;
+  width: 40%;
+  height: calc(100vh - 58px);
+  padding: 20px;
+  overflow-y: auto;
+  background-color: white;
+  border-left: 1px solid #ddd;
+  z-index: 1050;
+  box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease-in-out;
+}

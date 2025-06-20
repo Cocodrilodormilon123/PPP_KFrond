@@ -1,5 +1,5 @@
 <div class="container-fluid">
-  <h2 class="mb-4 text-primary">
+  <h2 class="mb-4 text-primary text-uppercase">
     <i class="fas fa-briefcase"></i> Ofertas Disponibles
   </h2>
 
@@ -7,26 +7,32 @@
     <div class="col-md-6 col-lg-4" *ngFor="let oferta of ofertasFiltradas">
       <div class="card shadow-sm h-100">
         <div class="card-body">
-          <h5 class="card-title text-primary">
-            <i class="fas fa-book"></i> {{ oferta.titulo }}
+          <h5 class="card-title text-uppercase fw-bold text-primary">
+            {{ oferta.titulo }}
           </h5>
+
           <p class="card-text mb-1">
-            <i class="fas fa-building"></i> <strong>Empresa:</strong> {{ oferta.empresa?.nombre || 'Sin asignar' }}
+            <i class="fas fa-building text-secondary"></i>
+            <strong>Empresa:</strong> {{ oferta.empresa?.nombre || 'No registrada' }}
           </p>
+
           <p class="card-text mb-1">
-            <i class="fas fa-laptop-house"></i> <strong>Modalidad:</strong> {{ oferta.modalidad }}
+            <i class="fas fa-map-marker-alt text-secondary"></i>
+            <strong>Ubicación:</strong> {{ oferta.empresa?.distrito || 'Ubicación no disponible' }}
           </p>
+
           <p class="card-text mb-1">
-            <i class="fas fa-calendar-day"></i> <strong>Inicio:</strong> {{ oferta.fechaInicio }}
+            <i class="fas fa-laptop-house text-secondary"></i>
+            <strong>Modalidad:</strong> {{ oferta.modalidad }}
           </p>
-          <p class="card-text mb-1" *ngIf="oferta.fechaFin">
-            <i class="fas fa-calendar-check"></i> <strong>Fin:</strong> {{ oferta.fechaFin }}
-          </p>
-          <p class="card-text" *ngIf="oferta.vacantes">
-            <i class="fas fa-user-friends"></i> <strong>Vacantes:</strong> {{ oferta.vacantes.disponibles }}
+
+          <p class="card-text text-danger mt-2">
+            <i class="fas fa-hourglass-half"></i>
+            <strong>Finaliza en:</strong> {{ getTiempoRestante(oferta.fechaFin) }}
           </p>
         </div>
-        <div class="card-footer text-end">
+
+        <div class="card-footer text-end bg-white">
           <button class="btn btn-sm btn-outline-primary" (click)="verDetalle(oferta)">
             <i class="fas fa-eye"></i> Ver Detalles
           </button>
@@ -39,3 +45,10 @@
     <i class="fas fa-info-circle"></i> No hay ofertas disponibles actualmente.
   </p>
 </div>
+<!-- Detalle lateral -->
+<app-detalle-oferta
+  *ngIf="ofertaSeleccionada"
+  [oferta]="ofertaSeleccionada"
+  (cerrar)="cerrarDetalle()"
+  class="detalle-lateral"
+></app-detalle-oferta>

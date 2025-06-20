@@ -41,6 +41,7 @@ import { OfertasComponent as EstudianteOfertasComponent } from './estudiante/ofe
 import { PostulacionesComponent as EstudiantePostulacionesComponent } from './estudiante/postulaciones/postulaciones.component';
 import { PracticasComponent } from './estudiante/practicas/practicas.component';
 import { SubirCvComponent } from './estudiante/subir-cv/subir-cv.component';
+import { DetalleOfertaComponent } from './estudiante/ofertas/detalle-oferta/detalle-oferta.component';
 
 
 const routes: Routes = [
@@ -90,7 +91,8 @@ const routes: Routes = [
     EstudianteOfertasComponent,
     EstudiantePostulacionesComponent,
     PracticasComponent,
-    SubirCvComponent
+    SubirCvComponent,
+    DetalleOfertaComponent
   ],
   imports: [
     BrowserModule,
