@@ -12,6 +12,7 @@ import { ModalPostulantesComponent } from './modal-postulantes/modal-postulantes
 })
 export class OfertasComponent implements OnInit {
   ofertas: any[] = [];
+  filtroEstado: string = 'TODAS';
 
   constructor(
     private http: HttpClient,
@@ -26,6 +27,51 @@ export class OfertasComponent implements OnInit {
     }, 1000);
   }
 
+  cargarOfertas() {
+    this.http.get<any[]>('http://localhost:4040/oferta-ms/ofertas').subscribe({
+      next: data => {
+        this.completarOfertas(data);
+      },
+      error: err => console.error('Error cargando ofertas', err)
+    });
+  }
+
+  filtrarOfertasPorEstado() {
+    if (this.filtroEstado === 'TODAS') {
+      this.cargarOfertas();
+    } else {
+      this.http.get<any[]>(`http://localhost:4040/oferta-ms/ofertas/estado/${this.filtroEstado}`).subscribe({
+        next: data => {
+          this.completarOfertas(data);
+        },
+        error: err => console.error('Error filtrando ofertas', err)
+      });
+    }
+  }
+
+  completarOfertas(data: any[]) {
+    const promises = data.map(oferta => {
+      const partes = oferta.fechaFin.split('/');
+      if (partes.length === 3) {
+        oferta.fechaFin = `${partes[2]}-${partes[1]}-${partes[0]}`;
+      }
+
+      return this.http.get<any>(`http://localhost:4040/oferta-ms/vacantes/oferta/${oferta.id}`).toPromise()
+        .then(vacantes => {
+          oferta.vacantes = vacantes;
+          return oferta;
+        })
+        .catch(() => {
+          oferta.vacantes = null;
+          return oferta;
+        });
+    });
+
+    Promise.all(promises).then(ofertasCompletas => {
+      this.ofertas = ofertasCompletas;
+    });
+  }
+
   abrirModalOferta(oferta?: any) {
     const dialogRef = this.dialog.open(ModalOfertaComponent, {
       width: '500px',
@@ -34,7 +80,7 @@ export class OfertasComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result === true) {
-        this.cargarOfertas();
+        this.filtrarOfertasPorEstado(); // Refrescar según filtro actual
       }
     });
   }
@@ -50,7 +96,7 @@ export class OfertasComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result === true) {
-        this.cargarOfertas();
+        this.filtrarOfertasPorEstado(); // Refrescar según filtro actual
       }
     });
   }
@@ -59,33 +105,6 @@ export class OfertasComponent implements OnInit {
     this.dialog.open(ModalPostulantesComponent, {
       width: '800px',
       data: { ofertaId: idOferta }
-    });
-  }
-  cargarOfertas() {
-    this.http.get<any[]>('http://localhost:4040/oferta-ms/ofertas').subscribe({
-      next: data => {
-        const promises = data.map(oferta => {
-          const partes = oferta.fechaFin.split('/');
-          if (partes.length === 3) {
-            oferta.fechaFin = `${partes[2]}-${partes[1]}-${partes[0]}`;
-          }
-
-          return this.http.get<any>(`http://localhost:4040/oferta-ms/vacantes/oferta/${oferta.id}`).toPromise()
-            .then(vacantes => {
-              oferta.vacantes = vacantes;
-              return oferta;
-            })
-            .catch(() => {
-              oferta.vacantes = null;
-              return oferta;
-            });
-        });
-
-        Promise.all(promises).then(ofertasCompletas => {
-          this.ofertas = ofertasCompletas;
-        });
-      },
-      error: err => console.error('Error cargando ofertas', err)
     });
   }
 
