@@ -7,8 +7,9 @@ import { Component, OnInit } from '@angular/core';
 })
 export class EstudianteComponent implements OnInit {
   estudianteNombre: string = 'Nombre del Estudiante';
-  estudianteFoto: string = 'https://cdn-icons-png.flaticon.com/512/149/149071.png'; // Mejor apariencia
-  sidebarVisible: boolean = true; // Nuevo: para alternar el sidebar
+  estudianteFoto: string = 'https://cdn-icons-png.flaticon.com/512/149/149071.png';
+  estudianteCodigo: string = '';
+  sidebarVisible: boolean = true;
 
   constructor() { }
 
@@ -18,6 +19,7 @@ export class EstudianteComponent implements OnInit {
       const datos = JSON.parse(usuario);
       this.estudianteNombre = datos.nombre || this.estudianteNombre;
       this.estudianteFoto = datos.foto || this.estudianteFoto;
+      this.estudianteCodigo = datos.codigo || '';
     }
   }
 

@@ -1,0 +1,18 @@
+<div class="login-container">
+  <h2>Iniciar sesión</h2>
+  <form (ngSubmit)="onLogin()" #loginForm="ngForm">
+    <mat-form-field appearance="outline">
+      <mat-label>Usuario</mat-label>
+      <input matInput type="text" name="username" [(ngModel)]="user.username" required>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Contraseña</mat-label>
+      <input matInput type="password" name="password" [(ngModel)]="user.password" required>
+    </mat-form-field>
+
+    <button mat-raised-button color="primary" type="submit" [disabled]="!loginForm.valid">Ingresar</button>
+  </form>
+
+  <p *ngIf="error" style="color: red">{{ error }}</p>
+</div>

@@ -1,7 +1,6 @@
-// Importaciones base
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { RouterModule, Routes } from '@angular/router';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -18,10 +17,11 @@ import { MatTableModule } from '@angular/material/table';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { MatSortModule } from '@angular/material/sort'; // opcional
+import { MatSortModule } from '@angular/material/sort';
 
 // Componentes principales
 import { AppComponent } from './app.component';
+import { LoginComponent } from './auth/login/login.component';
 
 // Admin
 import { AdminComponent } from './admin/admin.component';
@@ -45,9 +45,22 @@ import { PracticasComponent } from './estudiante/practicas/practicas.component';
 import { SubirCvComponent } from './estudiante/subir-cv/subir-cv.component';
 import { DetalleOfertaComponent } from './estudiante/ofertas/detalle-oferta/detalle-oferta.component';
 
+// Auth Guard
+import { AuthGuard } from './guards/auth.guard';
+
+// Interceptor
+import { AuthInterceptor } from './interceptors/auth.interceptor';
+
+// Rutas
 const routes: Routes = [
+  { path: 'login', component: LoginComponent },
   {
-    path: 'admin', component: AdminComponent, children: [
+    path: 'admin',
+    component: AdminComponent,
+    canActivate: [AuthGuard],
+    canActivateChild: [AuthGuard],
+    data: { role: 'ADMIN' },
+    children: [
       { path: 'empresas', component: EmpresasComponent },
       { path: 'ofertas', component: AdminOfertasComponent },
       { path: 'postulaciones', component: AdminPostulacionesComponent },
@@ -57,7 +70,12 @@ const routes: Routes = [
     ]
   },
   {
-    path: 'estudiante', component: EstudianteComponent, children: [
+    path: 'estudiante',
+    component: EstudianteComponent,
+    canActivate: [AuthGuard],
+    canActivateChild: [AuthGuard],
+    data: { role: 'ESTUDIANTE' },
+    children: [
       { path: 'perfil', component: PerfilComponent },
       { path: 'ofertas', component: EstudianteOfertasComponent },
       { path: 'postulaciones', component: EstudiantePostulacionesComponent },
@@ -66,12 +84,13 @@ const routes: Routes = [
       { path: '', redirectTo: 'perfil', pathMatch: 'full' }
     ]
   },
-  { path: '', redirectTo: 'admin', pathMatch: 'full' }
+  { path: '', redirectTo: 'login', pathMatch: 'full' }
 ];
 
 @NgModule({
   declarations: [
     AppComponent,
+    LoginComponent,
     AdminComponent,
     EmpresasComponent,
     AdminOfertasComponent,
@@ -108,9 +127,16 @@ const routes: Routes = [
     MatCardModule,
     MatIconModule,
     MatTooltipModule,
-    MatSortModule // si luego quieres ordenar columnas
+    MatSortModule
   ],
-  providers: [],
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true
+    },
+    AuthGuard
+  ],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {}

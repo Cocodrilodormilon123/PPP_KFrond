@@ -13,9 +13,14 @@
         <a href="#"><i class="fas fa-life-ring"></i> Ayuda</a>
         <a href="#"><i class="fas fa-bell"></i></a>
       </div>
+
+      <!-- INFO ESTUDIANTE -->
       <div class="user-info">
         <img [src]="estudianteFoto" alt="Foto" class="user-img" />
-        <span>{{ estudianteNombre }}</span>
+        <div class="text-info">
+          <span>{{ estudianteNombre }}</span><br />
+          <small class="codigo-universitario">Código: {{ estudianteCodigo }}</small>
+        </div>
       </div>
     </div>
   </header>
