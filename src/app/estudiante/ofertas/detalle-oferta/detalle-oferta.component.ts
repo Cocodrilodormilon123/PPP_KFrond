@@ -13,23 +13,27 @@ export class DetalleOfertaComponent {
   constructor(private http: HttpClient) {}
 
   postular(): void {
-    //para saber el id de la persona postulante
-    const stored = localStorage.getItem('user');
+    const stored = localStorage.getItem('usuario');
     const idPersona = stored ? JSON.parse(stored).idPersona : null;
-    // Convertir la fecha al formato que espera el backend: "dd/MM/yyyy"
+
+    if (!idPersona) {
+      alert('No se encontró el ID del usuario. Por favor, inicia sesión nuevamente.');
+      return;
+    }
+
     const fecha = this.convertirFecha(new Date());
 
     const nuevaPostulacion = {
-      idPersona: idPersona, // ⚠️ temporal — cambiar luego por el ID real desde el token
+      idPersona: idPersona,
       comentario: 'En espera',
       estado: 'PENDIENTE',
-      fechaPostulacion: fecha, // formato "dd/MM/yyyy"
+      fechaPostulacion: fecha,
       oferta: {
         id: this.oferta.id
       }
     };
 
-    console.log('JSON a enviar:', nuevaPostulacion); // 👈 para debug
+    console.log('JSON a enviar:', nuevaPostulacion);
     this.http.post('http://localhost:4040/oferta-ms/postulaciones', nuevaPostulacion)
       .subscribe({
         next: () => {
@@ -47,7 +51,6 @@ export class DetalleOfertaComponent {
     this.cerrar.emit();
   }
 
-  // 🛠️ Función para convertir a formato "dd/MM/yyyy"
   private convertirFecha(date: Date): string {
     const dia = String(date.getDate()).padStart(2, '0');
     const mes = String(date.getMonth() + 1).padStart(2, '0');

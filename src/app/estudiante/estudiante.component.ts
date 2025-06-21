@@ -18,8 +18,12 @@ export class EstudianteComponent implements OnInit {
     if (usuario) {
       const datos = JSON.parse(usuario);
       this.estudianteNombre = datos.nombre || this.estudianteNombre;
-      this.estudianteFoto = datos.foto || this.estudianteFoto;
       this.estudianteCodigo = datos.codigo || '';
+
+      // ✅ Corregido: construir la URL de la imagen si hay foto
+      if (datos.foto) {
+        this.estudianteFoto = `http://localhost:4040/persona-ms/img/${datos.foto}`;
+      }
     }
   }
 
