@@ -13,11 +13,14 @@ export class DetalleOfertaComponent {
   constructor(private http: HttpClient) {}
 
   postular(): void {
+    //para saber el id de la persona postulante
+    const stored = localStorage.getItem('user');
+    const idPersona = stored ? JSON.parse(stored).idPersona : null;
     // Convertir la fecha al formato que espera el backend: "dd/MM/yyyy"
     const fecha = this.convertirFecha(new Date());
 
     const nuevaPostulacion = {
-      idPersona: 1, // ⚠️ temporal — cambiar luego por el ID real desde el token
+      idPersona: idPersona, // ⚠️ temporal — cambiar luego por el ID real desde el token
       comentario: 'En espera',
       estado: 'PENDIENTE',
       fechaPostulacion: fecha, // formato "dd/MM/yyyy"

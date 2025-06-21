@@ -28,6 +28,10 @@ export class LoginComponent {
         try {
           const decoded: any = jwtDecode(res.accessToken);
           const role = decoded.role;
+          const idPersona = decoded.idPersona; // 👈 este debe venir del backend
+
+          // Guarda también el ID de la persona
+          localStorage.setItem('user', JSON.stringify({ idPersona }));
 
           if (role === 'ADMIN') {
             this.router.navigate(['/admin']);

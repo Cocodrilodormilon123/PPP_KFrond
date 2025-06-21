@@ -1,1 +1,29 @@
-<p>postulaciones works!</p>
+<h2>Mis Postulaciones</h2>
+<table>
+  <thead>
+  <tr>
+    <th>Oferta</th>
+    <th>Empresa</th>
+    <th>Fecha</th>
+    <th>Estado</th>
+    <th>Acciones</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr *ngFor="let p of postulaciones">
+    <td>{{ p.oferta?.titulo || 'N/A' }}</td>
+    <td>{{ p.oferta?.empresa?.nombre || 'N/A' }}</td>
+    <td>{{ p.fechaPostulacion | date }}</td>
+    <td [ngClass]="'estado-' + p.estado.toLowerCase()">
+      {{ p.estado }}
+    </td>
+
+    <td class="acciones">
+      <ng-container *ngIf="p.estado === 'EN_REVISION'">
+        <button class="btn-descargar">📥 Descargar</button>
+        <button class="btn-subir">📤 Subir</button>
+      </ng-container>
+    </td>
+  </tr>
+  </tbody>
+</table>
