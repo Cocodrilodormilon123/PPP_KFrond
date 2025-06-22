@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-estudiante',
@@ -6,12 +7,13 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./estudiante.component.css']
 })
 export class EstudianteComponent implements OnInit {
-  estudianteNombre: string = 'Nombre del Estudiante';
-  estudianteFoto: string = 'https://cdn-icons-png.flaticon.com/512/149/149071.png';
-  estudianteCodigo: string = '';
-  sidebarVisible: boolean = true;
+  estudianteNombre = 'Nombre del Estudiante';
+  estudianteCodigo = '';
+  estudianteFoto = 'https://cdn-icons-png.flaticon.com/512/149/149071.png';
+  sidebarVisible = true;
+  mostrarMenu = false;
 
-  constructor() { }
+  constructor(private router: Router) {}
 
   ngOnInit(): void {
     const usuario = localStorage.getItem('usuario');
@@ -19,15 +21,27 @@ export class EstudianteComponent implements OnInit {
       const datos = JSON.parse(usuario);
       this.estudianteNombre = datos.nombre || this.estudianteNombre;
       this.estudianteCodigo = datos.codigo || '';
-
-      // ✅ Corregido: construir la URL de la imagen si hay foto
       if (datos.foto) {
         this.estudianteFoto = `http://localhost:4040/persona-ms/img/${datos.foto}`;
       }
     }
   }
 
-  toggleSidebar() {
+  toggleSidebar(): void {
     this.sidebarVisible = !this.sidebarVisible;
+  }
+
+  cerrarSesion(): void {
+    localStorage.removeItem('accessToken');
+    localStorage.removeItem('usuario');
+    this.router.navigate(['/login']);
+  }
+
+  onMouseOut(event: MouseEvent): void {
+    const relatedTarget = event.relatedTarget as HTMLElement;
+    const dropdown = document.querySelector('.user-dropdown-wrapper');
+    if (dropdown && !dropdown.contains(relatedTarget)) {
+      this.mostrarMenu = false;
+    }
   }
 }

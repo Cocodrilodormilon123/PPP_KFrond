@@ -25,7 +25,7 @@
         <!-- Dropdown -->
         <ul class="dropdown-menu custom-dropdown" [ngClass]="{ 'show': mostrarMenu }">
           <li>
-            <a class="dropdown-item" href="#" (click)="cambiarClave()">
+            <a class="dropdown-item" routerLink="cambiar-clave" routerLinkActive="active">
               <i class="fas fa-key me-2"></i> Cambiar clave
             </a>
           </li>
@@ -50,6 +50,8 @@
         <li><a routerLink="buscar-estudiante" routerLinkActive="active"><i class="fas fa-search"></i> Buscar Estudiante</a></li>
         <li><a routerLink="crear-usuario" routerLinkActive="active"><i class="fas fa-user-plus"></i> Crear Usuario</a></li>
         <li><a routerLink="administradores" routerLinkActive="active"><i class="fas fa-user-shield"></i> Administradores</a></li>
+
+        <li><a routerLink="cambiar-clave" routerLinkActive="active"><i class="fas fa-key"></i> Cambiar clave</a></li>
       </ul>
     </aside>
 

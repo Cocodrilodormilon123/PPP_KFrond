@@ -14,13 +14,29 @@
         <a href="#"><i class="fas fa-bell"></i></a>
       </div>
 
-      <!-- INFO ESTUDIANTE -->
-      <div class="user-info">
-        <img [src]="estudianteFoto" alt="Foto" class="user-img" />
-        <div class="text-info">
-          <span>{{ estudianteNombre }}</span><br />
-          <small class="codigo-universitario">Código: {{ estudianteCodigo }}</small>
+      <!-- INFO ESTUDIANTE + DROPDOWN -->
+      <div class="user-dropdown-wrapper" (mouseleave)="onMouseOut($event)">
+        <div class="user-info" (click)="mostrarMenu = !mostrarMenu">
+          <img [src]="estudianteFoto" alt="Foto" class="user-img" />
+          <div class="text-info">
+            <span>{{ estudianteNombre }}</span>
+            <small class="codigo-universitario">Código: {{ estudianteCodigo }}</small>
+          </div>
         </div>
+
+        <!-- DROPDOWN -->
+        <ul class="custom-dropdown" [class.show]="mostrarMenu">
+          <li>
+            <a class="dropdown-item" routerLink="cambiar-clave" routerLinkActive="active">
+              <i class="fas fa-key me-2"></i> Cambiar clave
+            </a>
+          </li>
+          <li>
+            <a class="dropdown-item text-danger" href="#" (click)="cerrarSesion()">
+              <i class="fas fa-sign-out-alt me-2"></i> Cerrar sesión
+            </a>
+          </li>
+        </ul>
       </div>
     </div>
   </header>
@@ -35,10 +51,11 @@
         <li><a routerLink="postulaciones" routerLinkActive="active"><i class="fas fa-paper-plane"></i> Postulaciones</a></li>
         <li><a routerLink="practicas" routerLinkActive="active"><i class="fas fa-folder-open"></i> Prácticas</a></li>
         <li><a routerLink="cv" routerLinkActive="active"><i class="fas fa-file-alt"></i> Subir CV</a></li>
+        <li><a routerLink="cambiar-clave" routerLinkActive="active"><i class="fas fa-key"></i> Cambiar clave</a></li>
       </ul>
     </aside>
 
-    <!-- ROUTER -->
+    <!-- ÁREA DE CONTENIDO -->
     <section class="content">
       <router-outlet></router-outlet>
     </section>

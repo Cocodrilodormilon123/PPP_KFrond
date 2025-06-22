@@ -1,7 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { MatDialog } from '@angular/material/dialog';
-import { ModalCambiarClaveComponent } from './modal-cambiar-clave/modal-cambiar-clave.component';
 
 @Component({
   selector: 'app-admin',
@@ -9,13 +7,13 @@ import { ModalCambiarClaveComponent } from './modal-cambiar-clave/modal-cambiar-
   styleUrls: ['./admin.component.css']
 })
 export class AdminComponent implements OnInit {
-  adminNombre: string = 'Administrador';
-  adminCodigo: string = '';
-  adminFoto: string = 'https://cdn-icons-png.flaticon.com/512/149/149071.png';
-  sidebarVisible: boolean = true;
-  mostrarMenu: boolean = false;
+  adminNombre = 'Administrador';
+  adminCodigo = '';
+  adminFoto = 'https://cdn-icons-png.flaticon.com/512/149/149071.png';
+  sidebarVisible = true;
+  mostrarMenu = false;
 
-  constructor(private router: Router, private dialog: MatDialog) {}
+  constructor(private router: Router) {}
 
   ngOnInit(): void {
     const usuario = localStorage.getItem('usuario');
@@ -33,11 +31,6 @@ export class AdminComponent implements OnInit {
     this.sidebarVisible = !this.sidebarVisible;
   }
 
-  cambiarClave(): void {
-    this.dialog.open(ModalCambiarClaveComponent, {
-      width: '400px'
-    });
-  }
 
   cerrarSesion(): void {
     localStorage.removeItem('accessToken');

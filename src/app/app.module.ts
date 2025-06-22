@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule, Routes } from '@angular/router';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
@@ -35,7 +35,7 @@ import { FormAdminComponent } from './admin/form-admin/form-admin.component';
 import { ModalOfertaComponent } from './admin/ofertas/modal-oferta/modal-oferta.component';
 import { ModalCuposComponent } from './admin/ofertas/modal-cupos/modal-cupos.component';
 import { ModalPostulantesComponent } from './admin/ofertas/modal-postulantes/modal-postulantes.component';
-import { ModalCambiarClaveComponent } from './admin/modal-cambiar-clave/modal-cambiar-clave.component';
+import { CambiarClaveComponent } from './admin/cambiar-clave/cambiar-clave.component';
 
 // Estudiante
 import { EstudianteComponent } from './estudiante/estudiante.component';
@@ -45,14 +45,13 @@ import { PostulacionesComponent as EstudiantePostulacionesComponent } from './es
 import { PracticasComponent } from './estudiante/practicas/practicas.component';
 import { SubirCvComponent } from './estudiante/subir-cv/subir-cv.component';
 import { DetalleOfertaComponent } from './estudiante/ofertas/detalle-oferta/detalle-oferta.component';
+import { CambiarClaveComponent as EstudianteCambiarClaveComponent } from './estudiante/cambiar-clave/cambiar-clave.component';
 
-// Auth Guard
+// Auth Guard e Interceptor
 import { AuthGuard } from './guards/auth.guard';
-
-// Interceptor
 import { AuthInterceptor } from './interceptors/auth.interceptor';
 
-// Rutas (sin cambiar-clave)
+// Rutas
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
 
@@ -68,9 +67,11 @@ const routes: Routes = [
       { path: 'postulaciones', component: AdminPostulacionesComponent },
       { path: 'buscar-estudiante', component: EstudianteDetalleComponent },
       { path: 'crear-usuario', component: CrearUsuarioComponent },
+      { path: 'cambiar-clave', component: CambiarClaveComponent },
       { path: '', redirectTo: 'empresas', pathMatch: 'full' }
     ]
   },
+
   {
     path: 'estudiante',
     component: EstudianteComponent,
@@ -83,10 +84,13 @@ const routes: Routes = [
       { path: 'postulaciones', component: EstudiantePostulacionesComponent },
       { path: 'practicas', component: PracticasComponent },
       { path: 'cv', component: SubirCvComponent },
+      { path: 'cambiar-clave', component: EstudianteCambiarClaveComponent },
       { path: '', redirectTo: 'perfil', pathMatch: 'full' }
     ]
   },
-  { path: '', redirectTo: 'login', pathMatch: 'full' }
+
+  { path: '', redirectTo: 'login', pathMatch: 'full' },
+  { path: '**', redirectTo: 'login' }
 ];
 
 @NgModule({
@@ -104,19 +108,21 @@ const routes: Routes = [
     ModalOfertaComponent,
     ModalCuposComponent,
     ModalPostulantesComponent,
-    ModalCambiarClaveComponent,
+    CambiarClaveComponent, // Admin
     EstudianteComponent,
     PerfilComponent,
     EstudianteOfertasComponent,
     EstudiantePostulacionesComponent,
     PracticasComponent,
     SubirCvComponent,
-    DetalleOfertaComponent
+    DetalleOfertaComponent,
+    EstudianteCambiarClaveComponent // Estudiante
   ],
   imports: [
     BrowserModule,
     HttpClientModule,
     FormsModule,
+    ReactiveFormsModule,
     RouterModule.forRoot(routes),
     BrowserAnimationsModule,
     MatDialogModule,

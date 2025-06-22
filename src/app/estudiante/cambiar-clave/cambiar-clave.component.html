@@ -1,0 +1,32 @@
+<h2 class="titulo">Cambiar Contraseña</h2>
+
+<form (ngSubmit)="cambiarClave()" #formClave="ngForm" class="formulario-cambio">
+  <div class="grupo-campo">
+    <label for="oldPassword">
+      <i class="fas fa-lock icono-label"></i> Contraseña actual:
+    </label>
+    <input type="password" id="oldPassword" name="oldPassword" [(ngModel)]="oldPassword" required>
+  </div>
+
+  <div class="grupo-campo">
+    <label for="newPassword">
+      <i class="fas fa-key icono-label"></i> Nueva contraseña:
+    </label>
+    <input type="password" id="newPassword" name="newPassword" [(ngModel)]="newPassword" required>
+  </div>
+
+  <div class="grupo-campo">
+    <label for="confirmPassword">
+      <i class="fas fa-check-double icono-label"></i> Confirmar nueva contraseña:
+    </label>
+    <input type="password" id="confirmPassword" name="confirmPassword" [(ngModel)]="confirmPassword" required>
+  </div>
+
+  <button type="submit" [disabled]="formClave.invalid">
+    <i class="fas fa-sync-alt"></i> Cambiar Contraseña
+  </button>
+</form>
+
+<p *ngIf="mensaje" [class.error]="error" [class.exito]="!error">
+  {{ mensaje }}
+</p>

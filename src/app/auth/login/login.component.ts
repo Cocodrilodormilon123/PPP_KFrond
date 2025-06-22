@@ -37,7 +37,8 @@ export class LoginComponent {
                 nombre: persona.nombre,
                 apellido: persona.apellido,
                 codigo: persona.codigo,
-                foto: persona.foto || 'https://cdn-icons-png.flaticon.com/512/149/149071.png'
+                foto: persona.foto || 'https://cdn-icons-png.flaticon.com/512/149/149071.png',
+                username: this.user.username
               };
               localStorage.setItem('usuario', JSON.stringify(usuario));
 

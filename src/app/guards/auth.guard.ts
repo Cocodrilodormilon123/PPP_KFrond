@@ -26,8 +26,6 @@ export class AuthGuard implements CanActivate, CanActivateChild {
       const decoded: any = jwtDecode(token);
       const now = Math.floor(Date.now() / 1000);
 
-      console.log('Token decodificado:', decoded);
-
       if (decoded.exp && decoded.exp < now) {
         console.warn('Token expirado');
         localStorage.removeItem('accessToken');
@@ -40,7 +38,6 @@ export class AuthGuard implements CanActivate, CanActivateChild {
 
       console.log('Rol esperado:', expectedRole, '| Rol del token:', actualRole);
 
-      // Compara ignorando mayúsculas/minúsculas
       if (expectedRole && actualRole?.toUpperCase() !== expectedRole?.toUpperCase()) {
         console.warn('Rol no coincide');
         this.router.navigate(['/login']);
@@ -56,8 +53,8 @@ export class AuthGuard implements CanActivate, CanActivateChild {
   }
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
-    const finalRoute = route.firstChild ? route.firstChild : route;
-    return this.validarAcceso(finalRoute);
+    // Antes se usaba route.firstChild, pero eso falla para rutas sin hijos
+    return this.validarAcceso(route);
   }
 
   canActivateChild(childRoute: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {

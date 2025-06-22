@@ -1,4 +1,3 @@
-// src/app/services/auth.service.ts
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
@@ -18,17 +17,14 @@ export class AuthService {
       }
     });
   }
-  changePassword(username: string, oldPassword: string, newPassword: string): Observable<any> {
-    const body = {
-      username,
-      oldPassword,
-      newPassword
-    };
 
+  changePassword(username: string, oldPassword: string, newPassword: string): Observable<any> {
+    const body = { username, oldPassword, newPassword };
     return this.http.post(`${this.baseUrl}/change-password`, body, {
       headers: {
         'Content-Type': 'application/json'
-      }
+      },
+      responseType: 'text' // Puedes usar 'json' si el backend devuelve JSON
     });
   }
 }
