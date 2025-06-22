@@ -2,18 +2,39 @@
   <!-- HEADER -->
   <header class="topbar">
     <div class="left-links">
-      <span class="toggle-button" (click)="toggleSidebar()">
-        <i class="fas fa-bars"></i>
-      </span>
+    <span class="toggle-button" (click)="toggleSidebar()">
+      <i class="fas fa-bars"></i>
+    </span>
     </div>
 
     <div class="right-section">
-      <div class="user-info">
-        <img [src]="adminFoto" alt="Foto Admin" class="user-img" />
-        <div class="text-info">
-          <span>{{ adminNombre }}</span>
-          <small class="codigo-universitario">Código: {{ adminCodigo }}</small>
+      <div
+        class="user-dropdown-wrapper"
+        (mouseenter)="mostrarMenu = true"
+        (mouseout)="onMouseOut($event)"
+      >
+        <!-- Info Usuario -->
+        <div class="user-info d-flex align-items-center">
+          <img [src]="adminFoto" alt="Foto Admin" class="user-img me-2" />
+          <div class="text-info text-white">
+            <span>{{ adminNombre }}</span><br />
+            <small class="codigo-universitario">Código: {{ adminCodigo }}</small>
+          </div>
         </div>
+
+        <!-- Dropdown -->
+        <ul class="dropdown-menu custom-dropdown" [ngClass]="{ 'show': mostrarMenu }">
+          <li>
+            <a class="dropdown-item" href="#" (click)="cambiarClave()">
+              <i class="fas fa-key me-2"></i> Cambiar clave
+            </a>
+          </li>
+          <li>
+            <a class="dropdown-item text-danger" href="#" (click)="cerrarSesion()">
+              <i class="fas fa-sign-out-alt me-2"></i> Cerrar sesión
+            </a>
+          </li>
+        </ul>
       </div>
     </div>
   </header>

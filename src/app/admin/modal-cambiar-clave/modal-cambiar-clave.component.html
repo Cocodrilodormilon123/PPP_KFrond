@@ -1,0 +1,27 @@
+<h2 mat-dialog-title>Cambiar contraseña</h2>
+
+<mat-dialog-content>
+  <mat-form-field appearance="fill" class="full-width">
+    <mat-label>Contraseña actual</mat-label>
+    <input matInput type="password" [(ngModel)]="oldPassword" required />
+  </mat-form-field>
+
+  <mat-form-field appearance="fill" class="full-width">
+    <mat-label>Nueva contraseña</mat-label>
+    <input matInput type="password" [(ngModel)]="newPassword" required />
+  </mat-form-field>
+
+  <mat-form-field appearance="fill" class="full-width">
+    <mat-label>Confirmar nueva contraseña</mat-label>
+    <input matInput type="password" [(ngModel)]="confirmPassword" required />
+  </mat-form-field>
+
+  <div *ngIf="mensaje" [ngClass]="{ 'error': error, 'success': !error }">
+    {{ mensaje }}
+  </div>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="cerrar()">Cancelar</button>
+  <button mat-raised-button color="primary" (click)="cambiarClave()">Actualizar</button>
+</mat-dialog-actions>

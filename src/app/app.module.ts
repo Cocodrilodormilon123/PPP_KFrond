@@ -35,6 +35,7 @@ import { FormAdminComponent } from './admin/form-admin/form-admin.component';
 import { ModalOfertaComponent } from './admin/ofertas/modal-oferta/modal-oferta.component';
 import { ModalCuposComponent } from './admin/ofertas/modal-cupos/modal-cupos.component';
 import { ModalPostulantesComponent } from './admin/ofertas/modal-postulantes/modal-postulantes.component';
+import { ModalCambiarClaveComponent } from './admin/modal-cambiar-clave/modal-cambiar-clave.component';
 
 // Estudiante
 import { EstudianteComponent } from './estudiante/estudiante.component';
@@ -51,9 +52,10 @@ import { AuthGuard } from './guards/auth.guard';
 // Interceptor
 import { AuthInterceptor } from './interceptors/auth.interceptor';
 
-// Rutas
+// Rutas (sin cambiar-clave)
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
+
   {
     path: 'admin',
     component: AdminComponent,
@@ -102,6 +104,7 @@ const routes: Routes = [
     ModalOfertaComponent,
     ModalCuposComponent,
     ModalPostulantesComponent,
+    ModalCambiarClaveComponent,
     EstudianteComponent,
     PerfilComponent,
     EstudianteOfertasComponent,

@@ -18,4 +18,17 @@ export class AuthService {
       }
     });
   }
+  changePassword(username: string, oldPassword: string, newPassword: string): Observable<any> {
+    const body = {
+      username,
+      oldPassword,
+      newPassword
+    };
+
+    return this.http.post(`${this.baseUrl}/change-password`, body, {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+  }
 }
