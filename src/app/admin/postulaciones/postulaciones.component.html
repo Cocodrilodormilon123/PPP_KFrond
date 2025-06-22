@@ -1,1 +1,42 @@
-<p>postulaciones works!</p>
+<table>
+  <thead>
+  <tr>
+    <th>Estudiante</th>
+    <th>Oferta</th>
+    <th>Estado</th>
+    <th>Acciones Estado</th>
+    <th>Documento Subido</th>
+    <th>Acciones Documento</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr *ngFor="let p of postulaciones">
+    <td>{{ p.nombreEstudiante || 'Desconocido' }}</td>
+    <td>{{ p.oferta?.titulo }}</td>
+    <td>{{ p.estado }}</td>
+
+    <!-- Acciones Estado -->
+    <td>
+      <button *ngIf="p.estado === 'PENDIENTE'" (click)="cambiarEstado(p.id, 'EN_REVISION')">✅ Revisar</button>
+      <button *ngIf="p.estado === 'PENDIENTE'" (click)="cambiarEstado(p.id, 'RECHAZADA')">❌ Rechazar</button>
+    </td>
+
+    <!-- Documento Subido -->
+    <td>
+      <ng-container *ngIf="documentos[p.id]; else noDoc">
+        <button (click)="verDocumento(documentos[p.id].rutaArchivo)">📄 Ver</button>
+      </ng-container>
+      <ng-template #noDoc>—</ng-template>
+    </td>
+
+    <!-- Acciones Documento -->
+    <td>
+      <ng-container *ngIf="documentos[p.id]">
+        <button (click)="cambiarEstadoDocumento(p.id, 'ACEPTADO')">✅ Aceptar</button>
+        <button (click)="cambiarEstadoDocumento(p.id, 'RECHAZADO')">❌ Rechazar</button>
+      </ng-container>
+      <ng-container *ngIf="!documentos[p.id]">—</ng-container>
+    </td>
+  </tr>
+  </tbody>
+</table>

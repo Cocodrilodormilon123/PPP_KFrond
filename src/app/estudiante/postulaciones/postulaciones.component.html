@@ -6,23 +6,41 @@
     <th>Empresa</th>
     <th>Fecha</th>
     <th>Estado</th>
-    <th>Acciones</th>
+    <th>Documento</th>
+    <th>Estado del Documento</th> <!-- ✅ NUEVA COLUMNA -->
   </tr>
   </thead>
   <tbody>
   <tr *ngFor="let p of postulaciones">
     <td>{{ p.oferta?.titulo || 'N/A' }}</td>
     <td>{{ p.oferta?.empresa?.nombre || 'N/A' }}</td>
-    <td>{{ p.fechaPostulacion | date }}</td>
+    <td>{{ p.fechaPostulacion | date: 'dd/MM/yyyy' }}</td>
     <td [ngClass]="'estado-' + p.estado.toLowerCase()">
       {{ p.estado }}
     </td>
 
+    <!-- Botones de acción -->
     <td class="acciones">
       <ng-container *ngIf="p.estado === 'EN_REVISION'">
-        <button class="btn-descargar">📥 Descargar</button>
-        <button class="btn-subir">📤 Subir</button>
+        <button class="btn-descargar" (click)="descargarPlantilla(p.id)">📥 Descargar</button>
+        <label class="btn-subir">
+          📤 Subir
+          <input type="file" (change)="subirArchivo($event, p.id)" hidden>
+        </label>
+
+        <!-- 🔴 Mensaje si el documento fue rechazado -->
+        <div *ngIf="documentos[p.id]?.estado === 'RECHAZADO'" class="alerta-rechazado">
+          ⚠ Tu documento fue rechazado. Por favor, vuelve a subirlo.
+        </div>
       </ng-container>
+    </td>
+
+    <!-- ✅ NUEVA COLUMNA: Estado del documento -->
+    <td>
+      <ng-container *ngIf="documentos[p.id]; else sinDoc">
+        {{ documentos[p.id].estado }}
+      </ng-container>
+      <ng-template #sinDoc>—</ng-template>
     </td>
   </tr>
   </tbody>

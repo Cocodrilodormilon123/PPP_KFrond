@@ -56,3 +56,10 @@ tr:hover {
 .btn-subir {
   background-color: #2ecc71;
 }
+
+.alerta-rechazado {
+  color: #b30000;
+  font-weight: bold;
+  margin-top: 5px;
+  font-size: 14px;
+}
