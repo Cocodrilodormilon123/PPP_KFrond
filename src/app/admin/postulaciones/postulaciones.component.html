@@ -31,9 +31,11 @@
 
     <!-- Acciones Documento -->
     <td>
-      <ng-container *ngIf="documentos[p.id]">
-        <button (click)="cambiarEstadoDocumento(p.id, 'ACEPTADO')">✅ Aceptar</button>
-        <button (click)="cambiarEstadoDocumento(p.id, 'RECHAZADO')">❌ Rechazar</button>
+      <ng-container *ngIf="documentos[p.id] as doc">
+        <ng-container *ngIf="doc.estado === 'PENDIENTE' || doc.estado === 'RECHAZADO'">
+          <button (click)="cambiarEstadoDocumento(p.id, 'ACEPTADO')">✅ Aceptar</button>
+          <button (click)="cambiarEstadoDocumento(p.id, 'RECHAZADO')">❌ Rechazar</button>
+        </ng-container>
       </ng-container>
       <ng-container *ngIf="!documentos[p.id]">—</ng-container>
     </td>
