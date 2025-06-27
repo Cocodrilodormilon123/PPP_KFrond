@@ -11,54 +11,69 @@ export class PostulacionService {
 
   constructor(private http: HttpClient) {}
 
+  private getAuthHeaders(): HttpHeaders {
+    const token = localStorage.getItem('accessToken') || '';
+    return new HttpHeaders().set('Authorization', `Bearer ${token}`);
+  }
+
   postular(postulacion: any): Observable<any> {
-    const token = localStorage.getItem('token') || '';
-    const headers = new HttpHeaders({
-      'Authorization': `Bearer ${token}`,
-      'Content-Type': 'application/json'
-    });
+    const headers = this.getAuthHeaders().set('Content-Type', 'application/json');
     return this.http.post(this.baseUrl, postulacion, { headers });
   }
 
   getPostulacionesByPersona(idPersona: number): Observable<any[]> {
-    return this.http.get<any[]>(`${this.baseUrl}/persona/${idPersona}`);
+    return this.http.get<any[]>(`${this.baseUrl}/persona/${idPersona}`, {
+      headers: this.getAuthHeaders()
+    });
   }
 
   getAllPostulaciones(): Observable<any[]> {
-    return this.http.get<any[]>(`${this.baseUrl}`);
+    return this.http.get<any[]>(this.baseUrl, {
+      headers: this.getAuthHeaders()
+    });
   }
 
   actualizarEstado(id: number, estado: string): Observable<any> {
-    return this.http.put(`${this.baseUrl}/${id}/estado?estado=${estado}`, {});
+    return this.http.put(`${this.baseUrl}/${id}/estado?estado=${estado}`, {}, {
+      headers: this.getAuthHeaders()
+    });
   }
 
   getDocumentoByPostulacion(idPostulacion: number): Observable<any> {
-    return this.http.get(`${this.baseUrl2}/${idPostulacion}`);
+    return this.http.get(`${this.baseUrl2}/${idPostulacion}`, {
+      headers: this.getAuthHeaders()
+    });
   }
 
   actualizarEstadoDocumento(id: number, nuevoEstado: string): Observable<any> {
-    return this.http.put(`${this.baseUrl2}/${id}/estado?nuevoEstado=${nuevoEstado}`, {});
+    return this.http.put(`${this.baseUrl2}/${id}/estado?nuevoEstado=${nuevoEstado}`, {}, {
+      headers: this.getAuthHeaders()
+    });
   }
 
   descargarPlantilla(idPostulacion: number): Observable<Blob> {
-    const token = localStorage.getItem('token') || '';
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
     return this.http.get(`${this.baseUrl2}/descargar-plantilla/${idPostulacion}`, {
-      headers,
+      headers: this.getAuthHeaders(),
       responseType: 'blob'
     });
   }
 
   subirArchivo(url: string, data: FormData): Observable<any> {
-    return this.http.post(url, data);
+    return this.http.post(url, data, {
+      headers: this.getAuthHeaders()
+    });
   }
 
   verDocumento(nombreArchivo: string): Observable<Blob> {
-    const token = localStorage.getItem('token') || '';
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-    return this.http.get(`http://localhost:4040/oferta-ms/documento-postulacion/archivo/${nombreArchivo}`, {
-      headers,
+    return this.http.get(`${this.baseUrl2}/archivo/${nombreArchivo}`, {
+      headers: this.getAuthHeaders(),
       responseType: 'blob'
+    });
+  }
+
+  getOfertaById(idOferta: number): Observable<any> {
+    return this.http.get(`http://localhost:4040/oferta-ms/ofertas/${idOferta}`, {
+      headers: this.getAuthHeaders()
     });
   }
 }

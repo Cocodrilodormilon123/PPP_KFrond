@@ -1,47 +1,93 @@
-<h2>Mis Postulaciones</h2>
-<table>
-  <thead>
-  <tr>
-    <th>Oferta</th>
-    <th>Empresa</th>
-    <th>Fecha</th>
-    <th>Estado</th>
-    <th>Documento</th>
-    <th>Estado del Documento</th> <!-- ✅ NUEVA COLUMNA -->
-  </tr>
-  </thead>
-  <tbody>
-  <tr *ngFor="let p of postulaciones">
-    <td>{{ p.oferta?.titulo || 'N/A' }}</td>
-    <td>{{ p.oferta?.empresa?.nombre || 'N/A' }}</td>
-    <td>{{ p.fechaPostulacion | date: 'dd/MM/yyyy' }}</td>
-    <td [ngClass]="'estado-' + p.estado.toLowerCase()">
-      {{ p.estado }}
-    </td>
+<div class="contenedor-postulaciones">
+  <div *ngIf="postulaciones.length === 0" class="mensaje-vacio">
+    <p>No tienes procesos de postulación vigentes.</p>
+  </div>
 
-    <!-- Botones de acción -->
-    <td class="acciones">
-      <ng-container *ngIf="p.estado === 'EN_REVISION'">
-        <button class="btn-descargar" (click)="descargarPlantilla(p.id)">📥 Descargar</button>
-        <label class="btn-subir">
-          📤 Subir
-          <input type="file" (change)="subirArchivo($event, p.id)" hidden>
-        </label>
+  <table *ngIf="postulaciones.length > 0" class="tabla-principal">
+    <thead>
+    <tr>
+      <th>Oferta</th>
+      <th>Empresa</th>
+      <th>Fecha</th>
+      <th>Estado</th>
+      <th>Comentario</th>
+      <th>Acción</th>
+    </tr>
+    </thead>
+    <tbody>
+    <ng-container *ngFor="let p of postulaciones">
+      <tr>
+        <td>{{ p.tituloOferta }}</td>
+        <td>{{ p.nombreEmpresa }}</td>
+        <td>{{ p.fechaPostulacion | date: 'dd/MM/yyyy' }}</td>
+        <td>
+            <span
+              [ngClass]="{
+                'estado-pendiente': p.estado === 'PENDIENTE',
+                'estado-revision': p.estado === 'EN_REVISION',
+                'estado-rechazada': p.estado === 'RECHAZADA'
+              }"
+            >
+              {{ p.estado.replace('_', ' ') }}
+            </span>
+        </td>
+        <td>{{ p.comentario || 'Sin comentario' }}</td>
+        <td>
+          <button class="btn-toggle" (click)="toggleDetalle(p.id)">
+            {{ expandedRows[p.id] ? 'Ocultar' : 'Ver más' }}
+          </button>
+        </td>
+      </tr>
 
-        <!-- 🔴 Mensaje si el documento fue rechazado -->
-        <div *ngIf="documentos[p.id]?.estado === 'RECHAZADO'" class="alerta-rechazado">
-          ⚠ Tu documento fue rechazado. Por favor, vuelve a subirlo.
-        </div>
-      </ng-container>
-    </td>
+      <tr *ngIf="expandedRows[p.id]" class="fila-detalle">
+        <td colspan="6">
+          <div *ngIf="p.estado === 'EN_REVISION'" class="zona-acciones">
+            <div class="acciones-botones">
+              <button class="btn-descargar" (click)="descargarPlantilla(p.id)">
+                <i class="fas fa-download"></i> Descargar
+              </button>
 
-    <!-- ✅ NUEVA COLUMNA: Estado del documento -->
-    <td>
-      <ng-container *ngIf="documentos[p.id]; else sinDoc">
-        {{ documentos[p.id].estado }}
-      </ng-container>
-      <ng-template #sinDoc>—</ng-template>
-    </td>
-  </tr>
-  </tbody>
-</table>
+              <label class="btn-adjuntar">
+                <i class="fas fa-paperclip"></i> Adjuntar
+                <input type="file" hidden (change)="adjuntarArchivo($event, p.id)" />
+              </label>
+
+              <div *ngIf="archivosCargados[p.id]" class="nombre-archivo">
+                {{ archivosCargados[p.id].name }}
+                <button class="btn-icono" (click)="verArchivoTemporal(p.id)">
+                  <i class="fas fa-eye"></i>
+                </button>
+              </div>
+
+              <div *ngIf="documentos[p.id]?.rutaArchivo" class="nombre-archivo">
+                {{ extraerNombre(documentos[p.id].rutaArchivo) }}
+                <button class="btn-icono" (click)="verDocumentoSubido(p.id)">
+                  <i class="fas fa-eye"></i>
+                </button>
+              </div>
+
+              <button class="btn-subir" *ngIf="archivosCargados[p.id]" (click)="subirArchivo(p.id)">
+                <i class="fas fa-upload"></i> Subir
+              </button>
+            </div>
+
+            <div class="estado-doc">
+              <strong>Estado del documento:</strong> {{ documentos[p.id]?.estado || 'PENDIENTE' }}
+            </div>
+          </div>
+
+          <div *ngIf="p.estado !== 'EN_REVISION'" class="alert-info">
+            Espera a que un administrador valide tu postulación para acceder a esta función.
+          </div>
+        </td>
+      </tr>
+    </ng-container>
+    </tbody>
+  </table>
+</div>
+
+<!-- Visor PDF emergente -->
+<div *ngIf="urlPDF" class="visor-pdf">
+  <button (click)="urlPDF = null" class="btn-cerrar">✖</button>
+  <iframe [src]="sanitizarURL(urlPDF)" width="100%" height="100%" frameborder="0"></iframe>
+</div>

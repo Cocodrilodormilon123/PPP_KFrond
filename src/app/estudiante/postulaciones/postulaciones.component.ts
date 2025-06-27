@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { PostulacionService } from '../../services/postulacion.service';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-postulaciones',
@@ -9,9 +10,15 @@ import { PostulacionService } from '../../services/postulacion.service';
 export class PostulacionesComponent implements OnInit {
   postulaciones: any[] = [];
   documentos: { [idPostulacion: number]: any } = {};
+  archivosCargados: { [idPostulacion: number]: File } = {};
   idPersona: number = 0;
+  expandedRows: { [id: number]: boolean } = {};
+  urlPDF: string | null = null;
 
-  constructor(private postulacionService: PostulacionService) {}
+  constructor(
+    private postulacionService: PostulacionService,
+    private sanitizer: DomSanitizer
+  ) {}
 
   ngOnInit(): void {
     const stored = localStorage.getItem('usuario');
@@ -19,7 +26,6 @@ export class PostulacionesComponent implements OnInit {
       const user = JSON.parse(stored);
       if (user && user.idPersona) {
         this.idPersona = user.idPersona;
-        console.log('ID persona recuperado:', this.idPersona);
         this.cargarPostulaciones();
       } else {
         console.error('idPersona no encontrado en el objeto usuario');
@@ -34,42 +40,43 @@ export class PostulacionesComponent implements OnInit {
       next: data => {
         this.postulaciones = data.map(p => ({
           ...p,
+          idOferta: p.oferta?.id ?? null,
+          tituloOferta: p.oferta?.titulo ?? 'Sin título',
+          nombreEmpresa: p.oferta?.empresa?.nombre ?? 'No especificado',
           fechaPostulacion: this.convertirFecha(p.fechaPostulacion)
         }));
 
-        // 🔁 Cargar documentos asociados a cada postulación
         this.postulaciones.forEach(p => {
-          this.postulacionService.getDocumentoByPostulacion(p.id).subscribe(doc => {
-            this.documentos[p.id] = doc;
+          this.postulacionService.getDocumentoByPostulacion(p.id).subscribe({
+            next: doc => this.documentos[p.id] = doc,
+            error: err => {
+              if (err.status !== 404) console.error('Error al obtener documento', err);
+            }
           });
         });
       },
-      error: err => console.error('Error al cargar postulaciones', err)
+      error: err => console.error('❌ Error al cargar postulaciones', err)
     });
   }
 
   convertirFecha(fechaStr: string): Date {
-    const partes = fechaStr.split('/');
-    if (partes.length === 3) {
-      const [dia, mes, anio] = partes;
+    if (fechaStr.includes('/')) {
+      const [dia, mes, anio] = fechaStr.split('/');
       return new Date(`${anio}-${mes}-${dia}`);
-    } else if (fechaStr.includes('-')) {
-      return new Date(fechaStr);
     }
     return new Date(fechaStr);
   }
 
-  // ✅ Descargar formato oficial
   descargarPlantilla(idPostulacion: number): void {
     this.postulacionService.descargarPlantilla(idPostulacion).subscribe({
       next: (data: Blob) => {
         const blob = new Blob([data], { type: 'application/pdf' });
-        const url = window.URL.createObjectURL(blob);
+        const url = URL.createObjectURL(blob);
         const link = document.createElement('a');
         link.href = url;
         link.download = `formato_postulacion_${idPostulacion}.pdf`;
         link.click();
-        window.URL.revokeObjectURL(url);
+        URL.revokeObjectURL(url);
       },
       error: err => {
         console.error('Error al descargar plantilla', err);
@@ -78,9 +85,29 @@ export class PostulacionesComponent implements OnInit {
     });
   }
 
-  subirArchivo(event: any, idPostulacion: number): void {
+  adjuntarArchivo(event: any, idPostulacion: number): void {
     const file = event.target.files[0];
-    if (!file) return;
+    if (file) {
+      this.archivosCargados[idPostulacion] = file;
+    }
+  }
+
+  verArchivoTemporal(idPostulacion: number): void {
+    const file = this.archivosCargados[idPostulacion];
+    if (file) {
+      const fileURL = URL.createObjectURL(file);
+      window.open(fileURL, '_blank');
+    } else {
+      alert('No hay archivo seleccionado para vista previa');
+    }
+  }
+
+  subirArchivo(idPostulacion: number): void {
+    const file = this.archivosCargados[idPostulacion];
+    if (!file) {
+      alert('Adjunta un archivo primero.');
+      return;
+    }
 
     const formData = new FormData();
     formData.append('file', file);
@@ -88,14 +115,53 @@ export class PostulacionesComponent implements OnInit {
     const url = `http://localhost:4040/oferta-ms/documento-postulacion/${idPostulacion}/archivo`;
     this.postulacionService.subirArchivo(url, formData).subscribe({
       next: () => {
-        alert("Archivo subido correctamente.");
+        alert("✅ Archivo subido correctamente.");
         this.cargarPostulaciones();
       },
       error: err => {
+        if (err.status === 413) {
+          alert('❌ El archivo es demasiado grande. Límite: 20MB.');
+        } else if (err.status === 400) {
+          alert('❌ Formato de archivo no permitido.');
+        } else {
+          alert("❌ Error al subir archivo.");
+        }
         console.error('Error al subir archivo', err);
-        alert("Error al subir archivo. Verifica el formato.");
       }
     });
   }
 
+  verDocumentoSubido(idPostulacion: number): void {
+    const doc = this.documentos[idPostulacion];
+    if (!doc?.rutaArchivo) {
+      alert("No se encontró el documento subido.");
+      return;
+    }
+
+    const nombre = doc.rutaArchivo.replace(/\\/g, '/').split('/').pop();
+    if (!nombre) return;
+
+    this.postulacionService.verDocumento(nombre).subscribe({
+      next: (blob) => {
+        const url = URL.createObjectURL(blob);
+        window.open(url);
+      },
+      error: err => {
+        alert("No se pudo visualizar el archivo.");
+        console.error("Error al ver documento:", err);
+      }
+    });
+  }
+
+  sanitizarURL(url: string): SafeResourceUrl {
+    return this.sanitizer.bypassSecurityTrustResourceUrl(url);
+  }
+
+  extraerNombre(ruta: string): string {
+    return ruta.split(/[\\/]/).pop() || 'archivo.pdf';
+  }
+
+  toggleDetalle(id: number): void {
+    this.expandedRows[id] = !this.expandedRows[id];
+  }
 }

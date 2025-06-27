@@ -1,52 +1,120 @@
-table {
+/* Contenedor de cada grupo de postulaciones */
+.grupo-postulaciones {
+  margin-bottom: 1.5rem;
+  border: 1px solid #d6d6d6;
+  border-radius: 8px;
+  background-color: #ffffff;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+}
+
+/* Encabezado clickeable de cada oferta */
+.encabezado-oferta {
+  background-color: #002855;
+  color: white;
+  padding: 12px 18px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  user-select: none;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.encabezado-oferta:hover {
+  background-color: #014080;
+}
+
+/* Tabla de detalle */
+.tabla-detalle {
   width: 100%;
   border-collapse: collapse;
-  margin-top: 20px;
-  background-color: #f9f9f9;
-  border-radius: 10px;
-  overflow: hidden;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  background-color: #fafafa;
 }
 
-thead {
-  background-color: #003366;
-  color: white;
-  text-align: left;
+/* Cabecera de tabla */
+.tabla-detalle thead th {
+  background-color: #e8f0fe;
+  padding: 12px;
+  text-align: center;
+  font-weight: 600;
+  border-bottom: 2px solid #d1d1d1;
 }
 
-th, td {
-  padding: 12px 16px;
+/* Celdas de tabla */
+.tabla-detalle td {
+  padding: 12px;
+  text-align: center;
   border-bottom: 1px solid #ddd;
+  font-size: 14px;
 }
 
-td button {
-  margin-right: 6px;
-  padding: 4px 8px;
+/* Botones */
+.btn-doc,
+.btn-aceptar,
+.btn-rechazar {
+  padding: 6px 14px;
   border: none;
-  border-radius: 5px;
+  border-radius: 6px;
+  font-size: 14px;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  transition: background-color 0.2s ease;
   cursor: pointer;
 }
 
-td button:hover {
-  opacity: 0.9;
+/* Botón Ver PDF */
+.btn-doc {
+  background-color: #138496;
+  color: #fff;
+}
+.btn-doc:hover {
+  background-color: #117a8b;
 }
 
-td button:nth-child(1) {
-  background-color: #007bff;
-  color: white;
+/* Botón aceptar */
+.btn-aceptar {
+  background-color: #28a745;
+  color: #fff;
+}
+.btn-aceptar:hover {
+  background-color: #218838;
 }
 
-td button:nth-child(2) {
+/* Botón rechazar */
+.btn-rechazar {
   background-color: #dc3545;
-  color: white;
+  color: #fff;
+}
+.btn-rechazar:hover {
+  background-color: #c82333;
 }
 
-a {
-  color: #007bff;
-  text-decoration: none;
-  font-weight: bold;
+/* Íconos Font Awesome */
+.fas {
+  font-size: 14px;
 }
 
-a:hover {
-  text-decoration: underline;
+/* Etiqueta badge de estado */
+.badge {
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 13px;
+  font-weight: 500;
+  display: inline-block;
+}
+
+/* Estilo para estados */
+.badge-estado {
+  background-color: #e2e3e5;
+  color: #343a40;
+}
+
+/* Texto gris si no hay archivo */
+.text-muted {
+  color: #6c757d;
+  font-style: italic;
 }

@@ -99,7 +99,11 @@ export class PostulacionesComponent implements OnInit {
       error: (err) => {
         console.error('✘ Error al aceptar documento:', err);
         const msg = err?.error ?? 'No se pudo aceptar el documento.';
+<<<<<<< HEAD
         alert(Error del servidor: ${msg});
+=======
+        alert(`Error del servidor: ${msg}`);
+>>>>>>> 3694b4f (avance procs..)
       }
     });
   }
@@ -115,9 +119,17 @@ export class PostulacionesComponent implements OnInit {
         error: err => {
           console.error("✘ Error al rechazar documento:", err);
           const msg = err?.error ?? 'No se pudo rechazar el documento.';
+<<<<<<< HEAD
           alert(Error del servidor: ${msg});
+=======
+          alert(`Error del servidor: ${msg}`);
+>>>>>>> 3694b4f (avance procs..)
         }
       });
     }
   }
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 3694b4f (avance procs..)

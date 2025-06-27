@@ -1,44 +1,42 @@
-<table>
-  <thead>
-  <tr>
-    <th>Estudiante</th>
-    <th>Oferta</th>
-    <th>Estado</th>
-    <th>Acciones Estado</th>
-    <th>Documento Subido</th>
-    <th>Acciones Documento</th>
-  </tr>
-  </thead>
-  <tbody>
-  <tr *ngFor="let p of postulaciones">
-    <td>{{ p.nombreEstudiante || 'Desconocido' }}</td>
-    <td>{{ p.oferta?.titulo }}</td>
-    <td>{{ p.estado }}</td>
+<div *ngFor="let grupo of postulacionesAgrupadas" class="grupo-postulaciones">
 
-    <!-- Acciones Estado -->
-    <td>
-      <button *ngIf="p.estado === 'PENDIENTE'" (click)="cambiarEstado(p.id, 'EN_REVISION')">✅ Revisar</button>
-      <button *ngIf="p.estado === 'PENDIENTE'" (click)="cambiarEstado(p.id, 'RECHAZADA')">❌ Rechazar</button>
-    </td>
+  <div class="encabezado-oferta" (click)="grupo.expandido = !grupo.expandido">
+    <i class="fas" [ngClass]="grupo.expandido ? 'fa-chevron-down' : 'fa-chevron-right'"></i>
+    {{ grupo.tituloOferta }} - {{ grupo.nombreEmpresa }}
+  </div>
 
-    <!-- Documento Subido -->
-    <td>
-      <ng-container *ngIf="documentos[p.id]; else noDoc">
-        <button (click)="verDocumento(documentos[p.id].rutaArchivo)">📄 Ver</button>
-      </ng-container>
-      <ng-template #noDoc>—</ng-template>
-    </td>
-
-    <!-- Acciones Documento -->
-    <td>
-      <ng-container *ngIf="documentos[p.id] as doc">
-        <ng-container *ngIf="doc.estado === 'PENDIENTE' || doc.estado === 'RECHAZADO'">
-          <button (click)="cambiarEstadoDocumento(p.id, 'ACEPTADO')">✅ Aceptar</button>
-          <button (click)="cambiarEstadoDocumento(p.id, 'RECHAZADO')">❌ Rechazar</button>
+  <table *ngIf="grupo.expandido" class="tabla-detalle">
+    <thead>
+    <tr>
+      <th>Estudiante</th>
+      <th>Estado</th>
+      <th>Documento</th>
+      <th>Acciones</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let postu of grupo.postulantes">
+      <td><i class="fas fa-user"></i> {{ postu.nombreEstudiante || 'Sin nombre' }}</td>
+      <td><span class="badge badge-estado">{{ postu.estado }}</span></td>
+      <td>
+        <ng-container *ngIf="postu.documento?.rutaArchivo; else sinDocumento">
+          <button class="btn-doc" (click)="verDocumento(postu.documento)">
+            <i class="fas fa-file-pdf"></i> Ver
+          </button>
         </ng-container>
-      </ng-container>
-      <ng-container *ngIf="!documentos[p.id]">—</ng-container>
-    </td>
-  </tr>
-  </tbody>
-</table>
+        <ng-template #sinDocumento>
+          <span class="text-muted">Sin archivo</span>
+        </ng-template>
+      </td>
+      <td>
+        <button class="btn-aceptar" (click)="aceptarPostulacion(postu)" title="Aceptar">
+          <i class="fas fa-check"></i>
+        </button>
+        <button class="btn-rechazar" (click)="rechazarConComentario(postu)" title="Rechazar">
+          <i class="fas fa-times"></i>
+        </button>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>

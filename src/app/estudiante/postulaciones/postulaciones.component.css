@@ -1,65 +1,183 @@
-table {
+.contenedor-postulaciones {
+  padding: 20px;
+  background-color: #f0f6ff;
+  border-radius: 12px;
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+.tabla-principal {
   width: 100%;
   border-collapse: collapse;
-  margin-top: 20px;
   font-family: 'Segoe UI', sans-serif;
+  background-color: #ffffff;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
+  border-radius: 10px;
+  overflow: hidden;
 }
 
-th, td {
-  padding: 12px;
-  border-bottom: 1px solid #ddd;
-  text-align: left;
-}
-
-th {
-  background-color: #2c3e50;
+.tabla-principal thead {
+  background-color: #102a56;
   color: white;
 }
 
-tr:hover {
-  background-color: #f2f2f2;
+.tabla-principal th,
+.tabla-principal td {
+  padding: 12px 15px;
+  text-align: left;
+  vertical-align: middle;
+  font-size: 14px;
+}
+
+.tabla-principal tbody tr:hover {
+  background-color: #f9f9f9;
 }
 
 .estado-pendiente {
-  color: #f39c12;
-  font-weight: bold;
+  color: #ff9800;
+  font-weight: 600;
 }
 
-.estado-en-revision {
-  color: #3498db;
-  font-weight: bold;
-}
-
-.estado-aceptada {
-  color: #27ae60;
-  font-weight: bold;
+.estado-revision {
+  color: #2196f3;
+  font-weight: 600;
 }
 
 .estado-rechazada {
-  color: #e74c3c;
-  font-weight: bold;
+  color: #f44336;
+  font-weight: 600;
 }
 
-.acciones button {
-  margin-right: 5px;
-  padding: 6px 10px;
+.fila-detalle {
+  background-color: #f1f1f1;
+}
+
+.mensaje-vacio {
+  text-align: center;
+  padding: 30px;
+  font-size: 18px;
+  color: #888;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.05);
+}
+
+/* Botones */
+.btn-descargar,
+.btn-adjuntar,
+.btn-subir,
+.btn-toggle {
+  padding: 7px 14px;
+  border-radius: 6px;
   border: none;
-  border-radius: 4px;
   color: white;
   cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  transition: all 0.3s ease;
 }
 
 .btn-descargar {
-  background-color: #3498db;
+  background-color: #0d47a1;
+}
+
+.btn-adjuntar {
+  background-color: #ff9800;
 }
 
 .btn-subir {
-  background-color: #2ecc71;
+  background-color: #4caf50;
 }
 
-.alerta-rechazado {
-  color: #b30000;
+.btn-toggle {
+  background-color: #ffffff;
+  color: #102a56;
+  font-weight: 600;
+  border: 1px solid #102a56;
+}
+
+.btn-toggle:hover {
+  background-color: #102a56;
+  color: #ffffff;
+}
+
+.nombre-archivo {
   font-weight: bold;
-  margin-top: 5px;
+  background-color: #f3f3f3;
+  padding: 6px 10px;
+  border-radius: 6px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: 10px;
+}
+
+.btn-icono {
+  border: 1px solid #cccccc;
+  background-color: white;
+  padding: 6px 8px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-icono:hover {
+  background-color: #eeeeee;
+  color: #102a56;
+}
+
+.zona-acciones {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.acciones-botones {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+
+.estado-doc {
+  text-align: right;
   font-size: 14px;
+  color: #333;
+}
+
+.alert-info {
+  padding: 10px;
+  border-left: 4px solid #2196f3;
+  background-color: #e3f2fd;
+  color: #0d47a1;
+  margin-top: 10px;
+  border-radius: 5px;
+}
+
+/* Visor PDF */
+.visor-pdf {
+  position: fixed;
+  top: 5%;
+  left: 10%;
+  width: 80%;
+  height: 85%;
+  background-color: white;
+  z-index: 9999;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.btn-cerrar {
+  position: absolute;
+  top: 8px;
+  right: 15px;
+  background: transparent;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: #333;
+  z-index: 10000;
 }
