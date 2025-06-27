@@ -12,7 +12,7 @@ export class PostulacionesComponent implements OnInit {
   documentos: { [idPostulacion: number]: any } = {};
   urlBase = 'http://localhost:4040/oferta-ms/documento-postulacion/archivo/';
 
-  constructor(private postuService: PostulacionService) {}
+  constructor(private postuService: PostulacionService) { }
 
   ngOnInit(): void {
     this.cargarPostulaciones();
@@ -20,8 +20,10 @@ export class PostulacionesComponent implements OnInit {
 
   cargarPostulaciones(): void {
     this.postuService.getAllPostulaciones().subscribe(postus => {
-      this.postulaciones = postus;
-      postus.forEach(p => {
+      // 🔍 Filtrar solo postulaciones que NO estén RECHAZADAS
+      this.postulaciones = postus.filter(p => p.estado !== 'RECHAZADA');
+
+      this.postulaciones.forEach(p => {
         this.postuService.getDocumentoByPostulacion(p.id).subscribe(doc => {
           this.documentos[p.id] = doc;
         });
