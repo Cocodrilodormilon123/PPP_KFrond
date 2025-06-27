@@ -93,43 +93,31 @@ export class PostulacionesComponent implements OnInit {
 
     this.postuService.aceptarDocumento(postulacion.id).subscribe({
       next: () => {
-        alert('✔ Documento aceptado y práctica generada correctamente.');
+        alert('✅ Documento aceptado y práctica generada correctamente.');
         this.cargarPostulacionesEnRevision();
       },
       error: (err) => {
-        console.error('✘ Error al aceptar documento:', err);
+        console.error('❌ Error al aceptar documento:', err);
         const msg = err?.error ?? 'No se pudo aceptar el documento.';
-<<<<<<< HEAD
-        alert(Error del servidor: ${msg});
-=======
         alert(`Error del servidor: ${msg}`);
->>>>>>> 3694b4f (avance procs..)
       }
     });
   }
 
   rechazarConComentario(postulacion: any): void {
-    const comentario = prompt('✘ Ingrese el motivo de rechazo para el estudiante:');
+    const comentario = prompt('❌ Ingrese el motivo de rechazo para el estudiante:');
     if (comentario !== null && comentario.trim() !== '') {
       this.postuService.rechazarDocumento(postulacion.id, comentario).subscribe({
         next: () => {
-          alert('✔ Documento rechazado correctamente.');
+          alert('✅ Documento rechazado correctamente.');
           this.cargarPostulacionesEnRevision();
         },
         error: err => {
-          console.error("✘ Error al rechazar documento:", err);
+          console.error("❌ Error al rechazar documento:", err);
           const msg = err?.error ?? 'No se pudo rechazar el documento.';
-<<<<<<< HEAD
-          alert(Error del servidor: ${msg});
-=======
           alert(`Error del servidor: ${msg}`);
->>>>>>> 3694b4f (avance procs..)
         }
       });
     }
   }
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> 3694b4f (avance procs..)
