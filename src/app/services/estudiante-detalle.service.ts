@@ -19,8 +19,4 @@ export class EstudianteDetalleService {
   obtenerEvidencias(idPractica: number): Observable<any[]> {
     return this.http.get<any[]>(`/practica-ms/evidencias/practica/${idPractica}`);
   }
-
-  subirEvidencia(formData: FormData): Observable<any> {
-    return this.http.post(`/practica-ms/evidencias`, formData);
-  }
 }

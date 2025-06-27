@@ -40,26 +40,6 @@
         </li>
       </ul>
       <p *ngIf="evidencias.length === 0" style="color: gray;">No hay evidencias aún.</p>
-
-      <button mat-raised-button color="accent" (click)="mostrarFormulario = true" style="margin-top: 15px;">
-        ⬆️ Subir nueva evidencia
-      </button>
-
-      <div *ngIf="mostrarFormulario" style="margin-top: 20px;">
-        <form (ngSubmit)="subirEvidencia()" enctype="multipart/form-data">
-          <mat-form-field appearance="outline">
-            <mat-label>Descripción</mat-label>
-            <input matInput [(ngModel)]="descripcion" name="descripcion" required />
-          </mat-form-field>
-
-          <input type="file" (change)="handleArchivo($event)" required />
-
-          <div style="margin-top: 10px;">
-            <button mat-raised-button color="primary" type="submit">Subir</button>
-            <button mat-stroked-button type="button" (click)="mostrarFormulario = false">Cancelar</button>
-          </div>
-        </form>
-      </div>
     </div>
 
     <div *ngIf="!practica" style="margin-top: 15px; color: red;">

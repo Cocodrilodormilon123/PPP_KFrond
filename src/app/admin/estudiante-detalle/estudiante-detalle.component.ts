@@ -12,10 +12,6 @@ export class EstudianteDetalleComponent {
   practica: any = null;
   evidencias: any[] = [];
 
-  mostrarFormulario: boolean = false;
-  descripcion: string = '';
-  archivoSeleccionado: File | null = null;
-
   constructor(private detalleService: EstudianteDetalleService) {}
 
   buscar(): void {
@@ -34,14 +30,18 @@ export class EstudianteDetalleComponent {
         this.estudiante = estudiante;
 
         this.detalleService.obtenerPracticaPorPersona(estudiante.id).subscribe({
-          next: practica => {
-            if (!practica || practica.estado !== 'EN_PROCESO') {
+          next: practicas => {
+            const activa = Array.isArray(practicas)
+              ? practicas.find((p: any) => p.estado === 'EN_PROCESO')
+              : (practicas.estado === 'EN_PROCESO' ? practicas : null);
+
+            if (!activa) {
               this.practica = null;
               this.evidencias = [];
               return;
             }
 
-            this.practica = practica;
+            this.practica = activa;
             this.cargarEvidencias();
           },
           error: () => {
@@ -69,33 +69,6 @@ export class EstudianteDetalleComponent {
       error: () => {
         this.evidencias = [];
       }
-    });
-  }
-
-  handleArchivo(event: any): void {
-    this.archivoSeleccionado = event.target.files[0] || null;
-  }
-
-  subirEvidencia(): void {
-    if (!this.archivoSeleccionado || !this.descripcion || !this.practica) {
-      alert('Completa todos los campos');
-      return;
-    }
-
-    const formData = new FormData();
-    formData.append('descripcion', this.descripcion);
-    formData.append('archivo', this.archivoSeleccionado);
-    formData.append('idPractica', this.practica.id);
-
-    this.detalleService.subirEvidencia(formData).subscribe({
-      next: () => {
-        alert('Evidencia subida correctamente');
-        this.descripcion = '';
-        this.archivoSeleccionado = null;
-        this.mostrarFormulario = false;
-        this.cargarEvidencias();
-      },
-      error: () => alert('Error al subir evidencia')
     });
   }
 
