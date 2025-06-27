@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { PostulacionService } from '../../services/postulacion.service';
+import { AdminPostulacionService } from '../../services/admin-postulacion.service';
 
 @Component({
   selector: 'app-postulaciones',
@@ -7,57 +7,117 @@ import { PostulacionService } from '../../services/postulacion.service';
   styleUrls: ['./postulaciones.component.css']
 })
 export class PostulacionesComponent implements OnInit {
+  postulacionesAgrupadas: any[] = [];
 
-  postulaciones: any[] = [];
-  documentos: { [idPostulacion: number]: any } = {};
-  urlBase = 'http://localhost:4040/oferta-ms/documento-postulacion/archivo/';
-
-  constructor(private postuService: PostulacionService) { }
+  constructor(private postuService: AdminPostulacionService) {}
 
   ngOnInit(): void {
-    this.cargarPostulaciones();
+    this.cargarPostulacionesEnRevision();
   }
 
-  cargarPostulaciones(): void {
-    this.postuService.getAllPostulaciones().subscribe(postus => {
-      // 🔍 Filtrar solo postulaciones que NO estén RECHAZADAS
-      this.postulaciones = postus.filter(p => p.estado !== 'RECHAZADA');
+  cargarPostulacionesEnRevision(): void {
+    this.postuService.getAllPostulaciones().subscribe((data: any[]) => {
+      const enRevision = data.filter(p => p.estado === 'EN_REVISION');
+      const agrupadas = new Map<number, any>();
 
-      this.postulaciones.forEach(p => {
-        this.postuService.getDocumentoByPostulacion(p.id).subscribe(doc => {
-          this.documentos[p.id] = doc;
+      for (const p of enRevision) {
+        const idOferta = p.oferta.id;
+        if (!agrupadas.has(idOferta)) {
+          agrupadas.set(idOferta, {
+            idOferta,
+            tituloOferta: p.oferta.titulo,
+            nombreEmpresa: p.oferta.empresa?.nombre,
+            expandido: false,
+            postulantes: []
+          });
+        }
+
+        const postulacion = {
+          ...p,
+          nombreEstudiante: 'Cargando...',
+          documento: null
+        };
+
+        agrupadas.get(idOferta).postulantes.push(postulacion);
+
+        this.postuService.getPersonaPorId(p.idPersona).subscribe({
+          next: persona => {
+            postulacion.nombreEstudiante = persona.nombre || 'Nombre no disponible';
+          },
+          error: () => {
+            postulacion.nombreEstudiante = 'Desconocido';
+          }
         });
-      });
+
+        this.postuService.getDocumentoPorPostulacion(p.id).subscribe({
+          next: doc => {
+            postulacion.documento = doc;
+          },
+          error: err => {
+            if (err.status !== 404) console.error('Error al obtener documento:', err);
+          }
+        });
+      }
+
+      this.postulacionesAgrupadas = Array.from(agrupadas.values());
     });
   }
 
-  cambiarEstado(id: number, nuevoEstado: string): void {
-    this.postuService.actualizarEstado(id, nuevoEstado).subscribe(() => this.cargarPostulaciones());
-  }
+  verDocumento(doc: any): void {
+    if (!doc || !doc.rutaArchivo) {
+      alert("No se encontró el documento para esta postulación.");
+      return;
+    }
 
-  cambiarEstadoDocumento(id: number, nuevoEstado: string): void {
-    this.postuService.actualizarEstadoDocumento(id, nuevoEstado).subscribe({
-      next: () => {
-        alert(`Documento marcado como ${nuevoEstado}`);
-        this.cargarPostulaciones(); // recargar para reflejar cambio
+    const nombre = doc.rutaArchivo.replace(/\\/g, '/').split('/').pop();
+    if (!nombre) {
+      alert("Nombre de archivo inválido.");
+      return;
+    }
+
+    this.postuService.verDocumento(nombre).subscribe({
+      next: (blob) => {
+        const url = URL.createObjectURL(blob);
+        window.open(url);
       },
       error: err => {
-        console.error('Error al actualizar documento', err);
-        alert('Error al actualizar el estado del documento.');
+        alert("No se pudo visualizar el archivo.");
+        console.error("Error al ver documento:", err);
       }
     });
   }
 
-  extraerNombre(ruta: string): string {
-    return ruta.replace(/^.*[\\/]/, '');
-  }
+  aceptarPostulacion(postulacion: any): void {
+    const confirmacion = confirm('¿Estás seguro de aceptar el documento? Esto generará una práctica.');
+    if (!confirmacion) return;
 
-  verDocumento(rutaArchivo: string): void {
-    const nombreArchivo = rutaArchivo.split('/').pop();
-    this.postuService.verDocumento(nombreArchivo!).subscribe(blob => {
-      const url = window.URL.createObjectURL(blob);
-      window.open(url, '_blank');
+    this.postuService.aceptarDocumento(postulacion.id).subscribe({
+      next: () => {
+        alert('✔ Documento aceptado y práctica generada correctamente.');
+        this.cargarPostulacionesEnRevision();
+      },
+      error: (err) => {
+        console.error('✘ Error al aceptar documento:', err);
+        const msg = err?.error ?? 'No se pudo aceptar el documento.';
+        alert(Error del servidor: ${msg});
+      }
     });
   }
 
+  rechazarConComentario(postulacion: any): void {
+    const comentario = prompt('✘ Ingrese el motivo de rechazo para el estudiante:');
+    if (comentario !== null && comentario.trim() !== '') {
+      this.postuService.rechazarDocumento(postulacion.id, comentario).subscribe({
+        next: () => {
+          alert('✔ Documento rechazado correctamente.');
+          this.cargarPostulacionesEnRevision();
+        },
+        error: err => {
+          console.error("✘ Error al rechazar documento:", err);
+          const msg = err?.error ?? 'No se pudo rechazar el documento.';
+          alert(Error del servidor: ${msg});
+        }
+      });
+    }
+  }
 }
