@@ -48,6 +48,7 @@
   </div>
 </div>
 
-<div *ngIf="estudiante === null && codigo">
+<!-- Solo mostrar mensaje de error si ya se presionó "Buscar" -->
+<div *ngIf="buscado && estudiante === null">
   <p style="color: red;">Estudiante no encontrado.</p>
 </div>

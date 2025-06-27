@@ -11,11 +11,14 @@ export class EstudianteDetalleComponent {
   estudiante: any = null;
   practica: any = null;
   evidencias: any[] = [];
+  buscado: boolean = false;
 
   constructor(private detalleService: EstudianteDetalleService) {}
 
   buscar(): void {
     if (!this.codigo) return;
+
+    this.buscado = false;
 
     this.detalleService.buscarEstudiantePorCodigo(this.codigo).subscribe({
       next: estudiante => {
@@ -23,11 +26,13 @@ export class EstudianteDetalleComponent {
           this.estudiante = null;
           this.practica = null;
           this.evidencias = [];
+          this.buscado = true;
           alert('No está permitido buscar administradores en esta sección');
           return;
         }
 
         this.estudiante = estudiante;
+        this.buscado = true;
 
         this.detalleService.obtenerPracticaPorPersona(estudiante.id).subscribe({
           next: practicas => {
@@ -54,6 +59,7 @@ export class EstudianteDetalleComponent {
         this.estudiante = null;
         this.practica = null;
         this.evidencias = [];
+        this.buscado = true;
         alert('Estudiante no encontrado');
       }
     });
