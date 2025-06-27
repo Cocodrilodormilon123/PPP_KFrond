@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { OfertaService } from '../../services/oferta.service';
 
 @Component({
   selector: 'app-ofertas',
@@ -9,61 +9,53 @@ import { HttpClient } from '@angular/common/http';
 export class OfertasComponent implements OnInit {
   ofertas: any[] = [];
   ofertasFiltradas: any[] = [];
-  ofertaSeleccionada: any = null;  // 👈 Para mostrar detalle
+  ofertaSeleccionada: any = null;
 
-  constructor(private http: HttpClient) {}
+  constructor(private ofertaService: OfertaService) {}
 
   ngOnInit(): void {
     this.cargarOfertas();
 
-    // Actualizar cada segundo para cuenta regresiva
     setInterval(() => {
-      this.ofertas = [...this.ofertas];
+      this.ofertas = [...this.ofertas]; // Forzar cambio en la vista (cuenta regresiva)
     }, 1000);
   }
 
   cargarOfertas(): void {
-    this.http.get<any[]>('http://localhost:4040/oferta-ms/ofertas')
-      .subscribe({
-        next: (data) => {
-          const hoy = new Date();
+    this.ofertaService.getOfertas().subscribe({
+      next: async (data) => {
+        const hoy = new Date();
 
-          const promesas = data.map(oferta => {
-            // Corregir formato de fecha si es necesario
-            if (oferta.fechaFin && oferta.fechaFin.includes('/')) {
-              const partes = oferta.fechaFin.split('/');
-              if (partes.length === 3) {
-                oferta.fechaFin = `${partes[2]}-${partes[1]}-${partes[0]}`; // yyyy-MM-dd
-              }
+        const promesas = data.map(async oferta => {
+          // Corrección de fecha
+          if (oferta.fechaFin && oferta.fechaFin.includes('/')) {
+            const partes = oferta.fechaFin.split('/');
+            if (partes.length === 3) {
+              oferta.fechaFin = `${partes[2]}-${partes[1]}-${partes[0]}`;
             }
+          }
 
-            // 👉 Consultar vacantes por oferta y agregar a cada objeto
-            return this.http.get<any>(`http://localhost:4040/oferta-ms/vacantes/oferta/${oferta.id}`)
-              .toPromise()
-              .then(vacantes => {
-                oferta.vacantes = vacantes;
-                return oferta;
-              })
-              .catch(() => {
-                oferta.vacantes = null;
-                return oferta;
-              });
-          });
+          try {
+            const vacantes = await this.ofertaService.getVacantesPorOferta(oferta.id);
+            oferta.vacantes = vacantes;
+          } catch {
+            oferta.vacantes = null;
+          }
 
-          Promise.all(promesas).then(ofertasConVacantes => {
-            this.ofertas = ofertasConVacantes;
+          return oferta;
+        });
 
-            this.ofertasFiltradas = this.ofertas.filter(oferta => {
-              if (!oferta.fechaFin) return true;
-              const fechaFin = new Date(oferta.fechaFin);
-              return fechaFin.getTime() > hoy.getTime();
-            });
-          });
-        },
-        error: (error) => {
-          console.error('Error al cargar ofertas:', error);
-        }
-      });
+        const ofertasConVacantes = await Promise.all(promesas);
+        this.ofertas = ofertasConVacantes;
+        this.ofertasFiltradas = this.ofertas.filter(oferta => {
+          if (!oferta.fechaFin) return true;
+          return new Date(oferta.fechaFin).getTime() > hoy.getTime();
+        });
+      },
+      error: (error) => {
+        console.error('Error al cargar ofertas:', error);
+      }
+    });
   }
 
   verDetalle(oferta: any): void {

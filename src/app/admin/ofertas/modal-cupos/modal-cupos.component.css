@@ -1,3 +1,33 @@
+.titulo-modal {
+  font-weight: 600;
+  font-size: 20px;
+  color: #2c3e50;
+}
+
+.contenido-modal {
+  margin-top: 10px;
+  min-width: 300px;
+}
+
+.campo-cupos {
+  width: 100%;
+}
+
+.acciones-modal {
+  margin-top: 10px;
+}
+
 mat-form-field {
-  margin-bottom: 15px;
+  margin-bottom: 20px;
+}
+/* Elimina las flechas del input en navegadores WebKit (Chrome, Edge, Safari) */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Elimina las flechas del input en Firefox */
+input[type="number"] {
+  -moz-appearance: textfield;
 }

@@ -1,0 +1,32 @@
+{
+  "/auth-server": {
+    "target": "http://localhost:4040",
+    "secure": false,
+    "changeOrigin": true,
+    "logLevel": "debug"
+  },
+  "/persona-ms": {
+    "target": "http://localhost:4040",
+    "secure": false,
+    "changeOrigin": true,
+    "logLevel": "debug"
+  },
+  "/oferta-ms": {
+    "target": "http://localhost:4040",
+    "secure": false,
+    "changeOrigin": true,
+    "logLevel": "debug"
+  },
+  "/practica-ms": {
+    "target": "http://localhost:4040",
+    "secure": false,
+    "changeOrigin": true,
+    "logLevel": "debug"
+  },
+  "/report-ms": {
+    "target": "http://localhost:4040",
+    "secure": false,
+    "changeOrigin": true,
+    "logLevel": "debug"
+  }
+}

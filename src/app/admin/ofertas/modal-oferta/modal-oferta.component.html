@@ -1,40 +1,9 @@
-<h2 mat-dialog-title>Registrar Nueva Oferta</h2>
+<h2 mat-dialog-title class="dialog-title">Registrar Nueva Oferta</h2>
 
 <mat-dialog-content class="oferta-dialog-content">
   <mat-form-field appearance="fill" class="full-width">
     <mat-label>Título</mat-label>
     <input matInput [(ngModel)]="nuevaOferta.titulo" name="titulo" required>
-  </mat-form-field>
-
-  <mat-form-field appearance="fill" class="full-width">
-    <mat-label>Ubicación</mat-label>
-    <input matInput [(ngModel)]="nuevaOferta.ubicacion" name="ubicacion" required>
-  </mat-form-field>
-
-  <mat-form-field appearance="fill" class="full-width">
-    <mat-label>Modalidad</mat-label>
-    <mat-select [(ngModel)]="nuevaOferta.modalidad" name="modalidad" required>
-      <mat-option value="PRESENCIAL">Presencial</mat-option>
-      <mat-option value="VIRTUAL">Virtual</mat-option>
-      <mat-option value="SEMI_PRESENCIAL">Semi-presencial</mat-option>
-    </mat-select>
-  </mat-form-field>
-
-  <mat-form-field appearance="fill" class="full-width">
-    <mat-label>Descripción</mat-label>
-    <textarea matInput [(ngModel)]="nuevaOferta.descripcion" name="descripcion" required></textarea>
-  </mat-form-field>
-
-  <mat-form-field appearance="fill" class="full-width">
-    <mat-label>Requerimientos</mat-label>
-    <textarea matInput [(ngModel)]="nuevaOferta.requerimientos" name="requerimientos"></textarea>
-  </mat-form-field>
-
-  <mat-form-field appearance="fill" class="full-width">
-    <mat-label>Fecha de fin</mat-label>
-    <input matInput [matDatepicker]="picker" [(ngModel)]="nuevaOferta.fechaFin" name="fechaFin" required>
-    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-    <mat-datepicker #picker></mat-datepicker>
   </mat-form-field>
 
   <mat-form-field appearance="fill" class="full-width">
@@ -45,9 +14,42 @@
       </mat-option>
     </mat-select>
   </mat-form-field>
+
+  <div class="form-row">
+    <mat-form-field appearance="fill" class="half-width">
+      <mat-label>Ubicación</mat-label>
+      <input matInput [(ngModel)]="nuevaOferta.ubicacion" name="ubicacion" required>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="half-width">
+      <mat-label>Modalidad</mat-label>
+      <mat-select [(ngModel)]="nuevaOferta.modalidad" name="modalidad" required>
+        <mat-option value="PRESENCIAL">Presencial</mat-option>
+        <mat-option value="VIRTUAL">Virtual</mat-option>
+        <mat-option value="SEMI_PRESENCIAL">Semi-presencial</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  <mat-form-field appearance="fill" class="full-width">
+    <mat-label>Fecha de fin</mat-label>
+    <input matInput [matDatepicker]="picker" [(ngModel)]="nuevaOferta.fechaFin" name="fechaFin" required>
+    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-datepicker #picker></mat-datepicker>
+  </mat-form-field>
+
+  <mat-form-field appearance="fill" class="full-width no-resize">
+    <mat-label>Descripción</mat-label>
+    <textarea matInput rows="3" [(ngModel)]="nuevaOferta.descripcion" name="descripcion" required></textarea>
+  </mat-form-field>
+
+  <mat-form-field appearance="fill" class="full-width no-resize">
+    <mat-label>Requerimientos</mat-label>
+    <textarea matInput rows="3" [(ngModel)]="nuevaOferta.requerimientos" name="requerimientos"></textarea>
+  </mat-form-field>
 </mat-dialog-content>
 
-<mat-dialog-actions align="end">
+<mat-dialog-actions align="end" class="dialog-actions">
   <button mat-button (click)="cerrar()">Cancelar</button>
   <button mat-flat-button color="primary" (click)="guardar()">Registrar</button>
 </mat-dialog-actions>

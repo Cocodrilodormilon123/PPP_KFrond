@@ -1,25 +1,42 @@
-<h2 class="titulo">Cambiar Contraseña</h2>
 
 <form (ngSubmit)="cambiarClave()" #formClave="ngForm" class="formulario-cambio">
+  <!-- Contraseña actual -->
   <div class="grupo-campo">
     <label for="oldPassword">
       <i class="fas fa-lock icono-label"></i> Contraseña actual:
     </label>
-    <input type="password" id="oldPassword" name="oldPassword" [(ngModel)]="oldPassword" required>
+    <div class="input-con-ojo">
+      <input [type]="mostrarOld ? 'text' : 'password'" id="oldPassword" name="oldPassword"
+             [(ngModel)]="oldPassword" required />
+      <i class="fas" [ngClass]="mostrarOld ? 'fa-eye-slash' : 'fa-eye'"
+         (click)="mostrarOld = !mostrarOld" title="Mostrar/Ocultar contraseña"></i>
+    </div>
   </div>
 
+  <!-- Nueva contraseña -->
   <div class="grupo-campo">
     <label for="newPassword">
       <i class="fas fa-key icono-label"></i> Nueva contraseña:
     </label>
-    <input type="password" id="newPassword" name="newPassword" [(ngModel)]="newPassword" required>
+    <div class="input-con-ojo">
+      <input [type]="mostrarNueva ? 'text' : 'password'" id="newPassword" name="newPassword"
+             [(ngModel)]="newPassword" required />
+      <i class="fas" [ngClass]="mostrarNueva ? 'fa-eye-slash' : 'fa-eye'"
+         (click)="mostrarNueva = !mostrarNueva" title="Mostrar/Ocultar contraseña"></i>
+    </div>
   </div>
 
+  <!-- Confirmar nueva contraseña -->
   <div class="grupo-campo">
     <label for="confirmPassword">
       <i class="fas fa-check-double icono-label"></i> Confirmar nueva contraseña:
     </label>
-    <input type="password" id="confirmPassword" name="confirmPassword" [(ngModel)]="confirmPassword" required>
+    <div class="input-con-ojo">
+      <input [type]="mostrarConfirmar ? 'text' : 'password'" id="confirmPassword" name="confirmPassword"
+             [(ngModel)]="confirmPassword" required />
+      <i class="fas" [ngClass]="mostrarConfirmar ? 'fa-eye-slash' : 'fa-eye'"
+         (click)="mostrarConfirmar = !mostrarConfirmar" title="Mostrar/Ocultar contraseña"></i>
+    </div>
   </div>
 
   <button type="submit" [disabled]="formClave.invalid">

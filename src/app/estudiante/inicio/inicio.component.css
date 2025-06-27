@@ -1,0 +1,134 @@
+/* DASHBOARD "LIBRE", sin cuadro de fondo */
+.dashboard {
+  padding: 1rem 3rem 1rem 2rem;
+  font-family: 'Segoe UI', sans-serif;
+  background: none;        /* Quita fondo */
+  box-shadow: none;        /* Quita sombra */
+  border-radius: 0;        /* Quita bordes redondeados */
+  max-width: 100%;
+  margin: auto;
+  position: relative;
+}
+
+/* Ícono de carita */
+.icono-bienvenida {
+  color: #facc15;
+  font-size: 1.5rem;
+}
+
+/* Encabezado */
+.encabezado-dashboard h2 {
+  font-size: 1.8rem;
+  color: #1e3a8a;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.encabezado-dashboard p {
+  font-size: 1rem;
+  color: #475569;
+}
+
+/* Estadísticas */
+.stats {
+  display: flex;
+  justify-content: space-around;
+  margin: 2rem 0 1.5rem 0;
+  flex-wrap: wrap;
+}
+
+.stat {
+  background: #f3f4f6;
+  border-radius: 12px;
+  padding: 1.2rem;
+  text-align: center;
+  width: 180px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  transition: transform 0.3s ease;
+}
+
+.stat:hover {
+  transform: translateY(-5px);
+}
+
+.stat h3 {
+  font-size: 2.2rem;
+  margin: 0;
+  color: #0f172a;
+}
+
+.stat p {
+  font-size: 0.95rem;
+  color: #475569;
+}
+
+.icono-stat {
+  font-size: 2rem;
+  color: #1e3a8a;
+  margin-bottom: 0.5rem;
+}
+
+/* Línea de progreso */
+.progreso ul {
+  list-style: none;
+  padding-left: 0;
+  margin-top: 1rem;
+}
+
+.progreso li {
+  margin: 0.6rem 0;
+  font-weight: bold;
+  color: #1e293b;
+}
+
+.progreso li span {
+  display: block;
+  font-weight: normal;
+  font-size: 0.85rem;
+  color: #64748b;
+}
+
+/* Acciones inferiores derechas */
+.acciones-derecha {
+  margin-top: -4rem;
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
+}
+
+/* Botones */
+.btn-oferta, .btn-cv {
+  padding: 0.6rem 1.4rem;
+  border: none;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1rem;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  transition: all 0.25s ease-in-out;
+}
+
+/* Botón amarillo */
+.btn-oferta {
+  background-color: #facc15;
+  color: #1e293b;
+}
+
+.btn-oferta:hover {
+  background-color: #eab308;
+}
+
+/* Botón azul */
+.btn-cv {
+  background-color: #1e3a8a;
+  color: white;
+}
+
+.btn-cv:hover {
+  background-color: #172554;
+}

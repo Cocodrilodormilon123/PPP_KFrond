@@ -1,0 +1,26 @@
+<div class="modal" *ngIf="visible">
+  <div class="modal-content">
+    <span class="close" (click)="cerrarModal()">×</span>
+    <h3>Registrar Empresa</h3>
+
+    <form (ngSubmit)="registrar()" #formEmpresa="ngForm">
+      <input [(ngModel)]="empresa.nombre" name="nombre" placeholder="Nombre" required />
+      <input [(ngModel)]="empresa.ruc" name="ruc" placeholder="RUC" required maxlength="11" minlength="11"
+             pattern="^(10|20)\\d{9}$" title="El RUC debe comenzar con 10 o 20 y tener 11 dígitos numéricos." />
+      <input [(ngModel)]="empresa.direccion" name="direccion" placeholder="Dirección" required />
+      <input [(ngModel)]="empresa.distrito" name="distrito" placeholder="Distrito" required />
+      <input [(ngModel)]="empresa.provincia" name="provincia" placeholder="Provincia" required />
+      <input [(ngModel)]="empresa.pais" name="pais" placeholder="País" required />
+      <input [(ngModel)]="empresa.telefono" name="telefono" placeholder="Teléfono" required />
+      <input [(ngModel)]="empresa.representanteLegal" name="representanteLegal" placeholder="Representante Legal" required />
+
+      <select [(ngModel)]="empresa.estado" name="estado" required>
+        <option value="ACTIVA">ACTIVA</option>
+        <option value="INACTIVA">INACTIVA</option>
+        <option value="SUSPENDIDA">SUSPENDIDA</option>
+      </select>
+
+      <button type="submit">Guardar</button>
+    </form>
+  </div>
+</div>

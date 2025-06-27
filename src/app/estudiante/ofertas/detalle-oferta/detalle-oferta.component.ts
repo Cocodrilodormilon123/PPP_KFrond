@@ -1,5 +1,5 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { PostulacionService } from '../../../services/postulacion.service'; // Usa ruta relativa
 
 @Component({
   selector: 'app-detalle-oferta',
@@ -10,7 +10,7 @@ export class DetalleOfertaComponent {
   @Input() oferta: any = null;
   @Output() cerrar = new EventEmitter<void>();
 
-  constructor(private http: HttpClient) {}
+  constructor(private postulacionService: PostulacionService) {}
 
   postular(): void {
     const stored = localStorage.getItem('usuario');
@@ -34,17 +34,17 @@ export class DetalleOfertaComponent {
     };
 
     console.log('JSON a enviar:', nuevaPostulacion);
-    this.http.post('http://localhost:4040/oferta-ms/postulaciones', nuevaPostulacion)
-      .subscribe({
-        next: () => {
-          alert('Postulación registrada con éxito');
-          this.cerrarPanel();
-        },
-        error: (err) => {
-          console.error('Error al postular:', err);
-          alert('Ocurrió un error al postular');
-        }
-      });
+
+    this.postulacionService.postular(nuevaPostulacion).subscribe({
+      next: () => {
+        alert('Postulación registrada con éxito');
+        this.cerrarPanel();
+      },
+      error: (err: any) => {
+        console.error('Error al postular:', err);
+        alert('Ocurrió un error al postular');
+      }
+    });
   }
 
   cerrarPanel(): void {

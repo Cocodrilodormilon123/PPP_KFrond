@@ -15,6 +15,11 @@ export class CambiarClaveComponent implements OnInit {
   mensaje = '';
   error = false;
 
+  // 👁️ Variables para mostrar u ocultar contraseñas
+  mostrarOld = false;
+  mostrarNueva = false;
+  mostrarConfirmar = false;
+
   constructor(private authService: AuthService, private router: Router) {}
 
   ngOnInit(): void {
@@ -54,11 +59,9 @@ export class CambiarClaveComponent implements OnInit {
         },
         error: (err) => {
           console.error('Error al cambiar la contraseña:', err);
-          if (err.status === 401) {
-            this.mensaje = 'La contraseña actual es incorrecta';
-          } else {
-            this.mensaje = 'Error al cambiar la contraseña';
-          }
+          this.mensaje = err.status === 401
+            ? 'La contraseña actual es incorrecta'
+            : 'Error al cambiar la contraseña';
           this.error = true;
         }
       });

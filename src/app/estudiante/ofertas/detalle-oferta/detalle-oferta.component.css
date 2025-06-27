@@ -1,14 +1,80 @@
 .panel-derecho {
   position: fixed;
-  top: 55px;
+  top: 60px;
   right: 0;
   width: 40%;
-  height: calc(100vh - 58px);
-  padding: 20px;
+  height: calc(100vh - 60px);
+  padding: 24px;
+  background-color: #fff;
+  border-left: 1px solid #e0e0e0;
+  box-shadow: -4px 0 16px rgba(0, 0, 0, 0.05);
   overflow-y: auto;
-  background-color: white;
-  border-left: 1px solid #ddd;
   z-index: 1050;
-  box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
-  transition: all 0.3s ease-in-out;
+  border-top-left-radius: 12px;
+  border-bottom-left-radius: 12px;
+  transition: transform 0.3s ease-in-out;
+}
+
+.panel-derecho h4 {
+  font-size: 1.3rem;
+  font-weight: bold;
+  color: #0d6efd;
+}
+
+.panel-derecho p {
+  margin-bottom: 0.5rem;
+  font-size: 0.95rem;
+  color: #333;
+}
+
+.panel-derecho i {
+  color: #666;
+  width: 20px;
+  text-align: center;
+}
+
+.panel-derecho h6 {
+  font-size: 0.95rem;
+  font-weight: 600;
+  margin-bottom: 0.3rem;
+  color: #444;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.text-muted {
+  font-size: 0.9rem;
+  color: #6c757d !important;
+}
+
+/* ✅ Botón Postularme */
+.btn.btn-primary {
+  padding: 0.5rem 1.2rem;
+  font-size: 0.95rem;
+  border-radius: 0.375rem;
+  box-shadow: 0 2px 6px rgba(13, 110, 253, 0.2);
+  transition: all 0.2s ease;
+}
+
+.btn.btn-primary:hover {
+  background-color: #0b5ed7;
+  box-shadow: 0 4px 12px rgba(13, 110, 253, 0.3);
+}
+
+.btn.btn-primary i {
+  color: #fff !important; /* ícono blanco */
+}
+
+/* ✅ Botón Cerrar (X) */
+.btn.btn-outline-secondary.btn-sm {
+  padding: 0.3rem 0.6rem;
+  font-size: 0.8rem;
+  border-radius: 6px;
+  background-color: #dc3545 !important; /* rojo */
+  border: none;
+  color: #fff !important; /* texto blanco */
+}
+
+.btn.btn-outline-secondary.btn-sm i {
+  color: #fff !important; /* ícono blanco */
 }

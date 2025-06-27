@@ -26,6 +26,7 @@ import { LoginComponent } from './auth/login/login.component';
 // Admin
 import { AdminComponent } from './admin/admin.component';
 import { EmpresasComponent } from './admin/empresas/empresas.component';
+import { ModalEmpresaComponent } from './admin/empresas/modal-empresa/modal-empresa.component';
 import { OfertasComponent as AdminOfertasComponent } from './admin/ofertas/ofertas.component';
 import { PostulacionesComponent as AdminPostulacionesComponent } from './admin/postulaciones/postulaciones.component';
 import { EstudianteDetalleComponent } from './admin/estudiante-detalle/estudiante-detalle.component';
@@ -39,7 +40,7 @@ import { CambiarClaveComponent } from './admin/cambiar-clave/cambiar-clave.compo
 
 // Estudiante
 import { EstudianteComponent } from './estudiante/estudiante.component';
-import { PerfilComponent } from './estudiante/perfil/perfil.component';
+import { InicioComponent } from './estudiante/inicio/inicio.component'; // <-- NUEVO COMPONENTE
 import { OfertasComponent as EstudianteOfertasComponent } from './estudiante/ofertas/ofertas.component';
 import { PostulacionesComponent as EstudiantePostulacionesComponent } from './estudiante/postulaciones/postulaciones.component';
 import { PracticasComponent } from './estudiante/practicas/practicas.component';
@@ -79,13 +80,13 @@ const routes: Routes = [
     canActivateChild: [AuthGuard],
     data: { role: 'ESTUDIANTE' },
     children: [
-      { path: 'perfil', component: PerfilComponent },
+      { path: 'inicio', component: InicioComponent }, // <-- CAMBIO AQUI
       { path: 'ofertas', component: EstudianteOfertasComponent },
       { path: 'postulaciones', component: EstudiantePostulacionesComponent },
       { path: 'practicas', component: PracticasComponent },
       { path: 'cv', component: SubirCvComponent },
       { path: 'cambiar-clave', component: EstudianteCambiarClaveComponent },
-      { path: '', redirectTo: 'perfil', pathMatch: 'full' }
+      { path: '', redirectTo: 'inicio', pathMatch: 'full' } // <-- CAMBIO AQUI
     ]
   },
 
@@ -99,6 +100,7 @@ const routes: Routes = [
     LoginComponent,
     AdminComponent,
     EmpresasComponent,
+    ModalEmpresaComponent,
     AdminOfertasComponent,
     AdminPostulacionesComponent,
     EstudianteDetalleComponent,
@@ -108,15 +110,15 @@ const routes: Routes = [
     ModalOfertaComponent,
     ModalCuposComponent,
     ModalPostulantesComponent,
-    CambiarClaveComponent, // Admin
+    CambiarClaveComponent,
     EstudianteComponent,
-    PerfilComponent,
+    InicioComponent, // <-- AGREGADO
     EstudianteOfertasComponent,
     EstudiantePostulacionesComponent,
     PracticasComponent,
     SubirCvComponent,
     DetalleOfertaComponent,
-    EstudianteCambiarClaveComponent // Estudiante
+    EstudianteCambiarClaveComponent
   ],
   imports: [
     BrowserModule,

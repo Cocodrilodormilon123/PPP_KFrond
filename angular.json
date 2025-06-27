@@ -65,7 +65,8 @@
               "buildTarget": "frontppp:build:production"
             },
             "development": {
-              "buildTarget": "frontppp:build:development"
+              "buildTarget": "frontppp:build:development",
+              "proxyConfig": "proxy.conf.json"
             }
           },
           "defaultConfiguration": "development"

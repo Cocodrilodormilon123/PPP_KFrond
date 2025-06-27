@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { EstudianteDetalleService } from '../../services/estudiante-detalle.service';
 
 @Component({
   selector: 'app-estudiante-detalle',
@@ -16,15 +16,13 @@ export class EstudianteDetalleComponent {
   descripcion: string = '';
   archivoSeleccionado: File | null = null;
 
-  constructor(private http: HttpClient) {}
+  constructor(private detalleService: EstudianteDetalleService) {}
 
-  buscar() {
+  buscar(): void {
     if (!this.codigo) return;
 
-    // Paso 1: Obtener estudiante por código
-    this.http.get<any>(`http://localhost:4040/persona-ms/personas/codigo/${this.codigo}`).subscribe({
+    this.detalleService.buscarEstudiantePorCodigo(this.codigo).subscribe({
       next: estudiante => {
-        // 👇 Validación: solo tipoPersona === 'ESTUDIANTE'
         if (estudiante.tipoPersona !== 'ESTUDIANTE') {
           this.estudiante = null;
           this.practica = null;
@@ -35,11 +33,9 @@ export class EstudianteDetalleComponent {
 
         this.estudiante = estudiante;
 
-        // Paso 2: Obtener práctica
-        this.http.get<any>(`http://localhost:4040/practica-ms/practicas/persona/${estudiante.id}`).subscribe({
+        this.detalleService.obtenerPracticaPorPersona(estudiante.id).subscribe({
           next: practica => {
-            //Validamos si no existe o no esta en estado EN_PROCESO de Practica
-            if (!practica || practica.estado !== 'EN_PROCESO'){
+            if (!practica || practica.estado !== 'EN_PROCESO') {
               this.practica = null;
               this.evidencias = [];
               return;
@@ -63,9 +59,10 @@ export class EstudianteDetalleComponent {
     });
   }
 
-  cargarEvidencias() {
+  cargarEvidencias(): void {
     if (!this.practica?.id) return;
-    this.http.get<any[]>(`http://localhost:4040/practica-ms/evidencias/practica/${this.practica.id}`).subscribe({
+
+    this.detalleService.obtenerEvidencias(this.practica.id).subscribe({
       next: evidencias => {
         this.evidencias = evidencias;
       },
@@ -75,11 +72,11 @@ export class EstudianteDetalleComponent {
     });
   }
 
-  handleArchivo(event: any) {
+  handleArchivo(event: any): void {
     this.archivoSeleccionado = event.target.files[0] || null;
   }
 
-  subirEvidencia() {
+  subirEvidencia(): void {
     if (!this.archivoSeleccionado || !this.descripcion || !this.practica) {
       alert('Completa todos los campos');
       return;
@@ -90,7 +87,7 @@ export class EstudianteDetalleComponent {
     formData.append('archivo', this.archivoSeleccionado);
     formData.append('idPractica', this.practica.id);
 
-    this.http.post(`http://localhost:4040/practica-ms/evidencias`, formData).subscribe({
+    this.detalleService.subirEvidencia(formData).subscribe({
       next: () => {
         alert('Evidencia subida correctamente');
         this.descripcion = '';
@@ -102,11 +99,8 @@ export class EstudianteDetalleComponent {
     });
   }
 
-  // Fallback para imagen rota
-  fotoError(event: any) {
-    // Detener el ciclo eliminando el manejador después del primer error
+  fotoError(event: any): void {
     event.target.onerror = null;
     event.target.src = '';
   }
-
 }

@@ -1,13 +1,28 @@
-<h2 mat-dialog-title>Gestionar Cupos</h2>
+<h2 mat-dialog-title class="titulo-modal">Gestionar Cupos</h2>
 
-<mat-dialog-content>
-  <mat-form-field appearance="fill" style="width: 100%;">
+<mat-dialog-content class="contenido-modal">
+  <mat-form-field appearance="fill" class="campo-cupos">
     <mat-label>Cantidad de cupos</mat-label>
-    <input matInput type="number" [(ngModel)]="cupos" min="0">
+    <input
+      matInput
+      type="number"
+      [(ngModel)]="cupos"
+      min="0"
+      required
+      (keydown)="preventMinus($event)"
+    />
+    <mat-error *ngIf="cupos < 0">El valor no puede ser negativo</mat-error>
   </mat-form-field>
 </mat-dialog-content>
 
-<mat-dialog-actions align="end">
+<mat-dialog-actions align="end" class="acciones-modal">
   <button mat-button (click)="dialogRef.close()">Cancelar</button>
-  <button mat-raised-button color="primary" (click)="guardar()">Guardar</button>
+  <button
+    mat-flat-button
+    color="primary"
+    (click)="guardar()"
+    [disabled]="cupos < 0 || cupos === null"
+  >
+    Guardar
+  </button>
 </mat-dialog-actions>

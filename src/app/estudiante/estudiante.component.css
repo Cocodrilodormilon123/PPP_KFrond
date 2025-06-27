@@ -3,10 +3,10 @@
   display: flex;
   flex-direction: column;
   height: 100vh;
-  font-family: Arial, sans-serif;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-/* HEADER - TOPBAR */
+/* HEADER SUPERIOR */
 .topbar {
   display: flex;
   justify-content: space-between;
@@ -17,7 +17,7 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
-/* MENÚ IZQUIERDO (botón hamburguesa) */
+/* Botón hamburguesa */
 .left-links .toggle-button {
   font-size: 22px;
   cursor: pointer;
@@ -28,48 +28,44 @@
 .right-section {
   display: flex;
   align-items: center;
-  position: relative;
   gap: 20px;
 }
 
+/* PILL Buttons: Guía, Ayuda */
 .header-actions {
   display: flex;
-  gap: 15px;
+  gap: 10px;
 }
 
 .header-actions a {
-  color: #bbdefb;
+  background-color: #003366;
+  color: #fff;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 13px;
   font-weight: 500;
   text-decoration: none;
+  transition: background-color 0.2s ease;
 }
 
 .header-actions a:hover {
-  color: #ffffff;
-  text-decoration: underline;
+  background-color: #00509e;
+  color: #fff;
 }
 
-/* USUARIO + DROPDOWN */
-.user-dropdown-wrapper {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-}
-
+/* USUARIO */
 .user-info {
   display: flex;
-  flex-direction: row;
   align-items: center;
-  cursor: pointer;
   gap: 10px;
 }
 
 .user-img {
   width: 40px;
   height: 40px;
-  border-radius: 6px;
+  border-radius: 50%;
   object-fit: cover;
-  border: 1px solid white;
-  box-shadow: 0 0 4px rgba(0, 0, 0, 0.15);
+  border: 2px solid white;
 }
 
 .text-info {
@@ -77,78 +73,37 @@
   flex-direction: column;
   justify-content: center;
   line-height: 1.2;
-  margin-left: 4px;
 }
 
 .text-info span {
-  font-weight: 500;
+  font-weight: 600;
   font-size: 14px;
   color: white;
-  margin-bottom: 3px; /* <-- separación */
 }
 
 .codigo-universitario {
   font-size: 12px;
   color: white;
-  margin-top: 0; /* opcional */
+  margin-top: -3px;
 }
 
-/* DROPDOWN */
-.custom-dropdown {
-  display: none;
-  position: absolute;
-  top: 100%;
-  right: 0;
-  margin-top: 5px;
-  background-color: white;
-  border-radius: 8px;
-  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.15);
-  z-index: 1000;
-  min-width: 180px;
-  padding: 0;
-  overflow: hidden;
-}
-
-.custom-dropdown.show {
-  display: block;
-}
-
-.custom-dropdown .dropdown-item {
-  padding: 10px 15px;
-  font-size: 14px;
-  border-bottom: 1px solid #eee;
-  color: #212529;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  transition: background-color 0.2s;
-}
-
-.custom-dropdown .dropdown-item:last-child {
-  border-bottom: none;
-}
-
-.custom-dropdown .dropdown-item:hover {
-  background-color: #f8f9fa;
-}
-
-/* CONTENEDOR GENERAL */
+/* BODY GENERAL */
 .body-content {
   display: flex;
   flex: 1;
   height: 100%;
+  overflow: hidden;
 }
 
 /* SIDEBAR */
 .sidebar {
   width: 220px;
-  background-color: rgb(0, 29, 73);
-  padding: 20px;
-  border-right: 1px solid #ccc;
+  background-color: #001d49;
+  padding: 0;
   transition: transform 0.3s ease;
   height: 100%;
-  min-height: 100%;
   box-sizing: border-box;
+  position: relative;
 }
 
 .sidebar.hidden {
@@ -164,38 +119,85 @@
 }
 
 .sidebar li {
-  margin-bottom: 15px;
+  margin-bottom: 0;
 }
 
-.sidebar a {
+/* Enlaces del sidebar */
+.sidebar li a {
+  display: flex;
+  align-items: center;
+  padding: 14px 20px;
   text-decoration: none;
   color: white;
   font-weight: 500;
-  display: block;
-  transition: color 0.2s ease;
+  position: relative;
+  transition: all 0.2s ease;
+  width: 100%;
 }
 
-.sidebar a:hover {
-  color: #00c0ff;
+/* BARRA AMARILLA + FONDO COMPLETO EN HOVER Y ACTIVE */
+.sidebar li a:hover::before,
+.sidebar li a.active::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 5px;
+  height: 100%;
+  background-color: #ffcc00;
 }
 
-.sidebar a.active {
-  color: #1976d2;
-  font-weight: bold;
+.sidebar li a:hover,
+.sidebar li a.active {
+  background-color: #0a2a56;
+  color: #ffffff;
 }
 
-/* ÁREA DE CONTENIDO */
-.content {
-  flex: 1;
-  padding: 30px;
-  background-color: #fff;
-  overflow-y: auto;
-}
-
-/* ÍCONOS */
+/* Íconos */
 .sidebar i,
 .header-actions i,
 .toggle-button i {
   color: white;
-  margin-right: 8px;
+  margin-right: 10px;
+}
+
+/* OPCIONES INFERIORES */
+.menu-secundario {
+  position: absolute;
+  bottom: 30px;
+  left: 0;
+  right: 0;
+}
+
+.menu-secundario li a {
+  padding: 14px 20px;
+  color: white;
+  display: flex;
+  align-items: center;
+  transition: all 0.2s ease;
+}
+
+.menu-secundario li a:hover::before,
+.menu-secundario li a.active::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 5px;
+  height: 100%;
+  background-color: #ffcc00;
+}
+
+.menu-secundario li a:hover,
+.menu-secundario li a.active {
+  background-color: #0a2a56;
+  color: white;
+}
+
+/* ÁREA DE CONTENIDO PRINCIPAL */
+.content {
+  flex: 1;
+  padding: 30px;
+  background-color: #f5faff;
+  overflow-y: auto;
 }

@@ -1,46 +1,53 @@
-<h3>👤 Registrar Administrador</h3>
+<mat-card class="form-card">
+  <mat-card-title>
+    <i class="fas fa-user-shield"></i> Registrar Administrador
+  </mat-card-title>
 
-<form (ngSubmit)="registrarAdmin()" enctype="multipart/form-data" class="form-card form-estudiante">
+  <form #formAdmin="ngForm" (ngSubmit)="registrarAdmin(formAdmin)" enctype="multipart/form-data" class="form-estudiante">
 
-  <div class="form-grid">
+    <div class="form-grid">
+      <mat-form-field appearance="fill">
+        <mat-label>Código de Administrador</mat-label>
+        <input matInput [(ngModel)]="admin.codigo" name="codigo" required />
+      </mat-form-field>
 
-    <mat-form-field appearance="fill">
-      <mat-label>Código Universitario</mat-label>
-      <input matInput [(ngModel)]="admin.codigo" name="codigo" required />
-    </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>Nombres</mat-label>
+        <input matInput [(ngModel)]="admin.nombre" name="nombre" required />
+      </mat-form-field>
 
-    <mat-form-field appearance="fill">
-      <mat-label>Nombres</mat-label>
-      <input matInput [(ngModel)]="admin.nombre" name="nombre" required />
-    </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>Apellidos</mat-label>
+        <input matInput [(ngModel)]="admin.apellido" name="apellido" required />
+      </mat-form-field>
 
-    <mat-form-field appearance="fill">
-      <mat-label>Apellidos</mat-label>
-      <input matInput [(ngModel)]="admin.apellido" name="apellido" required />
-    </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>DNI</mat-label>
+        <input matInput [(ngModel)]="admin.dni" name="dni" required />
+      </mat-form-field>
 
-    <mat-form-field appearance="fill">
-      <mat-label>DNI</mat-label>
-      <input matInput [(ngModel)]="admin.dni" name="dni" required />
-    </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>Teléfono</mat-label>
+        <input matInput [(ngModel)]="admin.telefono" name="telefono" required />
+      </mat-form-field>
+    </div>
 
-    <mat-form-field appearance="fill">
-      <mat-label>Teléfono</mat-label>
-      <input matInput [(ngModel)]="admin.telefono" name="telefono" required />
-    </mat-form-field>
+    <div class="file-upload-container">
+      <label class="file-label">
+        <i class="fas fa-camera"></i> Foto:
+        <button mat-stroked-button color="accent" type="button" (click)="inputFile.click()">
+          <i class="fas fa-upload"></i> Seleccionar archivo
+        </button>
+        <input type="file" #inputFile (change)="handleArchivo($event)" accept="image/*" hidden />
+        <span *ngIf="archivo" class="file-name">{{ archivo.name }}</span>
+      </label>
+    </div>
 
-  </div>
+    <div class="form-actions">
+      <button mat-raised-button color="primary" type="submit">
+        <i class="fas fa-user-plus"></i> Registrar Administrador
+      </button>
+    </div>
 
-  <div class="file-upload-container">
-    <label class="file-label">
-      📁 Foto:
-      <input type="file" (change)="handleArchivo($event)" required />
-    </label>
-    <span class="file-name" *ngIf="archivoSeleccionado">{{ archivoSeleccionado.name }}</span>
-  </div>
-
-  <div class="form-actions">
-    <button mat-raised-button color="primary" type="submit">Registrar Administrador</button>
-  </div>
-
-</form>
+  </form>
+</mat-card>

@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { EmpresaService } from '../../services/empresa.service';
+import { ModalEmpresaComponent } from './modal-empresa/modal-empresa.component';
 
 @Component({
   selector: 'app-empresas',
@@ -7,6 +8,8 @@ import { HttpClient } from '@angular/common/http';
   styleUrls: ['./empresas.component.css']
 })
 export class EmpresasComponent implements OnInit {
+  @ViewChild('modalEmpresa') modalEmpresa!: ModalEmpresaComponent;
+
   empresas: any[] = [];
 
   nuevaEmpresa = {
@@ -23,67 +26,78 @@ export class EmpresasComponent implements OnInit {
 
   mostrarFormulario = false;
 
-  constructor(private http: HttpClient) {}
+  constructor(private empresaService: EmpresaService) {}
 
   ngOnInit(): void {
     this.cargarEmpresas();
   }
 
-  cargarEmpresas() {
-    this.http.get<any[]>('http://localhost:4040/oferta-ms/empresas')
-      .subscribe({
-        next: data => {
-          console.log('Empresas cargadas:', data);
-          this.empresas = data;
-        },
-        error: err => console.error('Error cargando empresas', err)
-      });
-  }
-  editarEmpresa(empresa: any) {
-  this.nuevaEmpresa = { ...empresa };
-  this.mostrarFormulario = true;
+  cargarEmpresas(): void {
+    this.empresaService.listarEmpresas().subscribe({
+      next: (data) => {
+        console.log('Empresas cargadas:', data);
+        this.empresas = data;
+      },
+      error: (err) => {
+        console.error('Error cargando empresas', err);
+      }
+    });
   }
 
-  registrarEmpresa() {
+  abrirModal(): void {
+    this.mostrarFormulario = true;
+    this.nuevaEmpresa = {
+      nombre: '',
+      ruc: '',
+      direccion: '',
+      distrito: '',
+      provincia: '',
+      pais: '',
+      telefono: '',
+      representanteLegal: '',
+      estado: 'ACTIVA'
+    };
+  }
+
+  cerrarModal(): void {
+    this.mostrarFormulario = false;
+  }
+
+  editarEmpresa(empresa: any): void {
+    this.nuevaEmpresa = { ...empresa };
+    this.mostrarFormulario = true;
+  }
+
+  registrarEmpresa(empresa: any): void {
     const usuario = localStorage.getItem('usuario');
     if (usuario) {
       const datos = JSON.parse(usuario);
       const idPersona = datos.id || datos.idPersona;
 
       if (!idPersona) {
-        console.error('No se encontró el ID de la persona en sesión');
+        alert('No se encontró el ID de la persona en sesión');
         return;
       }
 
       const empresaConPersona = {
-        ...this.nuevaEmpresa,
+        ...empresa,
         idPersona: idPersona
       };
 
-      console.log('Empresa a registrar:', empresaConPersona); // ✅ Verifica que tenga idPersona
-
-      this.http.post('http://localhost:4040/oferta-ms/empresas', empresaConPersona)
-        .subscribe({
-          next: () => {
-            this.cargarEmpresas();
-            this.nuevaEmpresa = {
-              nombre: '',
-              ruc: '',
-              direccion: '',
-              distrito: '',
-              provincia: '',
-              pais: '',
-              telefono: '',
-              representanteLegal: '',
-              estado: 'ACTIVA'
-            };
-            this.mostrarFormulario = false;
-          },
-          error: err => console.error('Error al registrar empresa', err)
-        });
+      this.empresaService.registrarEmpresa(empresaConPersona).subscribe({
+        next: () => {
+          alert('Empresa registrada con éxito');
+          this.cargarEmpresas();
+          this.cerrarModal();
+        },
+        error: (err) => {
+          console.error('Error al registrar empresa', err);
+          const mensaje = err.error?.message || 'Error al registrar empresa';
+          alert(mensaje);
+        }
+      });
     } else {
-      console.error('No se encontró información del usuario en sesión');
+      alert('No se encontró información del usuario en sesión');
     }
   }
-
 }

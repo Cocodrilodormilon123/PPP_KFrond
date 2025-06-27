@@ -11,7 +11,6 @@ export class AdminComponent implements OnInit {
   adminCodigo = '';
   adminFoto = 'https://cdn-icons-png.flaticon.com/512/149/149071.png';
   sidebarVisible = true;
-  mostrarMenu = false;
 
   constructor(private router: Router) {}
 
@@ -22,7 +21,7 @@ export class AdminComponent implements OnInit {
       this.adminNombre = datos.nombre || this.adminNombre;
       this.adminCodigo = datos.codigo || '';
       if (datos.foto) {
-        this.adminFoto = `http://localhost:4040/persona-ms/img/${datos.foto}`;
+        this.adminFoto = `/persona-ms/img/${datos.foto}`;
       }
     }
   }
@@ -31,18 +30,9 @@ export class AdminComponent implements OnInit {
     this.sidebarVisible = !this.sidebarVisible;
   }
 
-
   cerrarSesion(): void {
     localStorage.removeItem('accessToken');
     localStorage.removeItem('usuario');
     this.router.navigate(['/login']);
-  }
-
-  onMouseOut(event: MouseEvent) {
-    const relatedTarget = event.relatedTarget as HTMLElement;
-    const dropdown = document.querySelector('.user-dropdown-wrapper');
-    if (dropdown && !dropdown.contains(relatedTarget)) {
-      this.mostrarMenu = false;
-    }
   }
 }

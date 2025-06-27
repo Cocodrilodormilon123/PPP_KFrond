@@ -10,33 +10,19 @@
     <div class="right-section">
       <div class="header-actions">
         <a href="#"><i class="fas fa-book-open"></i> Guía</a>
-        <a href="#"><i class="fas fa-life-ring"></i> Ayuda</a>
+        <a href="https://www.canva.com/design/DAGrPkLDcLg/ibPXepM9yWlYdMHGDQjZag/edit?utm_content=DAGrPkLDcLg&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton" target="_blank" rel="noopener">
+          <i class="fas fa-life-ring"></i> Ayuda
+        </a>
         <a href="#"><i class="fas fa-bell"></i></a>
       </div>
 
-      <!-- INFO ESTUDIANTE + DROPDOWN -->
-      <div class="user-dropdown-wrapper" (mouseleave)="onMouseOut($event)">
-        <div class="user-info" (click)="mostrarMenu = !mostrarMenu">
-          <img [src]="estudianteFoto" alt="Foto" class="user-img" />
-          <div class="text-info">
-            <span>{{ estudianteNombre }}</span>
-            <small class="codigo-universitario">Código: {{ estudianteCodigo }}</small>
-          </div>
+      <!-- INFO ESTUDIANTE SIN DROPDOWN -->
+      <div class="user-info">
+        <img [src]="estudianteFoto" alt="Foto" class="user-img" />
+        <div class="text-info">
+          <span>{{ estudianteNombre }}</span>
+          <small class="codigo-universitario">Código: {{ estudianteCodigo }}</small>
         </div>
-
-        <!-- DROPDOWN -->
-        <ul class="custom-dropdown" [class.show]="mostrarMenu">
-          <li>
-            <a class="dropdown-item" routerLink="cambiar-clave" routerLinkActive="active">
-              <i class="fas fa-key me-2"></i> Cambiar clave
-            </a>
-          </li>
-          <li>
-            <a class="dropdown-item text-danger" href="#" (click)="cerrarSesion()">
-              <i class="fas fa-sign-out-alt me-2"></i> Cerrar sesión
-            </a>
-          </li>
-        </ul>
       </div>
     </div>
   </header>
@@ -45,13 +31,18 @@
   <div class="body-content">
     <!-- SIDEBAR -->
     <aside class="sidebar" [class.hidden]="!sidebarVisible">
-      <ul>
-        <li><a routerLink="perfil" routerLinkActive="active"><i class="fas fa-user"></i> Perfil</a></li>
+      <ul class="menu-principal">
+        <li><a routerLink="inicio" routerLinkActive="active"><i class="fas fa-user"></i> Inicio</a></li>
         <li><a routerLink="ofertas" routerLinkActive="active"><i class="fas fa-clipboard-list"></i> Ofertas</a></li>
         <li><a routerLink="postulaciones" routerLinkActive="active"><i class="fas fa-paper-plane"></i> Postulaciones</a></li>
         <li><a routerLink="practicas" routerLinkActive="active"><i class="fas fa-folder-open"></i> Prácticas</a></li>
         <li><a routerLink="cv" routerLinkActive="active"><i class="fas fa-file-alt"></i> Subir CV</a></li>
+      </ul>
+
+      <!-- OPCIONES INFERIORES -->
+      <ul class="menu-secundario">
         <li><a routerLink="cambiar-clave" routerLinkActive="active"><i class="fas fa-key"></i> Cambiar clave</a></li>
+        <li><a href="#" (click)="cerrarSesion()"><i class="fas fa-sign-out-alt"></i> Cerrar sesión</a></li>
       </ul>
     </aside>
 

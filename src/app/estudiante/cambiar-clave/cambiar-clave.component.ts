@@ -15,6 +15,10 @@ export class CambiarClaveComponent implements OnInit {
   mensaje = '';
   error = false;
 
+  mostrarOld = false;
+  mostrarNueva = false;
+  mostrarConfirmar = false;
+
   constructor(private authService: AuthService, private router: Router) {}
 
   ngOnInit(): void {

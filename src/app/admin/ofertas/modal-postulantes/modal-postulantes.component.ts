@@ -1,6 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { HttpClient } from '@angular/common/http';
+import { AdminPostulacionService } from '../../../services/admin-postulacion.service';
 
 @Component({
   selector: 'app-modal-postulantes',
@@ -12,7 +12,7 @@ export class ModalPostulantesComponent implements OnInit {
   ofertaId: number;
 
   constructor(
-    private http: HttpClient,
+    private postulacionService: AdminPostulacionService,
     private dialogRef: MatDialogRef<ModalPostulantesComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
@@ -23,19 +23,15 @@ export class ModalPostulantesComponent implements OnInit {
     this.cargarPostulantes();
   }
 
-  cargarPostulantes() {
-    this.http.get<any[]>(`http://localhost:4040/oferta-ms/postulaciones/oferta/${this.ofertaId}/postulantes-unicos-detallado`)
-      .subscribe(resp => this.postulaciones = resp);
+  cargarPostulantes(): void {
+    this.postulacionService.obtenerPostulantesUnicosDetallado(this.ofertaId).subscribe({
+      next: (resp) => this.postulaciones = resp,
+      error: () => this.postulaciones = []
+    });
   }
 
-  cambiarEstado(id: number, estado: string, comentario?: string) {
-    let url = `http://localhost:4040/oferta-ms/postulaciones/${id}/estado?estado=${estado}`;
-
-    if (comentario && comentario.trim() !== '') {
-      url += `&comentario=${encodeURIComponent(comentario)}`;
-    }
-
-    this.http.put(url, {}).subscribe(() => {
+  cambiarEstado(id: number, estado: string, comentario?: string): void {
+    this.postulacionService.actualizarEstado(id, estado, comentario).subscribe(() => {
       this.postulaciones = this.postulaciones.map(p => {
         if (p.id === id) {
           return { ...p, estado, comentario: comentario || '' };
@@ -45,7 +41,7 @@ export class ModalPostulantesComponent implements OnInit {
     });
   }
 
-  cerrar() {
+  cerrar(): void {
     this.dialogRef.close();
   }
 }

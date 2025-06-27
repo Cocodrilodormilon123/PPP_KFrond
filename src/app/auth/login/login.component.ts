@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
-import { HttpClient } from '@angular/common/http';
 import { jwtDecode } from 'jwt-decode';
 
 @Component({
@@ -15,8 +14,7 @@ export class LoginComponent {
 
   constructor(
     private authService: AuthService,
-    private router: Router,
-    private http: HttpClient
+    private router: Router
   ) {}
 
   onLogin(): void {
@@ -29,17 +27,17 @@ export class LoginComponent {
           const role = decoded.role;
           const idPersona = decoded.idPersona;
 
-          // Traer datos reales del estudiante desde persona-ms
-          this.http.get<any>(`http://localhost:4040/persona-ms/personas/${idPersona}`).subscribe({
+          this.authService.getDatosPersona(idPersona).subscribe({
             next: (persona) => {
               const usuario = {
-                idPersona: idPersona,
+                idPersona,
                 nombre: persona.nombre,
                 apellido: persona.apellido,
                 codigo: persona.codigo,
                 foto: persona.foto || 'https://cdn-icons-png.flaticon.com/512/149/149071.png',
                 username: this.user.username
               };
+
               localStorage.setItem('usuario', JSON.stringify(usuario));
 
               if (role === 'ADMIN') {
@@ -52,7 +50,7 @@ export class LoginComponent {
             },
             error: (err) => {
               console.error('Error al obtener persona:', err);
-              this.error = 'No se pudo obtener los datos del estudiante';
+              this.error = 'No se pudo obtener los datos del usuario';
             }
           });
         } catch (e) {

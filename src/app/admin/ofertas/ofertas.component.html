@@ -1,9 +1,9 @@
-<h2 class="titulo-seccion">Ofertas de Prácticas</h2>
+<h2 class="titulo-seccion"><i class="fas fa-briefcase me-2"></i>Ofertas de Prácticas</h2>
 
 <!-- FILTRO POR ESTADO -->
-<div class="filtro-ofertas" style="margin-bottom: 16px;">
-  <label for="estado">Filtrar por estado:</label>
-  <select id="estado" [(ngModel)]="filtroEstado" (change)="filtrarOfertasPorEstado()">
+<div class="filtro-ofertas">
+  <label for="estado" class="filtro-label">Filtrar por estado:</label>
+  <select id="estado" [(ngModel)]="filtroEstado" (change)="filtrarOfertasPorEstado()" class="select-estilizado">
     <option value="TODAS">Todas</option>
     <option value="ACTIVA">Activas</option>
     <option value="FINALIZADA">Finalizadas</option>
@@ -11,28 +11,33 @@
 </div>
 
 <div class="btn-nueva-oferta">
-  <button mat-raised-button color="primary" (click)="abrirModalOferta()">➕ Nueva Oferta</button>
+  <button mat-raised-button color="primary" (click)="abrirModalOferta()">
+    <i class="fas fa-plus me-1"></i> Nueva Oferta
+  </button>
 </div>
 
 <div *ngIf="ofertas.length > 0" class="ofertas-grid">
   <div *ngFor="let oferta of ofertas" class="oferta-card">
-    <h3 class="oferta-titulo">{{ oferta.titulo }}</h3>
-    <p><strong>Empresa:</strong> {{ oferta.empresa?.nombre || 'Sin asignar' }}</p>
-    <p><strong>Modalidad:</strong> {{ oferta.modalidad }}</p>
-    <p><strong>Fecha de inicio:</strong> {{ oferta.fechaInicio }}</p>
-
-    <p *ngIf="oferta.fechaFin"><strong>Finaliza en:</strong> {{ getTiempoRestante(oferta.fechaFin) }}</p>
-    <p *ngIf="oferta.vacantes"><strong>Disponibles:</strong> {{ oferta.vacantes.disponibles }}</p>
-    <p *ngIf="!oferta.vacantes"><strong>Disponibles:</strong> No asignados aún</p>
+    <h3 class="oferta-titulo"><i class="fas fa-tag me-2"></i>{{ oferta.titulo }}</h3>
+    <p><i class="fas fa-building me-2"></i><strong>Empresa:</strong> {{ oferta.empresa?.nombre || 'Sin asignar' }}</p>
+    <p><i class="fas fa-laptop-house me-2"></i><strong>Modalidad:</strong> {{ oferta.modalidad }}</p>
+    <p><i class="fas fa-calendar-day me-2"></i><strong>Inicio:</strong> {{ oferta.fechaInicio }}</p>
+    <p *ngIf="oferta.fechaFin"><i class="fas fa-hourglass-half me-2"></i><strong>Finaliza en:</strong> {{ getTiempoRestante(oferta.fechaFin) }}</p>
+    <p *ngIf="oferta.vacantes">
+      <i class="fas fa-users me-2"></i><strong>Disponibles:</strong> {{ oferta.vacantes.disponibles }}
+    </p>
+    <p *ngIf="!oferta.vacantes"><i class="fas fa-exclamation-circle me-2"></i><strong>Disponibles:</strong> No asignados</p>
 
     <div class="card-actions">
       <button mat-stroked-button color="primary" (click)="abrirModalCupos(oferta.id)">
-        {{ oferta.vacantes ? '✏️ Editar Cupos' : '➕ Cupos' }}
+        <i class="fas fa-edit me-1"></i> {{ oferta.vacantes ? 'Editar Cupos' : 'Asignar Cupos' }}
       </button>
       <button mat-stroked-button color="primary" (click)="abrirModalPostulantes(oferta.id)">
-        👥 Postulantes
+        <i class="fas fa-user-graduate me-1"></i> Postulantes
       </button>
-      <button mat-stroked-button color="accent" (click)="abrirModalOferta(oferta)">✏️ Actualizar</button>
+      <button mat-stroked-button color="accent" (click)="abrirModalOferta(oferta)">
+        <i class="fas fa-pen me-1"></i> Actualizar
+      </button>
     </div>
   </div>
 </div>

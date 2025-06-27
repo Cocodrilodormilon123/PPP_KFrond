@@ -1,7 +1,9 @@
 <mat-card class="form-card">
-  <mat-card-title>📝 Registrar Estudiante</mat-card-title>
+  <mat-card-title>
+    <i class="fas fa-user-graduate"></i> Registrar Estudiante
+  </mat-card-title>
 
-  <form (ngSubmit)="registrarEstudiante()" enctype="multipart/form-data" #formEst="ngForm" class="form-estudiante">
+  <form (ngSubmit)="registrarEstudiante(formEst)" enctype="multipart/form-data" #formEst="ngForm" class="form-estudiante">
     <div class="form-grid">
 
       <mat-form-field appearance="fill">
@@ -36,12 +38,12 @@
         </mat-select>
       </mat-form-field>
 
-      <!-- Campo de Foto con estilo -->
+      <!-- Campo de Foto -->
       <div class="file-upload-container">
         <label class="file-label">
-          📁 Foto:
+          <i class="fas fa-camera"></i> Foto:
           <button mat-stroked-button color="accent" type="button" (click)="inputFile.click()">
-            Seleccionar archivo
+            <i class="fas fa-upload"></i> Seleccionar archivo
           </button>
           <span *ngIf="foto?.name" class="file-name">{{ foto.name }}</span>
           <input type="file" #inputFile (change)="handleFoto($event)" accept="image/*" hidden />
@@ -52,7 +54,7 @@
 
     <div class="form-actions">
       <button mat-raised-button color="primary" type="submit">
-        Registrar Estudiante
+        <i class="fas fa-user-plus"></i> Registrar Estudiante
       </button>
     </div>
   </form>

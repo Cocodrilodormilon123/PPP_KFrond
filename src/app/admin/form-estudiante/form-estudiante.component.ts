@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { NgForm } from '@angular/forms';
+import { EstudianteService } from '../../services/estudiante.service';
 
 @Component({
   selector: 'app-form-estudiante',
@@ -20,47 +21,39 @@ export class FormEstudianteComponent {
 
   foto!: File;
 
-  constructor(private http: HttpClient) {}
+  constructor(private estudianteService: EstudianteService) {}
 
-  handleFoto(event: Event) {
+  handleFoto(event: Event): void {
     const input = event.target as HTMLInputElement;
-    if (input.files && input.files.length > 0) {
+    if (input.files?.length) {
       this.foto = input.files[0];
     }
   }
 
-  registrarEstudiante() {
+  registrarEstudiante(form: NgForm): void {
     if (!this.foto) {
-      alert('Debes seleccionar una imagen antes de registrar.');
+      alert('❗ Debes seleccionar una imagen antes de registrar.');
       return;
     }
 
-    const formData = new FormData();
-
-    // ✅ Formato requerido por el backend: dd/MM/yyyy
     const fecha = new Date();
-    const dia = fecha.getDate().toString().padStart(2, '0');
-    const mes = (fecha.getMonth() + 1).toString().padStart(2, '0');
-    const anio = fecha.getFullYear();
-    const fechaRegistro = `${dia}/${mes}/${anio}`; // ✅ Aquí el cambio correcto
+    const fechaRegistro = `${fecha.getDate().toString().padStart(2, '0')}/${(fecha.getMonth() + 1).toString().padStart(2, '0')}/${fecha.getFullYear()}`;
 
     const personaPayload = {
       ...this.estudiante,
       fechaRegistro
     };
 
-    formData.append('persona', new Blob(
-      [JSON.stringify(personaPayload)],
-      { type: 'application/json' })
-    );
-
-    formData.append('file', this.foto);
-
-    this.http.post('http://localhost:4040/persona-ms/personas', formData).subscribe({
-      next: () => alert('✅ Estudiante registrado correctamente'),
-      error: err => {
+    this.estudianteService.registrarEstudiante(personaPayload, this.foto).subscribe({
+      next: () => {
+        alert('✅ Estudiante y usuario registrados correctamente');
+        form.resetForm();
+        this.foto = undefined!;
+      },
+      error: (err) => {
         console.error('❌ Error al registrar estudiante:', err);
-        alert('Error al registrar estudiante');
+        const mensajeError = err.error?.error || 'Error al registrar estudiante.';
+        alert('❌ ' + mensajeError);
       }
     });
   }

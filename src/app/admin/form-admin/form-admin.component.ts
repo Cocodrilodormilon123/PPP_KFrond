@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { NgForm } from '@angular/forms';
+import { AdminService } from '../../services/admin.service';
 
 @Component({
   selector: 'app-form-admin',
@@ -8,51 +9,51 @@ import { HttpClient } from '@angular/common/http';
 })
 export class FormAdminComponent {
   admin = {
-    codigo: '',
     nombre: '',
     apellido: '',
     dni: '',
     telefono: '',
+    codigo: '',
     tipoPersona: 'ADMIN',
     estado: true
   };
 
-  archivoSeleccionado: File | null = null;
+  archivo!: File;
 
-  constructor(private http: HttpClient) {}
+  constructor(private adminService: AdminService) {}
 
-  handleArchivo(event: any) {
-    this.archivoSeleccionado = event.target.files[0] || null;
+  handleArchivo(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (input.files?.length) {
+      this.archivo = input.files[0];
+    }
   }
 
-  registrarAdmin() {
-    if (!this.archivoSeleccionado) {
-      alert('Debe seleccionar una imagen');
+  registrarAdmin(form: NgForm): void {
+    if (!this.archivo) {
+      alert('❗ Debes seleccionar una imagen.');
       return;
     }
 
-    const formData = new FormData();
-    formData.append('file', this.archivoSeleccionado);
-    formData.append('persona', new Blob([JSON.stringify({
-      ...this.admin,
-      fechaRegistro: new Date().toLocaleDateString('en-GB')
-    })], { type: 'application/json' }));
+    const fecha = new Date();
+    const fechaRegistro = `${fecha.getDate().toString().padStart(2, '0')}/${(fecha.getMonth() + 1).toString().padStart(2, '0')}/${fecha.getFullYear()}`;
 
-    this.http.post('http://localhost:4040/persona-ms/personas', formData).subscribe({
-      next: () => alert('Administrador registrado exitosamente'),
-      error: err => console.error('Error al registrar administrador', err)
+    const payload = {
+      ...this.admin,
+      fechaRegistro
+    };
+
+    this.adminService.registrarAdmin(payload, this.archivo).subscribe({
+      next: () => {
+        alert('✅ Administrador registrado correctamente');
+        form.resetForm();
+        this.archivo = undefined!;
+      },
+      error: (err) => {
+        console.error('❌ Error al registrar administrador:', err);
+        const mensajeError = err.error?.error || 'Error al registrar administrador.';
+        alert('❌ ' + mensajeError);
+      }
     });
   }
-   resetFormulario() {
-      this.admin = {
-        codigo: '',
-        nombre: '',
-        apellido: '',
-        dni: '',
-        telefono: '',
-        tipoPersona: 'ADMIN',
-        estado: true
-      };
-      this.archivoSeleccionado = null;
-    }
 }

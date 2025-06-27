@@ -1,11 +1,39 @@
+.dialog-title {
+  font-weight: 600;
+  font-size: 20px;
+  color: #2c3e50;
+}
+
 .oferta-dialog-content {
   display: flex;
   flex-direction: column;
   gap: 16px;
   max-height: 70vh;
   overflow-y: auto;
+  padding-top: 8px;
 }
 
 mat-form-field.full-width {
   width: 100%;
+}
+
+.form-row {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.half-width {
+  flex: 1 1 45%;
+  min-width: 200px;
+}
+
+.no-resize textarea {
+  resize: none;
+}
+
+.dialog-actions {
+  margin-top: 8px;
+  padding: 0 8px 8px;
+  gap: 8px;
 }

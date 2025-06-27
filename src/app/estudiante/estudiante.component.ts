@@ -11,7 +11,6 @@ export class EstudianteComponent implements OnInit {
   estudianteCodigo = '';
   estudianteFoto = 'https://cdn-icons-png.flaticon.com/512/149/149071.png';
   sidebarVisible = true;
-  mostrarMenu = false;
 
   constructor(private router: Router) {}
 
@@ -35,13 +34,5 @@ export class EstudianteComponent implements OnInit {
     localStorage.removeItem('accessToken');
     localStorage.removeItem('usuario');
     this.router.navigate(['/login']);
-  }
-
-  onMouseOut(event: MouseEvent): void {
-    const relatedTarget = event.relatedTarget as HTMLElement;
-    const dropdown = document.querySelector('.user-dropdown-wrapper');
-    if (dropdown && !dropdown.contains(relatedTarget)) {
-      this.mostrarMenu = false;
-    }
   }
 }

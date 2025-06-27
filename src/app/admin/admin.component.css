@@ -1,12 +1,11 @@
-/* CONTENEDOR PRINCIPAL */
 .admin-container {
   display: flex;
   flex-direction: column;
   height: 100vh;
-  font-family: Arial, sans-serif;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-/* HEADER - TOPBAR */
+/* HEADER */
 .topbar {
   display: flex;
   justify-content: space-between;
@@ -23,105 +22,63 @@
   color: white;
 }
 
-/* SECCIÓN DERECHA (Usuario + Dropdown) */
+/* DERECHA */
 .right-section {
   display: flex;
   align-items: center;
-  position: relative;
+  gap: 20px;
 }
 
-/* INFO DEL USUARIO */
 .user-info {
   display: flex;
-  flex-direction: row; /* ✅ AHORA ES HORIZONTAL */
   align-items: center;
-  position: relative;
-  cursor: pointer;
   gap: 10px;
 }
 
-/* IMAGEN DEL USUARIO */
 .user-img {
   width: 40px;
   height: 40px;
-  border-radius: 6px;
+  border-radius: 50%;
   object-fit: cover;
-  border: 1px solid white;
-  box-shadow: 0 0 4px rgba(0, 0, 0, 0.15);
+  border: 2px solid white;
 }
 
-/* TEXTO DEL USUARIO */
 .text-info {
   display: flex;
   flex-direction: column;
-  line-height: 1.1;
+  justify-content: center;
+  line-height: 1.2;
 }
 
 .text-info span {
+  font-weight: 600;
+  font-size: 14px;
   color: white;
-  font-weight: 500;
 }
 
 .codigo-universitario {
-  color: white;
   font-size: 12px;
+  color: white;
+  margin-top: -3px;
 }
 
-/* DROPDOWN CUSTOMIZADO */
-.custom-dropdown {
-  display: none;
-  position: absolute;
-  top: 100%;
-  right: 0;
-  margin-top: 5px;
-  background-color: white;
-  border-radius: 8px;
-  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.15);
-  z-index: 1000;
-  min-width: 180px;
-  padding: 0;
-  overflow: hidden;
-}
-
-.custom-dropdown.show {
-  display: block;
-}
-
-.custom-dropdown .dropdown-item {
-  padding: 10px 15px;
-  font-size: 14px;
-  border-bottom: 1px solid #eee;
-  color: #212529;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  transition: background-color 0.2s;
-}
-
-.custom-dropdown .dropdown-item:last-child {
-  border-bottom: none;
-}
-
-.custom-dropdown .dropdown-item:hover {
-  background-color: #f8f9fa;
-}
-
-/* SIDEBAR */
+/* BODY GENERAL */
 .body-content {
   display: flex;
   flex: 1;
   height: 100%;
+  overflow: hidden;
 }
 
+/* SIDEBAR */
 .sidebar {
   width: 220px;
-  background-color: rgb(0, 29, 73);
-  padding: 20px;
-  border-right: 1px solid #ccc;
+  background-color: #001d49;
+  padding: 0;
   transition: transform 0.3s ease;
   height: 100%;
-  min-height: 100%;
   box-sizing: border-box;
+  position: relative;
 }
 
 .sidebar.hidden {
@@ -137,35 +94,80 @@
 }
 
 .sidebar li {
-  margin-bottom: 15px;
+  margin-bottom: 0;
 }
 
-.sidebar a {
+.sidebar li a {
+  display: flex;
+  align-items: center;
+  padding: 14px 20px;
   text-decoration: none;
   color: white;
   font-weight: 500;
-  display: block;
-  transition: color 0.2s ease;
+  position: relative;
+  transition: all 0.2s ease;
+  width: 100%;
 }
 
-.sidebar a:hover {
-  color: #00c0ff;
+.sidebar li a:hover::before,
+.sidebar li a.active::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 5px;
+  height: 100%;
+  background-color: #ffcc00;
 }
 
-.sidebar a.active {
-  color: #1976d2;
-  font-weight: bold;
+.sidebar li a:hover,
+.sidebar li a.active {
+  background-color: #0a2a56;
+  color: #ffffff;
+}
+
+.sidebar i {
+  margin-right: 10px;
+  color: white;
+}
+
+/* OPCIONES INFERIORES */
+.menu-secundario {
+  position: absolute;
+  bottom: 30px;
+  left: 0;
+  right: 0;
+}
+
+.menu-secundario li a {
+  padding: 14px 20px;
+  color: white;
+  display: flex;
+  align-items: center;
+  transition: all 0.2s ease;
+}
+
+.menu-secundario li a:hover::before,
+.menu-secundario li a.active::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 5px;
+  height: 100%;
+  background-color: #ffcc00;
+}
+
+.menu-secundario li a:hover,
+.menu-secundario li a.active {
+  background-color: #0a2a56;
+  color: white;
 }
 
 /* CONTENIDO CENTRAL */
 .content {
   flex: 1;
   padding: 30px;
-  background-color: #fff;
+  background-color: #f5faff;
   overflow-y: auto;
-}
-.user-dropdown-wrapper {
-  position: relative;
-  display: flex;
-  flex-direction: column;
 }

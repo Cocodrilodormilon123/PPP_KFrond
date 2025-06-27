@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 import { MatDialog } from '@angular/material/dialog';
 import { ModalOfertaComponent } from './modal-oferta/modal-oferta.component';
 import { ModalCuposComponent } from './modal-cupos/modal-cupos.component';
 import { ModalPostulantesComponent } from './modal-postulantes/modal-postulantes.component';
+import { AdminOfertaService } from '../../services/admin-oferta.service';
 
 @Component({
   selector: 'app-ofertas',
@@ -15,64 +15,66 @@ export class OfertasComponent implements OnInit {
   filtroEstado: string = 'TODAS';
 
   constructor(
-    private http: HttpClient,
+    private ofertaService: AdminOfertaService,
     private dialog: MatDialog
   ) {}
 
   ngOnInit(): void {
     this.cargarOfertas();
 
+    // ⏱️ Actualiza el contador en la vista cada segundo
     setInterval(() => {
       this.ofertas = [...this.ofertas];
     }, 1000);
+
+    // 🔁 Verifica cambios de estado automáticamente cada minuto
+    setInterval(() => {
+      this.filtrarOfertasPorEstado();
+    }, 60000);
   }
 
-  cargarOfertas() {
-    this.http.get<any[]>('http://localhost:4040/oferta-ms/ofertas').subscribe({
-      next: data => {
-        this.completarOfertas(data);
-      },
+  cargarOfertas(): void {
+    this.ofertaService.getOfertas().subscribe({
+      next: data => this.completarOfertas(data),
       error: err => console.error('Error cargando ofertas', err)
     });
   }
 
-  filtrarOfertasPorEstado() {
+  filtrarOfertasPorEstado(): void {
     if (this.filtroEstado === 'TODAS') {
       this.cargarOfertas();
     } else {
-      this.http.get<any[]>(`http://localhost:4040/oferta-ms/ofertas/estado/${this.filtroEstado}`).subscribe({
-        next: data => {
-          this.completarOfertas(data);
-        },
+      this.ofertaService.getOfertasPorEstado(this.filtroEstado).subscribe({
+        next: data => this.completarOfertas(data),
         error: err => console.error('Error filtrando ofertas', err)
       });
     }
   }
 
-  completarOfertas(data: any[]) {
-    const promises = data.map(oferta => {
-      const partes = oferta.fechaFin.split('/');
-      if (partes.length === 3) {
-        oferta.fechaFin = `${partes[2]}-${partes[1]}-${partes[0]}`;
+  async completarOfertas(data: any[]): Promise<void> {
+    const solicitudes = data.map(async oferta => {
+      // 🗓️ Reformat fecha si viene como dd/MM/yyyy
+      if (oferta.fechaFin?.includes('/')) {
+        const partes = oferta.fechaFin.split('/');
+        if (partes.length === 3) {
+          oferta.fechaFin = `${partes[2]}-${partes[1]}-${partes[0]}`;
+        }
       }
 
-      return this.http.get<any>(`http://localhost:4040/oferta-ms/vacantes/oferta/${oferta.id}`).toPromise()
-        .then(vacantes => {
-          oferta.vacantes = vacantes;
-          return oferta;
-        })
-        .catch(() => {
-          oferta.vacantes = null;
-          return oferta;
-        });
+      try {
+        const vacantes = await this.ofertaService.getVacantesPorOferta(oferta.id).toPromise();
+        oferta.vacantes = vacantes;
+      } catch {
+        oferta.vacantes = null;
+      }
+
+      return oferta;
     });
 
-    Promise.all(promises).then(ofertasCompletas => {
-      this.ofertas = ofertasCompletas;
-    });
+    this.ofertas = await Promise.all(solicitudes);
   }
 
-  abrirModalOferta(oferta?: any) {
+  abrirModalOferta(oferta?: any): void {
     const dialogRef = this.dialog.open(ModalOfertaComponent, {
       width: '500px',
       data: oferta || null
@@ -80,7 +82,7 @@ export class OfertasComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result === true) {
-        this.filtrarOfertasPorEstado(); // Refrescar según filtro actual
+        this.filtrarOfertasPorEstado();
       }
     });
   }
@@ -96,7 +98,7 @@ export class OfertasComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result === true) {
-        this.filtrarOfertasPorEstado(); // Refrescar según filtro actual
+        this.filtrarOfertasPorEstado();
       }
     });
   }
@@ -109,8 +111,8 @@ export class OfertasComponent implements OnInit {
   }
 
   getTiempoRestante(fechaFin: string | Date): string {
+    const fin = typeof fechaFin === 'string' ? new Date(fechaFin).getTime() : fechaFin.getTime();
     const ahora = new Date().getTime();
-    const fin = new Date(fechaFin).getTime();
     const diferencia = fin - ahora;
 
     if (diferencia <= 0) return 'Finalizado';

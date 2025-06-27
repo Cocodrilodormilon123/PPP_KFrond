@@ -1,18 +1,19 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { HttpClient } from '@angular/common/http';
+import { AdminOfertaService } from '../../../services/admin-oferta.service'; // ← Ruta corregida
 
 @Component({
   selector: 'app-modal-oferta',
-  templateUrl: './modal-oferta.component.html'
+  templateUrl: './modal-oferta.component.html',
+  styleUrls: ['./modal-oferta.component.css']
 })
 export class ModalOfertaComponent implements OnInit {
 
   nuevaOferta: any = {
     titulo: '',
     descripcion: '',
-    ubicacion: '',            // NUEVO
-    requerimientos: '',       // NUEVO
+    ubicacion: '',
+    requerimientos: '',
     modalidad: 'PRESENCIAL',
     estado: 'ACTIVA',
     fechaFin: '',
@@ -22,17 +23,16 @@ export class ModalOfertaComponent implements OnInit {
   empresas: any[] = [];
 
   constructor(
-    private http: HttpClient,
+    private ofertaService: AdminOfertaService,
     private dialogRef: MatDialogRef<ModalOfertaComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {}
 
   ngOnInit(): void {
-    this.http.get<any[]>('http://localhost:4040/oferta-ms/empresas/estado/ACTIVA')
-      .subscribe({
-        next: res => this.empresas = res,
-        error: err => console.error('Error al cargar empresas', err)
-      });
+    this.ofertaService.obtenerEmpresasActivas().subscribe({
+      next: (res: any) => this.empresas = res,
+      error: (err: any) => console.error('Error al cargar empresas', err)
+    });
 
     if (this.data) {
       this.nuevaOferta = {
@@ -48,7 +48,7 @@ export class ModalOfertaComponent implements OnInit {
     }
   }
 
-  guardar() {
+  guardar(): void {
     if (!this.nuevaOferta.empresaId) {
       alert('Debes seleccionar una empresa');
       return;
@@ -62,28 +62,16 @@ export class ModalOfertaComponent implements OnInit {
       modalidad: this.nuevaOferta.modalidad,
       estado: this.nuevaOferta.estado,
       fechaFin: this.convertirFechaDDMMYYYY(this.nuevaOferta.fechaFin),
-      empresa: {
-        id: this.nuevaOferta.empresaId
-      }
+      empresa: { id: this.nuevaOferta.empresaId }
     };
 
-    let request$;
-
-    if (this.data) {
-      request$ = this.http.put(
-        `http://localhost:4040/oferta-ms/ofertas/${this.data.id}`,
-        ofertaAEnviar
-      );
-    } else {
-      request$ = this.http.post(
-        `http://localhost:4040/oferta-ms/ofertas`,
-        ofertaAEnviar
-      );
-    }
+    const request$ = this.data
+      ? this.ofertaService.actualizarOferta(this.data.id, ofertaAEnviar)
+      : this.ofertaService.crearOferta(ofertaAEnviar);
 
     request$.subscribe({
       next: () => this.dialogRef.close(true),
-      error: err => {
+      error: (err: any) => {
         console.error('Error al guardar la oferta', err);
         alert('Error al guardar la oferta');
       }
@@ -98,7 +86,7 @@ export class ModalOfertaComponent implements OnInit {
     return `${dia}/${mes}/${anio}`;
   }
 
-  cerrar() {
+  cerrar(): void {
     this.dialogRef.close(false);
   }
 }
