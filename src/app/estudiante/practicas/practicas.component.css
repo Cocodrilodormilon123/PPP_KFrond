@@ -1,0 +1,68 @@
+.contenedor-practica {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.card-practica, .card-evidencias {
+  background-color: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.card-practica h2 {
+  color: #003366;
+  margin-bottom: 10px;
+}
+
+.card-evidencias h3 {
+  margin-bottom: 15px;
+  color: #005a87;
+}
+
+.semana-card {
+  border: 1px solid #cce5ff;
+  background-color: #f8f9fa;
+  border-radius: 6px;
+  padding: 15px;
+  margin-bottom: 10px;
+}
+
+.estado {
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+.estado.entregado {
+  color: green;
+}
+
+.estado.pendiente {
+  color: orange;
+}
+
+input[type="file"] {
+  margin-top: 8px;
+  margin-bottom: 10px;
+}
+
+button {
+  background-color: #005a87;
+  color: white;
+  padding: 6px 12px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  margin-right: 10px;
+}
+
+button:hover {
+  background-color: #00456a;
+}
+
+.boton-guia {
+  margin-top: 10px;
+  background-color: #28a745;
+}

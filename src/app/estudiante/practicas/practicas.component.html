@@ -1,1 +1,36 @@
-<p>practicas works!</p>
+<div *ngIf="practica" class="contenedor-practica">
+  <div class="card-practica">
+    <h2>📋 Seguimiento de tu práctica</h2>
+
+    <p *ngIf="practica.empresa"><strong>🏢 Empresa:</strong> {{ practica.empresa }}</p>
+    <p *ngIf="practica.tituloOferta"><strong>💼 Oferta:</strong> {{ practica.tituloOferta }}</p>
+    <p *ngIf="practica.modalidad"><strong>🌐 Modalidad:</strong> {{ practica.modalidad }}</p>
+    <p *ngIf="practica.fechaInicio"><strong>📅 Inicio:</strong> {{ practica.fechaInicio | date: 'dd/MM/yyyy' }}</p>
+    <p><strong>📌 Estado:</strong> {{ practica.estado }}</p>
+
+    <button (click)="descargarGuia()" class="boton-guia">📥 Descargar guía PDF</button>
+  </div>
+
+  <div class="card-evidencias">
+    <h3>📂 Registro de evidencias semanales</h3>
+
+    <div *ngFor="let semana of semanasDisponibles" class="semana-card">
+      <h4>🗓️ Semana {{ semana }}</h4>
+
+      <div *ngIf="getEvidenciaPorSemana(semana) as evidencia">
+        <p class="estado entregado">✅ Entregado</p>
+        <button (click)="descargarEvidencia(evidencia.nombreArchivo)">👁️ Ver archivo</button>
+      </div>
+
+      <div *ngIf="!getEvidenciaPorSemana(semana)">
+        <div *ngIf="semana === semanaActual">
+          <input type="file" (change)="seleccionarArchivo($event)" />
+          <button (click)="subirEvidencia(semana)">⬆️ Subir evidencia</button>
+        </div>
+        <div *ngIf="semana !== semanaActual">
+          <p class="estado pendiente">🕒 Aún no disponible</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
