@@ -201,3 +201,18 @@
   background-color: #f5faff;
   overflow-y: auto;
 }
+.noti-icon {
+  position: relative;
+  display: inline-block;
+}
+
+.badge-noti {
+  position: absolute;
+  top: 3px;
+  right: 2px;
+  width: 10px;
+  height: 10px;
+  background-color: red;
+  border-radius: 50%;
+  z-index: 10;
+}

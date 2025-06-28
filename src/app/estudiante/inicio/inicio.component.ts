@@ -24,7 +24,7 @@ export class InicioComponent implements OnInit {
       if (idPersona) {
         this.inicioService.getPostulaciones(idPersona).subscribe(data => {
           this.postulacionesEnProceso = data.filter(p =>
-            p.estado === 'PENDIENTE' || p.estado === 'ACEPTADA'
+            p.estado === 'PENDIENTE' || p.estado === 'EN_REVISION'
           ).length;
         });
 

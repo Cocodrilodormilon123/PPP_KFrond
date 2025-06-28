@@ -76,4 +76,7 @@ export class PostulacionService {
       headers: this.getAuthHeaders()
     });
   }
+  verificarPracticaActiva(idPersona: number): Observable<boolean> {
+    return this.http.get<boolean>(`/practica-ms/practicas/persona/${idPersona}/tiene-activa`);
+  }
 }

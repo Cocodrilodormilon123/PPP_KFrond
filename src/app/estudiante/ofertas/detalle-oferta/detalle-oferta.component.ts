@@ -1,5 +1,5 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { PostulacionService } from '../../../services/postulacion.service'; // Usa ruta relativa
+import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
+import { PostulacionService } from '../../../services/postulacion.service';
 
 @Component({
   selector: 'app-detalle-oferta',
@@ -7,33 +7,68 @@ import { PostulacionService } from '../../../services/postulacion.service'; // U
   styleUrls: ['./detalle-oferta.component.css']
 })
 export class DetalleOfertaComponent {
-  @Input() oferta: any = null;
+  private _oferta: any = null;
+
+  @Input() set oferta(value: any) {
+    this._oferta = value;
+    if (value) this.prepararPostulacion();
+  }
+  get oferta(): any {
+    return this._oferta;
+  }
+
   @Output() cerrar = new EventEmitter<void>();
+
+  tienePracticaActiva: boolean = false;
+  idPersona: number | null = null;
 
   constructor(private postulacionService: PostulacionService) {}
 
-  postular(): void {
+  prepararPostulacion(): void {
     const stored = localStorage.getItem('usuario');
-    const idPersona = stored ? JSON.parse(stored).idPersona : null;
+    this.idPersona = stored ? JSON.parse(stored).idPersona : null;
 
-    if (!idPersona) {
+    console.log('ID Persona:', this.idPersona);
+
+    if (this.idPersona) {
+      this.postulacionService.verificarPracticaActiva(this.idPersona).subscribe({
+        next: (res) => {
+          this.tienePracticaActiva = res;
+          console.log('¿Tiene práctica activa?', res);
+        },
+        error: (err) => {
+          console.error('Error al verificar práctica activa:', err);
+          this.tienePracticaActiva = false;
+        }
+      });
+    }
+  }
+
+  postular(): void {
+    if (this.oferta.vacantes?.disponibles === 0) {
+      alert('Esta oferta no tiene vacantes disponibles.');
+      return;
+    }
+
+    if (this.tienePracticaActiva) {
+      alert('Ya tienes una práctica en proceso. No puedes postular a otra oferta.');
+      return;
+    }
+
+    if (!this.idPersona) {
       alert('No se encontró el ID del usuario. Por favor, inicia sesión nuevamente.');
       return;
     }
 
-    const fecha = this.convertirFecha(new Date());
-
     const nuevaPostulacion = {
-      idPersona: idPersona,
+      idPersona: this.idPersona,
       comentario: 'En espera',
       estado: 'PENDIENTE',
-      fechaPostulacion: fecha,
-      oferta: {
-        id: this.oferta.id
-      }
+      fechaPostulacion: this.convertirFecha(new Date()),
+      oferta: { id: this.oferta.id }
     };
 
-    console.log('JSON a enviar:', nuevaPostulacion);
+    console.log('Postulación enviada:', nuevaPostulacion);
 
     this.postulacionService.postular(nuevaPostulacion).subscribe({
       next: () => {

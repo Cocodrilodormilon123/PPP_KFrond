@@ -1,34 +1,40 @@
 <div *ngIf="practica" class="contenedor-practica">
   <div class="card-practica">
-    <h2>📋 Seguimiento de tu práctica</h2>
+    <h2 class="titulo-seccion"><i class="fas fa-clipboard-list me-2"></i>Seguimiento de tu práctica</h2>
 
-    <p *ngIf="practica.empresa"><strong>🏢 Empresa:</strong> {{ practica.empresa }}</p>
-    <p *ngIf="practica.tituloOferta"><strong>💼 Oferta:</strong> {{ practica.tituloOferta }}</p>
-    <p *ngIf="practica.modalidad"><strong>🌐 Modalidad:</strong> {{ practica.modalidad }}</p>
-    <p *ngIf="practica.fechaInicio"><strong>📅 Inicio:</strong> {{ practica.fechaInicio | date: 'dd/MM/yyyy' }}</p>
-    <p><strong>📌 Estado:</strong> {{ practica.estado }}</p>
+    <p *ngIf="practica.empresa"><i class="fas fa-building me-2"></i><strong>Empresa:</strong> {{ practica.empresa }}</p>
+    <p *ngIf="practica.tituloOferta"><i class="fas fa-briefcase me-2"></i><strong>Oferta:</strong> {{ practica.tituloOferta }}</p>
+    <p *ngIf="practica.modalidad"><i class="fas fa-globe me-2"></i><strong>Modalidad:</strong> {{ practica.modalidad }}</p>
+    <p *ngIf="practica.fechaInicio"><i class="fas fa-calendar-alt me-2"></i><strong>Inicio:</strong> {{ practica.fechaInicio | date: 'dd/MM/yyyy' }}</p>
+    <p><i class="fas fa-thumbtack me-2"></i><strong>Estado:</strong> {{ practica.estado }}</p>
 
-    <button (click)="descargarGuia()" class="boton-guia">📥 Descargar guía PDF</button>
+    <button (click)="descargarGuia()" class="btn btn-success mt-3">
+      <i class="fas fa-file-download me-2"></i>Descargar guía PDF
+    </button>
   </div>
 
   <div class="card-evidencias">
-    <h3>📂 Registro de evidencias semanales</h3>
+    <h3 class="titulo-subseccion"><i class="fas fa-folder-open me-2"></i>Registro de evidencias semanales</h3>
 
     <div *ngFor="let semana of semanasDisponibles" class="semana-card">
-      <h4>🗓️ Semana {{ semana }}</h4>
+      <h5><i class="fas fa-calendar-week me-2"></i>Semana {{ semana }}</h5>
 
       <div *ngIf="getEvidenciaPorSemana(semana) as evidencia">
-        <p class="estado entregado">✅ Entregado</p>
-        <button (click)="descargarEvidencia(evidencia.nombreArchivo)">👁️ Ver archivo</button>
+        <p class="estado entregado"><i class="fas fa-check-circle text-success me-1"></i>Entregado</p>
+        <button class="btn btn-outline-primary btn-sm" (click)="descargarEvidencia(evidencia.nombreArchivo)">
+          <i class="fas fa-eye me-1"></i>Ver archivo
+        </button>
       </div>
 
       <div *ngIf="!getEvidenciaPorSemana(semana)">
         <div *ngIf="semana === semanaActual">
-          <input type="file" (change)="seleccionarArchivo($event)" />
-          <button (click)="subirEvidencia(semana)">⬆️ Subir evidencia</button>
+          <input type="file" (change)="seleccionarArchivo($event)" class="form-control mt-2 mb-2" />
+          <button class="btn btn-primary btn-sm" (click)="subirEvidencia(semana)">
+            <i class="fas fa-upload me-1"></i>Subir evidencia
+          </button>
         </div>
         <div *ngIf="semana !== semanaActual">
-          <p class="estado pendiente">🕒 Aún no disponible</p>
+          <p class="estado pendiente"><i class="fas fa-clock text-warning me-1"></i>Aún no disponible</p>
         </div>
       </div>
     </div>

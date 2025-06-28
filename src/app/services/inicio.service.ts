@@ -17,11 +17,13 @@ export class InicioService {
   }
 
   getOfertas(): Observable<any[]> {
-    return this.http.get<any[]>(`${this.apiUrl}/ofertas`);
+    return this.http.get<any[]>(`${this.apiUrl}/ofertas`, {
+      headers: this.getAuthHeaders()
+    });
   }
 
   private getAuthHeaders(): HttpHeaders {
     const token = localStorage.getItem('accessToken') || '';
-    return new HttpHeaders({ 'Authorization': `Bearer ${token}` });
+    return new HttpHeaders({ Authorization: `Bearer ${token}` });
   }
 }

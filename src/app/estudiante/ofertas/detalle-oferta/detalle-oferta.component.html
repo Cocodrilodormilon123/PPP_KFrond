@@ -24,8 +24,16 @@
     <p class="text-muted">{{ oferta.requerimientos || 'No especificados' }}</p>
   </div>
 
+  <div *ngIf="tienePracticaActiva" class="text-danger mb-2 text-end small">
+    Ya tienes una práctica en proceso. No puedes postular a otra oferta.
+  </div>
+
   <div class="text-end">
-    <button class="btn btn-primary" (click)="postular()">
+    <button
+      class="btn btn-primary"
+      (click)="postular()"
+      [disabled]="oferta.vacantes?.disponibles === 0 || tienePracticaActiva"
+    >
       <i class="fas fa-paper-plane me-2"></i>Postularme
     </button>
   </div>

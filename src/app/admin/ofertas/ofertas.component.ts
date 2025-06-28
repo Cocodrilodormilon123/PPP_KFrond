@@ -110,12 +110,22 @@ export class OfertasComponent implements OnInit {
     });
   }
 
-  getTiempoRestante(fechaFin: string | Date): string {
+  getTiempoRestante(fechaFin: string | Date, oferta?: any): string {
     const fin = typeof fechaFin === 'string' ? new Date(fechaFin).getTime() : fechaFin.getTime();
     const ahora = new Date().getTime();
     const diferencia = fin - ahora;
 
-    if (diferencia <= 0) return 'Finalizado';
+    if (diferencia <= 0) {
+      if (oferta && oferta.estado === 'ACTIVA') {
+        // 🔁 Solo actualizar si aún está activa
+        oferta.estado = 'FINALIZADA';
+        this.ofertaService.actualizarEstadoOferta(oferta.id, 'FINALIZADA').subscribe({
+          next: () => console.log(`Oferta ${oferta.id} finalizada automáticamente.`),
+          error: err => console.error('Error al finalizar oferta automáticamente', err)
+        });
+      }
+      return `<span style="color: red; font-weight: bold;">Finalizado</span>`;
+    }
 
     const dias = Math.floor(diferencia / (1000 * 60 * 60 * 24));
     const horas = Math.floor((diferencia / (1000 * 60 * 60)) % 24);

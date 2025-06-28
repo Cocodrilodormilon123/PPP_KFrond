@@ -48,4 +48,9 @@ export class AdminOfertaService {
     const token = localStorage.getItem('accessToken') || '';
     return new HttpHeaders({ Authorization: `Bearer ${token}` });
   }
+  actualizarEstadoOferta(id: number, nuevoEstado: string): Observable<any> {
+    return this.http.put(`${this.apiUrl}/ofertas/${id}/estado?estado=${nuevoEstado}`, null, {
+      headers: this.getAuthHeaders()
+    });
+  }
 }
