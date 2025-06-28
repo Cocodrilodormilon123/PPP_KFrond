@@ -3,9 +3,12 @@
     <h2 class="titulo-seccion"><i class="fas fa-clipboard-list me-2"></i>Seguimiento de tu práctica</h2>
 
     <p *ngIf="practica.empresa"><i class="fas fa-building me-2"></i><strong>Empresa:</strong> {{ practica.empresa }}</p>
-    <p *ngIf="practica.tituloOferta"><i class="fas fa-briefcase me-2"></i><strong>Oferta:</strong> {{ practica.tituloOferta }}</p>
-    <p *ngIf="practica.modalidad"><i class="fas fa-globe me-2"></i><strong>Modalidad:</strong> {{ practica.modalidad }}</p>
-    <p *ngIf="practica.fechaInicio"><i class="fas fa-calendar-alt me-2"></i><strong>Inicio:</strong> {{ practica.fechaInicio | date: 'dd/MM/yyyy' }}</p>
+    <p *ngIf="practica.tituloOferta"><i class="fas fa-briefcase me-2"></i><strong>Oferta:</strong> {{
+      practica.tituloOferta }}</p>
+    <p *ngIf="practica.modalidad"><i class="fas fa-globe me-2"></i><strong>Modalidad:</strong> {{ practica.modalidad }}
+    </p>
+    <p *ngIf="practica.fechaInicio"><i class="fas fa-calendar-alt me-2"></i><strong>Inicio:</strong> {{
+      practica.fechaInicio | date: 'dd/MM/yyyy' }}</p>
     <p><i class="fas fa-thumbtack me-2"></i><strong>Estado:</strong> {{ practica.estado }}</p>
 
     <button (click)="descargarGuia()" class="btn btn-success mt-3">
@@ -19,22 +22,37 @@
     <div *ngFor="let semana of semanasDisponibles" class="semana-card">
       <h5><i class="fas fa-calendar-week me-2"></i>Semana {{ semana }}</h5>
 
+      <!-- SI EXISTE EVIDENCIA -->
       <div *ngIf="getEvidenciaPorSemana(semana) as evidencia">
         <p class="estado entregado"><i class="fas fa-check-circle text-success me-1"></i>Entregado</p>
+
+        <!-- Validación segura de fecha usando método del componente -->
+        <p *ngIf="esFechaValida(evidencia.fechaSubida)">
+          <strong>📅 Subido el:</strong> {{ evidencia.fechaSubida | date:'dd/MM/yyyy' }}
+        </p>
+        <p *ngIf="!esFechaValida(evidencia.fechaSubida)">
+          <strong>📅 Subido el:</strong> <span class="text-danger">Fecha inválida</span>
+        </p>
+
         <button class="btn btn-outline-primary btn-sm" (click)="descargarEvidencia(evidencia.nombreArchivo)">
           <i class="fas fa-eye me-1"></i>Ver archivo
         </button>
       </div>
 
+      <!-- SI NO EXISTE EVIDENCIA -->
       <div *ngIf="!getEvidenciaPorSemana(semana)">
-        <div *ngIf="semana === semanaActual">
-          <input type="file" (change)="seleccionarArchivo($event)" class="form-control mt-2 mb-2" />
-          <button class="btn btn-primary btn-sm" (click)="subirEvidencia(semana)">
+        <div>
+          <input type="file" (change)="seleccionarArchivo($event)" class="form-control mt-2 mb-2"
+            [disabled]="!puedeSubirSemana(semana)" />
+
+          <button class="btn btn-primary btn-sm" (click)="subirEvidencia(semana)"
+            [disabled]="!archivoSeleccionado || !puedeSubirSemana(semana)">
             <i class="fas fa-upload me-1"></i>Subir evidencia
           </button>
-        </div>
-        <div *ngIf="semana !== semanaActual">
-          <p class="estado pendiente"><i class="fas fa-clock text-warning me-1"></i>Aún no disponible</p>
+
+          <p *ngIf="!puedeSubirSemana(semana)" class="estado pendiente mt-2">
+            <i class="fas fa-clock text-warning me-1"></i>Disponible en una semana
+          </p>
         </div>
       </div>
     </div>
