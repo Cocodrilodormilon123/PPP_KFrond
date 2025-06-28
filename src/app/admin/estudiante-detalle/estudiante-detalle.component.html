@@ -1,4 +1,4 @@
-<h2>🔎 Buscar Estudiante</h2>
+<h2 class="titulo-busqueda"><i class="fas fa-search"></i> Buscar Estudiante</h2>
 
 <form (ngSubmit)="buscar()" class="form-busqueda">
   <mat-form-field appearance="outline">
@@ -9,46 +9,46 @@
 </form>
 
 <div *ngIf="estudiante" class="perfil-container">
-  <div class="card-perfil">
+  <!-- Tarjeta de estudiante -->
+  <div class="card card-perfil">
     <div class="perfil-izq">
-      <img class="perfil-foto"
-           [src]="'http://localhost:4040/persona-ms/personas/img/' + estudiante.foto"
-           (error)="fotoError($event)" />
+      <img class="perfil-foto" [src]="imagenEstudiante" />
     </div>
     <div class="perfil-der">
       <h2>{{ estudiante.nombre }} {{ estudiante.apellido }}</h2>
-      <p><strong>Código:</strong> {{ estudiante.codigo }}</p>
-      <p><strong>EP:</strong> {{ estudiante.ep }}</p>
-      <p><strong>DNI:</strong> {{ estudiante.dni }}</p>
-      <p><strong>Teléfono:</strong> {{ estudiante.telefono }}</p>
+      <div class="info-line"><i class="fas fa-id-card"></i> <span>Código:</span> {{ estudiante.codigo }}</div>
+      <div class="info-line"><i class="fas fa-laptop-code"></i> <span>EP:</span> {{ estudiante.ep }}</div>
+      <div class="info-line"><i class="fas fa-id-badge"></i> <span>DNI:</span> {{ estudiante.dni }}</div>
+      <div class="info-line"><i class="fas fa-phone-alt"></i> <span>Teléfono:</span> {{ estudiante.telefono }}</div>
     </div>
   </div>
 
-  <div class="card-practicas">
-    <h3>🏢 Práctica Profesional</h3>
+  <!-- Tarjeta de práctica -->
+  <div class="card card-practica">
+    <h3><i class="fas fa-briefcase"></i> Práctica Profesional</h3>
+    <div *ngIf="practica; else sinPractica">
+      <div class="info-line"><i class="fas fa-building"></i> <span>Empresa:</span> {{ practica.empresa }}</div>
+      <div class="info-line"><i class="fas fa-bullhorn"></i> <span>Oferta:</span> {{ practica.tituloOferta }}</div>
+      <div class="info-line"><i class="fas fa-calendar-alt"></i> <span>Fecha de inicio:</span> {{ practica.fechaInicio }}</div>
+      <div class="info-line" *ngIf="practica.fechaFin"><i class="fas fa-calendar-check"></i> <span>Fecha de fin:</span> {{ practica.fechaFin }}</div>
+      <div class="info-line"><i class="fas fa-laptop-house"></i> <span>Modalidad:</span> {{ practica.modalidad }}</div>
+      <div class="info-line"><i class="fas fa-info-circle"></i> <span>Estado:</span> {{ practica.estado }}</div>
 
-    <div *ngIf="practica">
-      <p><strong>Empresa:</strong> {{ practica.empresaNombre }}</p>
-      <p><strong>Oferta:</strong> {{ practica.ofertaTitulo }}</p>
-      <p><strong>Fecha de inicio:</strong> {{ practica.fechaInicio }}</p>
-
-      <h4>📁 Evidencias Subidas</h4>
-      <ul *ngIf="evidencias.length > 0">
+      <h4><i class="fas fa-folder-open"></i> Evidencias Subidas</h4>
+      <ul *ngIf="evidencias.length > 0" class="lista-evidencias">
         <li *ngFor="let evidencia of evidencias">
-          {{ evidencia.descripcion }} —
+          <i class="fas fa-file-alt"></i> {{ evidencia.descripcion }} —
           <a [href]="evidencia.url" target="_blank">Ver archivo</a>
         </li>
       </ul>
-      <p *ngIf="evidencias.length === 0" style="color: gray;">No hay evidencias aún.</p>
+      <p *ngIf="evidencias.length === 0" class="no-evidencias">No hay evidencias subidas.</p>
     </div>
-
-    <div *ngIf="!practica" style="margin-top: 15px; color: red;">
-      Este estudiante no tiene una práctica activa.
-    </div>
+    <ng-template #sinPractica>
+      <p class="no-practica">Este estudiante no tiene una práctica activa.</p>
+    </ng-template>
   </div>
 </div>
 
-<!-- Solo mostrar mensaje de error si ya se presionó "Buscar" -->
 <div *ngIf="buscado && estudiante === null">
-  <p style="color: red;">Estudiante no encontrado.</p>
+  <p class="no-encontrado">Estudiante no encontrado.</p>
 </div>

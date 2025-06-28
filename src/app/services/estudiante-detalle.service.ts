@@ -16,7 +16,21 @@ export class EstudianteDetalleService {
     return this.http.get(`/practica-ms/practicas/persona/${idPersona}`);
   }
 
+  obtenerDetallePractica(idPractica: number): Observable<any> {
+    return this.http.get(`/practica-ms/practicas/detalle/${idPractica}`);
+  }
+
   obtenerEvidencias(idPractica: number): Observable<any[]> {
     return this.http.get<any[]>(`/practica-ms/evidencias/practica/${idPractica}`);
+  }
+
+  verFoto(nombreArchivo: string): Observable<Blob> {
+    const token = localStorage.getItem('accessToken') || '';
+    return this.http.get(`http://localhost:4040/persona-ms/personas/img/${nombreArchivo}`, {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      },
+      responseType: 'blob'
+    });
   }
 }

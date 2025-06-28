@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { EstudianteDetalleService } from '../../services/estudiante-detalle.service';
+import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-estudiante-detalle',
@@ -12,8 +13,12 @@ export class EstudianteDetalleComponent {
   practica: any = null;
   evidencias: any[] = [];
   buscado: boolean = false;
+  imagenEstudiante: SafeUrl = 'https://cdn-icons-png.flaticon.com/512/149/149071.png';
 
-  constructor(private detalleService: EstudianteDetalleService) {}
+  constructor(
+    private detalleService: EstudianteDetalleService,
+    private sanitizer: DomSanitizer
+  ) {}
 
   buscar(): void {
     if (!this.codigo) return;
@@ -23,16 +28,25 @@ export class EstudianteDetalleComponent {
     this.detalleService.buscarEstudiantePorCodigo(this.codigo).subscribe({
       next: estudiante => {
         if (estudiante.tipoPersona !== 'ESTUDIANTE') {
-          this.estudiante = null;
-          this.practica = null;
-          this.evidencias = [];
-          this.buscado = true;
+          this.resetVista();
           alert('No está permitido buscar administradores en esta sección');
           return;
         }
 
         this.estudiante = estudiante;
         this.buscado = true;
+
+        if (estudiante.foto) {
+          this.detalleService.verFoto(estudiante.foto).subscribe({
+            next: (blob) => {
+              const objectUrl = URL.createObjectURL(blob);
+              this.imagenEstudiante = this.sanitizer.bypassSecurityTrustUrl(objectUrl);
+            },
+            error: () => {
+              this.imagenEstudiante = 'https://cdn-icons-png.flaticon.com/512/149/149071.png';
+            }
+          });
+        }
 
         this.detalleService.obtenerPracticaPorPersona(estudiante.id).subscribe({
           next: practicas => {
@@ -41,45 +55,47 @@ export class EstudianteDetalleComponent {
               : (practicas.estado === 'EN_PROCESO' ? practicas : null);
 
             if (!activa) {
-              this.practica = null;
-              this.evidencias = [];
+              this.resetPractica();
               return;
             }
 
-            this.practica = activa;
-            this.cargarEvidencias();
+            this.detalleService.obtenerDetallePractica(activa.id).subscribe({
+              next: detalle => {
+                this.practica = detalle;
+                this.cargarEvidencias();
+              },
+              error: () => this.resetPractica()
+            });
           },
-          error: () => {
-            this.practica = null;
-            this.evidencias = [];
-          }
+          error: () => this.resetPractica()
         });
       },
       error: () => {
-        this.estudiante = null;
-        this.practica = null;
-        this.evidencias = [];
-        this.buscado = true;
+        this.resetVista();
         alert('Estudiante no encontrado');
       }
     });
   }
 
   cargarEvidencias(): void {
-    if (!this.practica?.id) return;
+    if (!this.practica?.idPractica) return;
 
-    this.detalleService.obtenerEvidencias(this.practica.id).subscribe({
-      next: evidencias => {
-        this.evidencias = evidencias;
-      },
-      error: () => {
-        this.evidencias = [];
-      }
+    this.detalleService.obtenerEvidencias(this.practica.idPractica).subscribe({
+      next: evidencias => this.evidencias = evidencias,
+      error: () => this.evidencias = []
     });
   }
 
-  fotoError(event: any): void {
-    event.target.onerror = null;
-    event.target.src = '';
+  resetVista(): void {
+    this.estudiante = null;
+    this.practica = null;
+    this.evidencias = [];
+    this.buscado = true;
+    this.imagenEstudiante = 'https://cdn-icons-png.flaticon.com/512/149/149071.png';
+  }
+
+  resetPractica(): void {
+    this.practica = null;
+    this.evidencias = [];
   }
 }
