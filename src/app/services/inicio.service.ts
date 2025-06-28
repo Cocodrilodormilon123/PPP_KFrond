@@ -6,7 +6,8 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class InicioService {
-  private apiUrl = '/oferta-ms';
+  private readonly apiUrl = 'http://localhost:4040/oferta-ms';
+  private readonly personaImgUrl = 'http://localhost:4040/persona-ms/img';
 
   constructor(private http: HttpClient) {}
 
@@ -20,6 +21,10 @@ export class InicioService {
     return this.http.get<any[]>(`${this.apiUrl}/ofertas`, {
       headers: this.getAuthHeaders()
     });
+  }
+
+  getFotoUrl(nombreFoto: string): string {
+    return `${this.personaImgUrl}/${nombreFoto}`;
   }
 
   private getAuthHeaders(): HttpHeaders {

@@ -24,10 +24,9 @@ export class EstudianteComponent implements OnInit {
       const datos = JSON.parse(usuario);
       this.estudianteNombre = datos.nombre || this.estudianteNombre;
       this.estudianteCodigo = datos.codigo || '';
-      const idPersona = datos.id || datos.idPersona;
 
       if (datos.foto) {
-        this.estudianteFoto = `http://localhost:4040/persona-ms/img/${datos.foto}`;
+        this.estudianteFoto = this.inicioService.getFotoUrl(datos.foto);
       }
     }
   }
@@ -39,7 +38,7 @@ export class EstudianteComponent implements OnInit {
   cerrarSesion(): void {
     localStorage.removeItem('accessToken');
     localStorage.removeItem('usuario');
-    localStorage.removeItem('estadosPostulacion'); // opcional, ya no se usa
+    localStorage.removeItem('estadosPostulacion');
     this.router.navigate(['/login']);
   }
 

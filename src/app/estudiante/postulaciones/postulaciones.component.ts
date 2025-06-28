@@ -112,8 +112,7 @@ export class PostulacionesComponent implements OnInit {
     const formData = new FormData();
     formData.append('file', file);
 
-    const url = `http://localhost:4040/oferta-ms/documento-postulacion/${idPostulacion}/archivo`;
-    this.postulacionService.subirArchivo(url, formData).subscribe({
+    this.postulacionService.subirArchivo(idPostulacion, formData).subscribe({
       next: () => {
         alert("✅ Archivo subido correctamente.");
         this.cargarPostulaciones();

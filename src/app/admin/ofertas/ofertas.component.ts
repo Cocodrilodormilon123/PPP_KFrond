@@ -22,12 +22,12 @@ export class OfertasComponent implements OnInit {
   ngOnInit(): void {
     this.cargarOfertas();
 
-    // ⏱️ Actualiza el contador en la vista cada segundo
+    // Actualiza el contador en la vista cada segundo
     setInterval(() => {
       this.ofertas = [...this.ofertas];
     }, 1000);
 
-    // 🔁 Verifica cambios de estado automáticamente cada minuto
+    // Verifica cambios de estado automáticamente cada minuto
     setInterval(() => {
       this.filtrarOfertasPorEstado();
     }, 60000);
@@ -53,7 +53,7 @@ export class OfertasComponent implements OnInit {
 
   async completarOfertas(data: any[]): Promise<void> {
     const solicitudes = data.map(async oferta => {
-      // 🗓️ Reformat fecha si viene como dd/MM/yyyy
+      // reformat fecha si viene como dd/MM/yyyy
       if (oferta.fechaFin?.includes('/')) {
         const partes = oferta.fechaFin.split('/');
         if (partes.length === 3) {
@@ -117,7 +117,7 @@ export class OfertasComponent implements OnInit {
 
     if (diferencia <= 0) {
       if (oferta && oferta.estado === 'ACTIVA') {
-        // 🔁 Solo actualizar si aún está activa
+        // Solo actualizar si aún está activa
         oferta.estado = 'FINALIZADA';
         this.ofertaService.actualizarEstadoOferta(oferta.id, 'FINALIZADA').subscribe({
           next: () => console.log(`Oferta ${oferta.id} finalizada automáticamente.`),

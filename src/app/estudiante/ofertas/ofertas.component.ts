@@ -17,7 +17,7 @@ export class OfertasComponent implements OnInit {
     this.cargarOfertas();
 
     setInterval(() => {
-      this.ofertas = [...this.ofertas]; // Forzar cambio en la vista (cuenta regresiva)
+      this.ofertas = [...this.ofertas]; // Forzar cambio en la vista
     }, 1000);
   }
 

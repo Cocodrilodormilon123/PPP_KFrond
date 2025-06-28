@@ -7,7 +7,9 @@ import { Observable } from 'rxjs';
 })
 export class PostulacionService {
   private baseUrl = 'http://localhost:4040/oferta-ms/postulaciones';
-  private baseUrl2 = 'http://localhost:4040/oferta-ms/documento-postulacion';
+  private docBaseUrl = 'http://localhost:4040/oferta-ms/documento-postulacion';
+  private ofertaBaseUrl = 'http://localhost:4040/oferta-ms/ofertas';
+  private practicaBaseUrl = 'http://localhost:4040/practica-ms/practicas';
 
   constructor(private http: HttpClient) {}
 
@@ -40,43 +42,44 @@ export class PostulacionService {
   }
 
   getDocumentoByPostulacion(idPostulacion: number): Observable<any> {
-    return this.http.get(`${this.baseUrl2}/${idPostulacion}`, {
+    return this.http.get(`${this.docBaseUrl}/${idPostulacion}`, {
       headers: this.getAuthHeaders()
     });
   }
 
   actualizarEstadoDocumento(id: number, nuevoEstado: string): Observable<any> {
-    return this.http.put(`${this.baseUrl2}/${id}/estado?nuevoEstado=${nuevoEstado}`, {}, {
+    return this.http.put(`${this.docBaseUrl}/${id}/estado?nuevoEstado=${nuevoEstado}`, {}, {
       headers: this.getAuthHeaders()
     });
   }
 
   descargarPlantilla(idPostulacion: number): Observable<Blob> {
-    return this.http.get(`${this.baseUrl2}/descargar-plantilla/${idPostulacion}`, {
+    return this.http.get(`${this.docBaseUrl}/descargar-plantilla/${idPostulacion}`, {
       headers: this.getAuthHeaders(),
       responseType: 'blob'
     });
   }
 
-  subirArchivo(url: string, data: FormData): Observable<any> {
-    return this.http.post(url, data, {
+  subirArchivo(idPostulacion: number, data: FormData): Observable<any> {
+    return this.http.post(`${this.docBaseUrl}/${idPostulacion}/archivo`, data, {
       headers: this.getAuthHeaders()
     });
   }
 
   verDocumento(nombreArchivo: string): Observable<Blob> {
-    return this.http.get(`${this.baseUrl2}/archivo/${nombreArchivo}`, {
+    return this.http.get(`${this.docBaseUrl}/archivo/${nombreArchivo}`, {
       headers: this.getAuthHeaders(),
       responseType: 'blob'
     });
   }
 
   getOfertaById(idOferta: number): Observable<any> {
-    return this.http.get(`http://localhost:4040/oferta-ms/ofertas/${idOferta}`, {
+    return this.http.get(`${this.ofertaBaseUrl}/${idOferta}`, {
       headers: this.getAuthHeaders()
     });
   }
+
   verificarPracticaActiva(idPersona: number): Observable<boolean> {
-    return this.http.get<boolean>(`/practica-ms/practicas/persona/${idPersona}/tiene-activa`);
+    return this.http.get<boolean>(`${this.practicaBaseUrl}/persona/${idPersona}/tiene-activa`);
   }
 }

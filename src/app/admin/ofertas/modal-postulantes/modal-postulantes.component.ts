@@ -68,7 +68,7 @@ export class ModalPostulantesComponent implements OnInit {
         return p;
       });
 
-      // ✅ Manejo de cupos según cambio de estado
+      // Manejo de cupos según cambio de estado
       if (estadoAnterior !== 'EN_REVISION' && nuevoEstado === 'EN_REVISION') {
           this.postulacionService.incrementarCupo(this.ofertaId).subscribe(() => this.cargarCupos());
       }
