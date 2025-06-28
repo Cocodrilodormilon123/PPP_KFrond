@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { PracticaService } from '../../services/practica.service';
 import { EvidenciaService } from '../../services/evidencia.service';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 @Component({
   selector: 'app-practicas',
@@ -17,8 +18,9 @@ export class PracticasComponent implements OnInit {
 
   constructor(
     private practicaService: PracticaService,
-    private evidenciaService: EvidenciaService
-  ) {}
+    private evidenciaService: EvidenciaService,
+    private http: HttpClient
+  ) { }
 
   ngOnInit(): void {
     const userStr = localStorage.getItem('usuario');
@@ -88,7 +90,27 @@ export class PracticasComponent implements OnInit {
   }
 
   descargarGuia(): void {
-    window.open('/guia_subida_evidencias.pdf', '_blank');
+    const token = localStorage.getItem('accessToken') || '';
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+
+    this.http.get('http://localhost:4040/practica-ms/guia_subida_evidencias.pdf', {
+      headers,
+      responseType: 'blob'
+    }).subscribe({
+      next: (data: Blob) => {
+        const blob = new Blob([data], { type: 'application/pdf' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = 'guia_subida_evidencias.pdf';
+        link.click();
+        URL.revokeObjectURL(url);
+      },
+      error: err => {
+        console.error('Error al descargar la guía', err);
+        alert('No se pudo descargar la guía de evidencias');
+      }
+    });
   }
 
   descargarEvidencia(nombreArchivo: string): void {
