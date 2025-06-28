@@ -6,27 +6,38 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class EstudianteDetalleService {
+  private baseUrl = 'http://localhost:4040';
+
   constructor(private http: HttpClient) {}
 
   buscarEstudiantePorCodigo(codigo: string): Observable<any> {
-    return this.http.get(`/persona-ms/personas/codigo/${codigo}`);
+    return this.http.get(`${this.baseUrl}/persona-ms/personas/codigo/${codigo}`);
   }
 
   obtenerPracticaPorPersona(idPersona: number): Observable<any> {
-    return this.http.get(`/practica-ms/practicas/persona/${idPersona}`);
+    return this.http.get(`${this.baseUrl}/practica-ms/practicas/persona/${idPersona}`);
   }
 
   obtenerDetallePractica(idPractica: number): Observable<any> {
-    return this.http.get(`/practica-ms/practicas/detalle/${idPractica}`);
+    return this.http.get(`${this.baseUrl}/practica-ms/practicas/detalle/${idPractica}`);
   }
 
   obtenerEvidencias(idPractica: number): Observable<any[]> {
-    return this.http.get<any[]>(`/practica-ms/evidencias/practica/${idPractica}`);
+    return this.http.get<any[]>(`${this.baseUrl}/practica-ms/practicaspp/evidencias/practica/${idPractica}`);
   }
 
   verFoto(nombreArchivo: string): Observable<Blob> {
     const token = localStorage.getItem('accessToken') || '';
-    return this.http.get(`http://localhost:4040/persona-ms/personas/img/${nombreArchivo}`, {
+    return this.http.get(`${this.baseUrl}/persona-ms/personas/img/${nombreArchivo}`, {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      },
+      responseType: 'blob'
+    });
+  }
+  verArchivo(nombreArchivo: string): Observable<Blob> {
+    const token = localStorage.getItem('accessToken') || '';
+    return this.http.get(`${this.baseUrl}/practica-ms/practicaspp/evidencias/descargar/${nombreArchivo}`, {
       headers: {
         'Authorization': `Bearer ${token}`
       },

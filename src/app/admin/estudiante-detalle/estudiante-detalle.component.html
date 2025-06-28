@@ -35,14 +35,26 @@
       <div class="info-line"><i class="fas fa-info-circle"></i> <span>Estado:</span> {{ practica.estado }}</div>
 
       <h4><i class="fas fa-folder-open"></i> Evidencias Subidas</h4>
-      <ul *ngIf="evidencias.length > 0" class="lista-evidencias">
-        <li *ngFor="let evidencia of evidencias">
-          <i class="fas fa-file-alt"></i> {{ evidencia.descripcion }} —
-          <a [href]="evidencia.url" target="_blank">Ver archivo</a>
-        </li>
-      </ul>
-      <p *ngIf="evidencias.length === 0" class="no-evidencias">No hay evidencias subidas.</p>
+
+      <div *ngIf="evidencias.length > 0; else sinEvidencias" class="evidencias-container">
+        <div *ngFor="let evidencia of evidencias" class="evidencia-card">
+          <div class="evidencia-icono">
+            <i class="fas fa-file-alt"></i>
+          </div>
+          <div class="evidencia-contenido">
+            <p class="evidencia-semana">Semana {{ evidencia.semana }}</p>
+            <button mat-stroked-button color="primary" (click)="verEvidencia(evidencia.nombreArchivo)">
+              <i class="fas fa-eye me-1"></i> Ver archivo
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <ng-template #sinEvidencias>
+        <p class="no-evidencias">No hay evidencias subidas.</p>
+      </ng-template>
     </div>
+
     <ng-template #sinPractica>
       <p class="no-practica">Este estudiante no tiene una práctica activa.</p>
     </ng-template>

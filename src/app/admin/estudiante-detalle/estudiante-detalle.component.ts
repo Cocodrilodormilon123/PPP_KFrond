@@ -86,6 +86,10 @@ export class EstudianteDetalleComponent {
     });
   }
 
+  getUrlDescarga(nombreArchivo: string): string {
+    return `http://localhost:4040/practica-ms/practicaspp/evidencias/descargar/${nombreArchivo}`;
+  }
+
   resetVista(): void {
     this.estudiante = null;
     this.practica = null;
@@ -98,4 +102,11 @@ export class EstudianteDetalleComponent {
     this.practica = null;
     this.evidencias = [];
   }
+  verEvidencia(nombreArchivo: string): void {
+    this.detalleService.verArchivo(nombreArchivo).subscribe(blob => {
+      const fileURL = URL.createObjectURL(blob);
+      window.open(fileURL, '_blank');
+    });
+  }
+
 }
