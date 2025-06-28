@@ -118,3 +118,15 @@
   color: #6c757d;
   font-style: italic;
 }
+
+/* Estilo para mensaje vacío */
+.mensaje-vacio {
+  text-align: center;
+  padding: 40px;
+  font-size: 18px;
+  color: #888;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  border: 1px dashed #ccc;
+  margin-top: 20px;
+}

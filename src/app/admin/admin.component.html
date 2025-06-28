@@ -5,6 +5,8 @@
       <span class="toggle-button" (click)="toggleSidebar()">
         <i class="fas fa-bars"></i>
       </span>
+      <img src="assets/img/cordero.png" alt="Logo Cordero" class="logo-cordero" />
+      <img src="assets/img/lamb.png" alt="Logo LAMB" class="logo-lamb" />
     </div>
 
     <div class="right-section">
@@ -30,10 +32,15 @@
         <li><a routerLink="crear-usuario" routerLinkActive="active"><i class="fas fa-user-plus"></i> Crear Usuario</a></li>
       </ul>
 
-      <ul class="menu-secundario">
-        <li><a routerLink="cambiar-clave" routerLinkActive="active"><i class="fas fa-key"></i> Cambiar clave</a></li>
-        <li><a href="#" (click)="cerrarSesion()"><i class="fas fa-sign-out-alt"></i> Cerrar sesión</a></li>
-      </ul>
+      <!-- NUEVOS BOTONES INFERIORES -->
+      <div class="menu-secundario-botones">
+        <button class="boton-secundario" routerLink="cambiar-clave">
+          <i class="fas fa-key"></i> Cambiar clave
+        </button>
+        <button class="boton-secundario" (click)="cerrarSesion()">
+          <i class="fas fa-sign-out-alt"></i> Cerrar sesión
+        </button>
+      </div>
     </aside>
 
     <!-- CONTENIDO PRINCIPAL -->

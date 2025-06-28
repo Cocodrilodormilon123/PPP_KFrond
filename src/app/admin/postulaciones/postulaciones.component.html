@@ -1,3 +1,7 @@
+<div *ngIf="postulacionesAgrupadas.length === 0" class="mensaje-vacio">
+  <i class="fas fa-folder-open"></i> Aún no hay postulaciones para revisar
+</div>
+
 <div *ngFor="let grupo of postulacionesAgrupadas" class="grupo-postulaciones">
 
   <div class="encabezado-oferta" (click)="grupo.expandido = !grupo.expandido">

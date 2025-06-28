@@ -131,37 +131,42 @@
   color: white;
 }
 
-/* OPCIONES INFERIORES */
-.menu-secundario {
+/* NUEVO: BOTONES SECUNDARIOS AMARILLOS */
+.menu-secundario-botones {
   position: absolute;
   bottom: 30px;
   left: 0;
-  right: 0;
+  width: 100%;
+  padding: 0 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
-.menu-secundario li a {
-  padding: 14px 20px;
-  color: white;
+.boton-secundario {
+  background-color: #ffcc00;
+  color: #001d49;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 8px;
+  font-weight: bold;
   display: flex;
   align-items: center;
-  transition: all 0.2s ease;
+  gap: 5px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.2s ease;
+  width: calc(100% - 40px);
+  margin-left: 20px;
 }
 
-.menu-secundario li a:hover::before,
-.menu-secundario li a.active::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 5px;
-  height: 100%;
-  background-color: #ffcc00;
+.boton-secundario i {
+  color: #001d49;
+  font-size: 15px;
 }
 
-.menu-secundario li a:hover,
-.menu-secundario li a.active {
-  background-color: #0a2a56;
-  color: white;
+.boton-secundario:hover {
+  background-color: #ffd633;
 }
 
 /* CONTENIDO CENTRAL */
@@ -170,4 +175,17 @@
   padding: 30px;
   background-color: #f5faff;
   overflow-y: auto;
+}
+
+/* LOGOS */
+.logo-cordero {
+  height: 35px;
+  margin-left: 10px;
+  object-fit: contain;
+}
+
+.logo-lamb {
+  height: 25px;
+  margin-left: 5px;
+  object-fit: contain;
 }

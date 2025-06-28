@@ -11,6 +11,7 @@ import { jwtDecode } from 'jwt-decode';
 export class LoginComponent {
   user = { username: '', password: '' };
   error = '';
+  hidePassword = true; // 🔒 Necesario para el botón de visibilidad de la contraseña
 
   constructor(
     private authService: AuthService,

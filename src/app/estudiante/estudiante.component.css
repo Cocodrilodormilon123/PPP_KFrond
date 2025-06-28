@@ -1,4 +1,4 @@
-/* CONTENEDOR PRINCIPAL */
+/* CONTENEDOR GENERAL */
 .estudiante-container {
   display: flex;
   flex-direction: column;
@@ -17,21 +17,18 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
-/* Botón hamburguesa */
 .left-links .toggle-button {
   font-size: 22px;
   cursor: pointer;
   color: white;
 }
 
-/* SECCIÓN DERECHA */
 .right-section {
   display: flex;
   align-items: center;
   gap: 20px;
 }
 
-/* PILL Buttons: Guía, Ayuda */
 .header-actions {
   display: flex;
   gap: 10px;
@@ -50,7 +47,6 @@
 
 .header-actions a:hover {
   background-color: #00509e;
-  color: #fff;
 }
 
 /* USUARIO */
@@ -71,7 +67,6 @@
 .text-info {
   display: flex;
   flex-direction: column;
-  justify-content: center;
   line-height: 1.2;
 }
 
@@ -99,7 +94,6 @@
 .sidebar {
   width: 220px;
   background-color: #001d49;
-  padding: 0;
   transition: transform 0.3s ease;
   height: 100%;
   box-sizing: border-box;
@@ -113,16 +107,15 @@
 }
 
 .sidebar ul {
-  list-style-type: none;
-  padding: 0;
+  list-style: none;
   margin: 0;
+  padding: 0;
 }
 
 .sidebar li {
   margin-bottom: 0;
 }
 
-/* Enlaces del sidebar */
 .sidebar li a {
   display: flex;
   align-items: center;
@@ -130,12 +123,11 @@
   text-decoration: none;
   color: white;
   font-weight: 500;
-  position: relative;
   transition: all 0.2s ease;
   width: 100%;
+  position: relative;
 }
 
-/* BARRA AMARILLA + FONDO COMPLETO EN HOVER Y ACTIVE */
 .sidebar li a:hover::before,
 .sidebar li a.active::before {
   content: '';
@@ -150,10 +142,9 @@
 .sidebar li a:hover,
 .sidebar li a.active {
   background-color: #0a2a56;
-  color: #ffffff;
 }
 
-/* Íconos */
+/* ÍCONOS */
 .sidebar i,
 .header-actions i,
 .toggle-button i {
@@ -161,58 +152,59 @@
   margin-right: 10px;
 }
 
-/* OPCIONES INFERIORES */
-.menu-secundario {
-  position: absolute;
-  bottom: 30px;
-  left: 0;
-  right: 0;
-}
-
-.menu-secundario li a {
-  padding: 14px 20px;
-  color: white;
-  display: flex;
-  align-items: center;
-  transition: all 0.2s ease;
-}
-
-.menu-secundario li a:hover::before,
-.menu-secundario li a.active::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 5px;
-  height: 100%;
-  background-color: #ffcc00;
-}
-
-.menu-secundario li a:hover,
-.menu-secundario li a.active {
-  background-color: #0a2a56;
-  color: white;
-}
-
-/* ÁREA DE CONTENIDO PRINCIPAL */
+/* ÁREA DE CONTENIDO */
 .content {
   flex: 1;
   padding: 30px;
   background-color: #f5faff;
   overflow-y: auto;
 }
-.noti-icon {
-  position: relative;
-  display: inline-block;
+
+/* BOTONES PERSONALIZADOS ABAJO */
+.menu-secundario-botones {
+  position: absolute;
+  bottom: 30px;
+  left: 0;
+  width: 100%;
+  padding: 0 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
-.badge-noti {
-  position: absolute;
-  top: 3px;
-  right: 2px;
-  width: 10px;
-  height: 10px;
-  background-color: red;
-  border-radius: 50%;
-  z-index: 10;
+.boton-secundario {
+  background-color: #ffcc00;
+  color: #001d49;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 8px; /* ← antes estaba en 14px o más, ahora reducido */
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  gap: 5px; /* menos espacio entre ícono y texto */
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.2s ease;
+  width: calc(100% - 40px); /* 🔧 para reducir ancho total dentro del padding del sidebar */
+  margin-left: 20px;
+}
+
+.boton-secundario i {
+  color: #001d49;
+  font-size: 15px;
+}
+
+.boton-secundario:hover {
+  background-color: #ffd633;
+}
+.logo-cordero {
+  height: 35px;
+  margin-left: 10px;
+  object-fit: contain;
+}
+
+.logo-lamb {
+  height: 25px; /* 🔽 más pequeño que antes */
+  margin-left: 5px;
+  object-fit: contain;
 }

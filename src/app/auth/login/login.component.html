@@ -1,18 +1,61 @@
 <div class="login-container">
-  <h2>Iniciar sesión</h2>
-  <form (ngSubmit)="onLogin()" #loginForm="ngForm">
-    <mat-form-field appearance="outline">
-      <mat-label>Usuario</mat-label>
-      <input matInput type="text" name="username" [(ngModel)]="user.username" required>
-    </mat-form-field>
+  <!-- LADO IZQUIERDO -->
+  <div class="login-left">
+    <div class="logo-titulo-container">
+      <img src="assets/img/logoppp.jpg" alt="Logo PPP" class="logo-left" />
+      <div class="titulo-container">
+        <h2 class="titulo-principal">Prácticas</h2>
+        <h2 class="titulo-sub">Preprofesionales</h2>
+        <div class="subrayado"></div>
+      </div>
+    </div>
+    <p class="subtexto">Bienvenido al Sistema de Prácticas</p>
+    <p class="descripcion">
+      Automatizamos tu camino hacia la experiencia profesional.
+    </p>
+  </div>
 
-    <mat-form-field appearance="outline">
-      <mat-label>Contraseña</mat-label>
-      <input matInput type="password" name="password" [(ngModel)]="user.password" required>
-    </mat-form-field>
+  <!-- LADO DERECHO -->
+  <div class="login-right">
+    <div class="login-card">
+      <img src="assets/img/logoupeu.png" alt="Logo UPeU" class="logo-up" />
+      <p class="identificacion-texto">Por favor, identifíquese</p>
 
-    <button mat-raised-button color="primary" type="submit" [disabled]="!loginForm.valid">Ingresar</button>
-  </form>
+      <form (ngSubmit)="onLogin()">
+        <!-- Usuario -->
+        <div class="input-group">
+          <i class="fas fa-user icono"></i>
+          <input
+            type="text"
+            placeholder="Usuario*"
+            [(ngModel)]="user.username"
+            name="username"
+            required
+          />
+        </div>
 
-  <p *ngIf="error" style="color: red">{{ error }}</p>
+        <!-- Contraseña -->
+        <div class="input-group">
+          <i class="fas fa-lock icono"></i>
+          <input
+            [type]="hidePassword ? 'password' : 'text'"
+            placeholder="Contraseña*"
+            [(ngModel)]="user.password"
+            name="password"
+            required
+          />
+          <i
+            class="toggle-password fas"
+            [ngClass]="hidePassword ? 'fa-eye-slash' : 'fa-eye'"
+            (click)="hidePassword = !hidePassword"
+          ></i>
+        </div>
+
+        <button type="submit" [disabled]="!user.username || !user.password">
+          Iniciar sesión
+        </button>
+        <p class="error" *ngIf="error">{{ error }}</p>
+      </form>
+    </div>
+  </div>
 </div>
